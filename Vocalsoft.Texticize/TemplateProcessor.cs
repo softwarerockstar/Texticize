@@ -9,12 +9,13 @@ namespace Vocalsoft.Texticize
     /// TemplateProcessor
     /// </summary>
     public class TemplateProcessor
-    {
+    {   
         private string _template;
         private Dictionary<string, Delegate> _maps;
         private Dictionary<string, object> _variables;
         private List<string> _regexKeys;
         private RegexOptions _regexOptions;
+        private const string DEFAULT_VARIABLE_KEY = "$$__default";
 
         #region Constructors        
         public TemplateProcessor(string template)
@@ -84,6 +85,20 @@ namespace Vocalsoft.Texticize
         }
 
         /// <summary>
+        /// Sets default execution variable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="variableName">Name of the variable.</param>
+        /// <param name="variable">The variable.</param>
+        /// <returns>This instance.</returns>
+        public TemplateProcessor SetVariable<T>(T variable)
+        {
+            _variables[DEFAULT_VARIABLE_KEY] = variable;
+            return this;
+        }
+
+
+        /// <summary>
         /// Sets the Regex options used in matching expressions in the template.
         /// </summary>
         /// <param name="options">The options.</param>
@@ -148,16 +163,34 @@ namespace Vocalsoft.Texticize
                             for (int i = 1; i < match.Groups.Count; i++)
                                 groups.Add(match.Groups[i].Value);
 
-                            // Extract variable name from map's key
-                            var varName = map.Key.Substring(1, map.Key.IndexOf('!') - 1);
+                            string varName;
+                            string expression;
+                            object target;
 
-                            // Expression found in template to be replaced
-                            var expression = String.Format("{0}{1}", 
-                                map.Key.Substring(0, 1), 
-                                map.Key.Substring(map.Key.IndexOf('!') + 1)); 
+                            if (map.Key.Contains("!"))
+                            {
+                                // Variable name
+                                varName = map.Key.Substring(1, map.Key.IndexOf('!') - 1);
 
-                            // Find correct variable in the _variables list
-                            var target = _variables.Where(s => s.Key == varName).First().Value;
+                                // Expression found in template to be replaced
+                                expression = String.Format("{0}{1}",
+                                    map.Key.Substring(0, 1),
+                                    map.Key.Substring(map.Key.IndexOf('!') + 1));
+
+                                // Find correct variable in the _variables list
+                                target = _variables.Where(s => s.Key == varName).First().Value;
+                            }
+                            else
+                            {
+                                // Variable name
+                                varName = map.Key;
+
+                                // Expression found in template to be replaced
+                                expression = match.Value;
+                                
+                                // Find correct variable in the _variables list
+                                target = _variables.Where(s => s.Key == DEFAULT_VARIABLE_KEY).First().Value;
+                            }
 
                             // Create context to be sent to delegate that will provide replacement value
                             IContext context = Utility.CreateContext(
@@ -176,44 +209,13 @@ namespace Vocalsoft.Texticize
 
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 // Log exception
             }
 
             return toReturn;
         }
-        #endregion
-
-        #region Private Methods
-        ///// <summary>
-        ///// Returns given key name qualified by type name T.
-        ///// </summary>
-        ///// <typeparam name="T">Type to qualify key name with.</typeparam>
-        ///// <param name="keyName">Name of the key prefixed with name of type follows by !.</param>
-        ///// <returns></returns>
-        //private string GetTypeQualifiedKeyName<T>(string keyName)
-        //{
-        //    return keyName.Insert(1, String.Format("{0}!", typeof(T).Name));
-        //}
-
-        ///// <summary>
-        ///// Converts regex variables with type-name qualified keys to variable-name qualified keys
-        ///// </summary>
-        ///// <returns></returns>
-        //private IList<string> ResolveKeysWithVariableNames()
-        //{
-        //    List<string> toReturn = new List<string>();
-
-        //    foreach (var key in _regexKeys)
-        //    {
-        //        string typeName = key.Substring(1, key.IndexOf('!') - 1);
-        //        string variableName = _variables.Where(s => s.Value.GetType().Name == typeName).First().Key;
-        //        toReturn.Add(key.Replace(typeName, variableName));
-        //    }
-
-        //    return toReturn;
-        //}
         #endregion
     }
 }
