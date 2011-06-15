@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Vocalsoft.Texticize.UnitTests.DTO
 {
-    class ProductDto
+    public class ProductDto
     {
         public int ProductID { get; set; }
         public string Description { get; set; }

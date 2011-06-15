@@ -9,7 +9,7 @@ namespace Vocalsoft.Texticize
     {
         private static IDictionary<string, IContext> ContextCache = new Dictionary<string, IContext>();
 
-        public static IContext CreateContext(object variable, string variableName, string expression, IList<string> regexGroups)
+        public static IContext CreateContext(object variable, string variableName, string expression, Dictionary<string, string> parameters)
         {
             Type elementType = variable.GetType();
             string cacheKey = variableName;
@@ -25,7 +25,7 @@ namespace Vocalsoft.Texticize
             }
 
             var cachedContext = ContextCache[cacheKey];
-            cachedContext.SetProperties(variable, variableName, expression, regexGroups);
+            cachedContext.SetProperties(variable, variableName, expression, parameters);
 
             return cachedContext;
         }
