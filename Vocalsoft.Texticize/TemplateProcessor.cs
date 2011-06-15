@@ -47,26 +47,29 @@ namespace Vocalsoft.Texticize
             // Add key, func to _maps dictionary            
             _maps.Add(pattern, func);
 
+            // Add key to _regexKeys list
+            _regexKeys.Add(pattern);
+
             return this;
         }
 
-        /// <summary>
-        /// For a given type parameter T, creates a mapping between given pattern and a delegate to perform replacement for that pattern.
-        /// </summary>
-        /// <typeparam name="T">Type parameter.</typeparam>
-        /// <param name="pattern">The pattern.</param>
-        /// <param name="func">The delegate function that will perform replacement.</param>
-        /// <returns>This instance.</returns>
-        public TemplateProcessor CreatePatternMap<T>(string pattern, Func<Context<T>, string> func)
+        public TemplateProcessor CreateMap(string pattern, Func<Context<object>, string> func)
         {
-            // Create map
-            CreateMap<T>(pattern, func);
+            if (String.IsNullOrEmpty("pattern"))
+                throw new ArgumentNullException("pattern");
+
+            if (_maps.ContainsKey(pattern))
+                throw new ArgumentException("Specified pattern already exists for given type.");
+
+            // Add key, func to _maps dictionary            
+            _maps.Add(pattern, func);
 
             // Add key to _regexKeys list
             _regexKeys.Add(pattern);
 
             return this;
         }
+
 
         /// <summary>
         /// Sets an execution variable.
@@ -76,6 +79,15 @@ namespace Vocalsoft.Texticize
         /// <param name="variable">The variable.</param>
         /// <returns>This instance.</returns>
         public TemplateProcessor SetVariable<T>(string variableName, T variable)
+        {
+            if (_variables.ContainsKey(variableName))
+                throw new ArgumentException("Specified variable name already exists.", "variableName");
+
+            _variables.Add(variableName, variable);
+            return this;
+        }
+
+        public TemplateProcessor SetVariable(string variableName, object variable)
         {
             if (_variables.ContainsKey(variableName))
                 throw new ArgumentException("Specified variable name already exists.", "variableName");
@@ -97,6 +109,12 @@ namespace Vocalsoft.Texticize
             return this;
         }
 
+
+        public TemplateProcessor SetVariable(object variable)
+        {
+            _variables[DEFAULT_VARIABLE_KEY] = variable;
+            return this;
+        }
 
         /// <summary>
         /// Sets the Regex options used in matching expressions in the template.
@@ -142,30 +160,40 @@ namespace Vocalsoft.Texticize
             {
                 foreach (var map in _maps)
                 {
-                    // If map was created as a pattern map, then map's key should exist in regexKeys list.
-                    // In that case create a regular expression regex, otherwise create regex excaping
-                    // any special characters implying non-regular expression text                    
-                    Regex regex = _regexKeys.Contains(map.Key) ? new Regex(map.Key, _regexOptions) : new Regex(Regex.Escape(map.Key), _regexOptions);
+                    string originalPattern = Regex.Escape(map.Key);
+                    string parameterPattern = @"(?:\[(.+?(?:,.+?)*?)\])?";
+                    string pattern = originalPattern.Insert(originalPattern.Length-1, parameterPattern);
+                    Regex regex = new Regex(pattern, _regexOptions);
 
                     // Get all regex matches in template
                     var matches = regex.Matches(toReturn);
+                    Dictionary<string, string> parameterDictionary = new Dictionary<string, string>();
 
                     // Process each match...
                     for (int j = 0; j < matches.Count; j++)
                     {
                         var match = matches[j];
-
-                        List<string> groups = new List<string>();
                         
                         // Process each group in the match...
                         if (match.Success && match.Groups.Count > 0)
                         {
-                            for (int i = 1; i < match.Groups.Count; i++)
-                                groups.Add(match.Groups[i].Value);
+                            if (match.Groups.Count > 1)
+                            {
+                                var parameters = match.Groups[1].Value.Split(',').Select(s => s.Trim());
+                                
+                                foreach (string parameter in parameters)
+                                {
+                                    var paramParts = parameter.Split('=');
+
+                                    if (paramParts.Length > 1)
+                                        parameterDictionary.Add(paramParts[0], paramParts[1]);
+                                }
+                            }
+                                
 
                             string varName;
                             string expression;
-                            object target;
+                            object target = null;
 
                             if (map.Key.Contains("!"))
                             {
@@ -178,26 +206,35 @@ namespace Vocalsoft.Texticize
                                     map.Key.Substring(map.Key.IndexOf('!') + 1));
 
                                 // Find correct variable in the _variables list
-                                target = _variables.Where(s => s.Key == varName).First().Value;
+                                if (_variables.ContainsKey(varName))
+                                    target = _variables[varName];// .Where(s => s.Key == varName).First().Value;
+                                else
+                                    target = new System.Object();
                             }
                             else
                             {
-                                // Variable name
-                                varName = map.Key;
+                                // Find correct variable in the _variables list
+                                if (_variables.ContainsKey(DEFAULT_VARIABLE_KEY))
+                                {
+                                    varName = DEFAULT_VARIABLE_KEY;
+                                    target = _variables[DEFAULT_VARIABLE_KEY];
+                                }
+                                else
+                                {
+                                    target = new System.Object();
+                                    varName = "None";
+                                }
 
                                 // Expression found in template to be replaced
-                                expression = match.Value;
-                                
-                                // Find correct variable in the _variables list
-                                target = _variables.Where(s => s.Key == DEFAULT_VARIABLE_KEY).First().Value;
+                                expression = match.Value;                                
                             }
 
                             // Create context to be sent to delegate that will provide replacement value
                             IContext context = Utility.CreateContext(
                                 variable:target, 
                                 variableName: varName, 
-                                expression: expression, 
-                                regexGroups: groups);
+                                expression: expression,
+                                parameters: parameterDictionary);
 
                             // Perform substitution using map's delegate function sending in context
                             var substitute = map.Value.DynamicInvoke(context).ToString();
@@ -209,9 +246,10 @@ namespace Vocalsoft.Texticize
 
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 // Log exception
+                Console.Error.WriteLine(ex.ToString());
             }
 
             return toReturn;

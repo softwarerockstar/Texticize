@@ -7,6 +7,6 @@ namespace Vocalsoft.Texticize
 {
     interface IContext
     {
-        void SetProperties(object variable, string variableName, string expression, IList<string> regexGroups);
+        void SetProperties(object variable, string variableName, string expression, Dictionary<string, string> parameters);
     }
 }
