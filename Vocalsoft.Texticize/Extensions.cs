@@ -18,14 +18,14 @@ namespace Vocalsoft.Texticize
         /// <param name="rowBegin"></param>
         /// <param name="rowEnd"></param>
         /// <returns></returns>
-        public static string ToFormattedTable<T>(this IList<T> target, Func<T, string>[] columns, string colBeginTag="", string colEndTag="", string rowBeginTag="", string rowEndTag="")
+        public static string ToDelimitedText<T>(this IList<T> target, Func<T, string>[] columns, string colBeginDelimiter = "", string colEndDelimiter = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
         {
             StringBuilder sb = new StringBuilder();
             foreach (var t in target)
             {
-                sb.Append(rowBeginTag);
-                sb.Append(columns.Select(w => w(t)).Aggregate((a, b) => colBeginTag + a + colEndTag + colBeginTag + b + colEndTag));
-                sb.Append(rowEndTag);
+                sb.Append(rowBeginDelimiter);
+                sb.Append(columns.Select(w => w(t)).Aggregate((a, b) => colBeginDelimiter + a + colEndDelimiter + colBeginDelimiter + b + colEndDelimiter));
+                sb.Append(rowEndDelimiter);
             }
             return sb.ToString();
         }
