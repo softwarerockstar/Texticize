@@ -35,6 +35,5 @@ namespace Vocalsoft.Texticize
         {
             return value(target.Where(x => condition(x)).First());
         }
-
     }
 }
