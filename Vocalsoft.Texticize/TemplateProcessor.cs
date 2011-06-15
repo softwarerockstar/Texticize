@@ -80,11 +80,13 @@ namespace Vocalsoft.Texticize
         /// <returns>This instance.</returns>
         public TemplateProcessor SetVariable<T>(string variableName, T variable)
         {
-            if (_variables.ContainsKey(variableName))
-                throw new ArgumentException("Specified variable name already exists.", "variableName");
+            //if (_variables.ContainsKey(variableName))
+            //    throw new ArgumentException("Specified variable name already exists.", "variableName");
 
-            _variables.Add(variableName, variable);
-            return this;
+            //_variables.Add(variableName, variable);
+            //return this;
+
+            return SetVariable(variableName, (object)variable);
         }
 
         public TemplateProcessor SetVariable(string variableName, object variable)
@@ -105,8 +107,10 @@ namespace Vocalsoft.Texticize
         /// <returns>This instance.</returns>
         public TemplateProcessor SetVariable<T>(T variable)
         {
-            _variables[DEFAULT_VARIABLE_KEY] = variable;
-            return this;
+            //_variables[DEFAULT_VARIABLE_KEY] = variable;
+            //return this;
+
+            return SetVariable((object)variable);
         }
 
 
