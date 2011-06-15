@@ -12,8 +12,7 @@ namespace Vocalsoft.Texticize
     {   
         private string _template;
         private Dictionary<string, Delegate> _maps;
-        private Dictionary<string, object> _variables;
-        private List<string> _regexKeys;
+        private Dictionary<string, object> _variables;        
         private RegexOptions _regexOptions;
         private const string DEFAULT_VARIABLE_KEY = "$$__default";
 
@@ -23,7 +22,6 @@ namespace Vocalsoft.Texticize
             _template = template;
             _maps = new Dictionary<string, Delegate>();
             _variables = new Dictionary<string, object>();
-            _regexKeys = new List<string>();
             _regexOptions = RegexOptions.None;
         }
         #endregion
@@ -47,9 +45,6 @@ namespace Vocalsoft.Texticize
             // Add key, func to _maps dictionary            
             _maps.Add(pattern, func);
 
-            // Add key to _regexKeys list
-            _regexKeys.Add(pattern);
-
             return this;
         }
 
@@ -64,9 +59,6 @@ namespace Vocalsoft.Texticize
             // Add key, func to _maps dictionary            
             _maps.Add(pattern, func);
 
-            // Add key to _regexKeys list
-            _regexKeys.Add(pattern);
-
             return this;
         }
 
@@ -80,12 +72,6 @@ namespace Vocalsoft.Texticize
         /// <returns>This instance.</returns>
         public TemplateProcessor SetVariable<T>(string variableName, T variable)
         {
-            //if (_variables.ContainsKey(variableName))
-            //    throw new ArgumentException("Specified variable name already exists.", "variableName");
-
-            //_variables.Add(variableName, variable);
-            //return this;
-
             return SetVariable(variableName, (object)variable);
         }
 
@@ -107,9 +93,6 @@ namespace Vocalsoft.Texticize
         /// <returns>This instance.</returns>
         public TemplateProcessor SetVariable<T>(T variable)
         {
-            //_variables[DEFAULT_VARIABLE_KEY] = variable;
-            //return this;
-
             return SetVariable((object)variable);
         }
 
@@ -138,7 +121,6 @@ namespace Vocalsoft.Texticize
         public TemplateProcessor ClearMaps()
         {
             _maps.Clear();
-            _regexKeys.Clear();
             return this;
         }
 
