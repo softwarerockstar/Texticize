@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.RegularExpressions;
 using System.Data;
 using Vocalsoft.Texticize.UnitTests.DTO;
+using System.Diagnostics;
 
 namespace Vocalsoft.Texticize.UnitTests
 {
@@ -91,6 +92,39 @@ namespace Vocalsoft.Texticize.UnitTests
                 }
             };
         }
+
+        [TestMethod]
+        public void SimpleNonGenericTest()
+        {
+            string template = "Your age is {Age}";
+            string toCompare = "Your age is 21";
+
+            string result = new TemplateProcessor(template)
+                .CreateMap("{Age}", s => "21")
+                .ProcessTemplate();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+        [TestMethod]
+        public void PlainStringDictionaryTest()
+        {
+            Dictionary<string, string> testData = new Dictionary<string, string>
+            {
+                {"Name", "John Doe"},
+                {"Age", "27"}
+            };
+
+            string template = "My name is {Name}. I am {Age} years old.";
+
+            string result = new TemplateProcessor(template)
+                .CreateMap<Dictionary<string, string>>("{Name}", s => s.Variable["Name"])
+                .CreateMap<Dictionary<string, string>>("{Age}", s => s.Variable["Age"])
+                .SetVariable<Dictionary<string, string>>(testData)
+                .ProcessTemplate();
+
+            Assert.AreEqual<string>(result, "My name is John Doe. I am 27 years old.");
+        }
         
         [TestMethod]
         public void SingleVariableDateTest()
@@ -110,7 +144,6 @@ namespace Vocalsoft.Texticize.UnitTests
                 DateTime.Today.ToShortDateString());
 
             Assert.AreEqual<string>(result, toCompare);
-
         }
 
         [TestMethod]
@@ -129,24 +162,45 @@ namespace Vocalsoft.Texticize.UnitTests
                 .ProcessTemplate();
 
             Assert.AreEqual<string>(result, "Dear Mr. Doe:\nYour order # 1 has been received. Your order total is: $275.49.");
-
         }
 
         [TestMethod]
         public void ConditionalTest()
         {
-            
-
             string template = "Price for 15MP Camera is ${Product!Price[Description=15MP Camera]}.";
 
-            string result = new TemplateProcessor(template)                
-                .CreatePatternMap<List<ProductDto>>(@"{Product!Price\[Description=(.+?)\]}",
-                            s => s.Variable.Where(q => q.Description == s.RegexGroups[0]).First().Price.ToString())
+            string result = new TemplateProcessor(template)
+                .CreateMap<List<ProductDto>>(@"{Product!Price}",
+                            s => s.Variable.Where(q => q.Description == s.Parameters["Description"]).First().Price.ToString())
                 .SetVariable<List<ProductDto>>("Product", _products)
                 .ProcessTemplate();
 
             Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
+
         }
 
+        [TestMethod]
+        public void LoopingTest()
+        {
+            string template = @"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}";
+            string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
+
+            string result = new TemplateProcessor(template)
+
+                .CreateMap<List<ProductDto>>("{Products!List}",
+                    s => s.Variable.ToFormattedTable(
+                        columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
+                        columnBegin: s.Parameters["ColBegin"],
+                        columnEnd: s.Parameters["ColEnd"],
+                        rowBegin: s.Parameters["RowBegin"],
+                        rowEnd: s.Parameters["RowEnd"]
+                    )
+                )
+
+                .SetVariable<List<ProductDto>>("Products", _products)
+                .ProcessTemplate();
+            
+            Assert.AreEqual<string>(result, toCompare);
+        }
     }
 }
