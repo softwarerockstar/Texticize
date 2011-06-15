@@ -167,14 +167,14 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void ConditionalTest()
         {
-            string template = "Price for 15MP Camera is ${Product!Price[Description=15MP Camera]}.";
+            string template = "Price for 15MP Camera is {Product!Price[Description=15MP Camera]}.";
 
             string result = new TemplateProcessor(template)
                 
                 .CreateMap<List<ProductDto>>(@"{Product!Price}",
                     s => s.Variable.Lookup(
                         condition: q => q.Description == s.Parameters["Description"],
-                        value: u => u.Price.ToString()
+                        value: u => u.Price.ToString("C")
                     )
                 )
                 
@@ -194,12 +194,12 @@ namespace Vocalsoft.Texticize.UnitTests
             string result = new TemplateProcessor(template)
 
                 .CreateMap<List<ProductDto>>("{Products!List}",
-                    s => s.Variable.ToFormattedTable(
+                    s => s.Variable.ToDelimitedText(
                         columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
-                        colBeginTag: s.Parameters["ColBegin"],
-                        colEndTag: s.Parameters["ColEnd"],
-                        rowBeginTag: s.Parameters["RowBegin"],
-                        rowEndTag: s.Parameters["RowEnd"]
+                        colBeginDelimiter: s.Parameters["ColBegin"],
+                        colEndDelimiter: s.Parameters["ColEnd"],
+                        rowBeginDelimiter: s.Parameters["RowBegin"],
+                        rowEndDelimiter: s.Parameters["RowEnd"]
                     )
                 )
 
