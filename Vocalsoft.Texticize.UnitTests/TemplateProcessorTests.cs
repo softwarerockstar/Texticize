@@ -170,8 +170,14 @@ namespace Vocalsoft.Texticize.UnitTests
             string template = "Price for 15MP Camera is ${Product!Price[Description=15MP Camera]}.";
 
             string result = new TemplateProcessor(template)
+                
                 .CreateMap<List<ProductDto>>(@"{Product!Price}",
-                            s => s.Variable.Where(q => q.Description == s.Parameters["Description"]).First().Price.ToString())
+                    s => s.Variable.Lookup(
+                        condition: q => q.Description == s.Parameters["Description"],
+                        value: u => u.Price.ToString()
+                    )
+                )
+                
                 .SetVariable<List<ProductDto>>("Product", _products)
                 .ProcessTemplate();
 
@@ -190,10 +196,10 @@ namespace Vocalsoft.Texticize.UnitTests
                 .CreateMap<List<ProductDto>>("{Products!List}",
                     s => s.Variable.ToFormattedTable(
                         columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
-                        columnBegin: s.Parameters["ColBegin"],
-                        columnEnd: s.Parameters["ColEnd"],
-                        rowBegin: s.Parameters["RowBegin"],
-                        rowEnd: s.Parameters["RowEnd"]
+                        colBeginTag: s.Parameters["ColBegin"],
+                        colEndTag: s.Parameters["ColEnd"],
+                        rowBeginTag: s.Parameters["RowBegin"],
+                        rowEndTag: s.Parameters["RowEnd"]
                     )
                 )
 
