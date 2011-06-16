@@ -22,9 +22,9 @@ namespace Vocalsoft.Texticize
         private string _template;
         private Dictionary<string, Delegate> _maps;
         private Dictionary<string, object> _variables;        
-        private RegexOptions _regexOptions;
-        private const string DEFAULT_VARIABLE_KEY = "$$__default";
+        private RegexOptions _regexOptions;        
         private string _lastRestult;
+        private Configurator _configuration;
 
         #region Constructors
         public TemplateProcessor(string template)
@@ -34,6 +34,7 @@ namespace Vocalsoft.Texticize
             _maps = new Dictionary<string, Delegate>();
             _variables = new Dictionary<string, object>();
             _regexOptions = RegexOptions.None;
+            _configuration = new Configurator();
         }
         #endregion
 
@@ -47,7 +48,7 @@ namespace Vocalsoft.Texticize
         /// <returns>This instance.</returns>
         public TemplateProcessor CreateMap<T>(string pattern, Func<Context<T>, string> func)
         {
-            if (String.IsNullOrEmpty("pattern"))
+            if (String.IsNullOrEmpty(pattern))
                 throw new ArgumentNullException("pattern");
 
             if (_maps.ContainsKey(pattern))
@@ -61,7 +62,7 @@ namespace Vocalsoft.Texticize
 
         public TemplateProcessor CreateMap(string pattern, Func<Context<object>, string> func)
         {
-            if (String.IsNullOrEmpty("pattern"))
+            if (String.IsNullOrEmpty(pattern))
                 throw new ArgumentNullException("pattern");
 
             if (_maps.ContainsKey(pattern))
@@ -110,7 +111,7 @@ namespace Vocalsoft.Texticize
 
         public TemplateProcessor SetVariable(object variable)
         {
-            _variables[DEFAULT_VARIABLE_KEY] = variable;
+            _variables[_configuration.DefaultVariableKey] = variable;
             return this;
         }
 
@@ -166,7 +167,7 @@ namespace Vocalsoft.Texticize
                 foreach (var map in _maps)
                 {
                     string originalPattern = Regex.Escape(map.Key);
-                    string parameterPattern = @"(?:\[(?<paramsGroup90515721005799>.+?(?:,.+?)*?)\])?";
+                    string parameterPattern = _configuration.TemplateRegexPatternFormatted;
                     string pattern = originalPattern.Insert(originalPattern.Length-1, parameterPattern);
                     Regex regex = new Regex(pattern, _regexOptions);
 
@@ -182,23 +183,24 @@ namespace Vocalsoft.Texticize
                         if (match.Success && match.Groups.Count > 0 && match.Groups.Count > 1)
                         {
                             // Determine variable name
-                            string varName = (map.Key.Contains("!")) ?
+                            string varName = (map.Key.Contains(_configuration.PropertySeperator)) ?
                                 map.Key.Substring(1, map.Key.IndexOf('!') - 1) :
-                                _variables.ContainsKey(DEFAULT_VARIABLE_KEY) ?
-                                    DEFAULT_VARIABLE_KEY :
-                                    "None";
+                                _variables.ContainsKey(_configuration.DefaultVariableKey) ?
+                                    _configuration.DefaultVariableKey :
+                                    _configuration.NoVariableName;
 
                             // Determine expression found in template to be replaced
-                            string expression = (map.Key.Contains("!")) ?
+                            string expression = (map.Key.Contains(_configuration.PropertySeperator)) ?
                                 expression = String.Format("{0}{1}",
                                     map.Key.Substring(0, 1),
-                                    map.Key.Substring(map.Key.IndexOf('!') + 1)) :
+                                    map.Key.Substring(map.Key.IndexOf(_configuration.PropertySeperator) + 1)) :
                                 match.Value;
 
                             // Determine parameters within expression
                             Dictionary<string, string> parameterDictionary =
                                 (match.Groups.Count > 1) ?
-                                    match.Groups["paramsGroup90515721005799"].ToParameterDictionary() :
+                                    match.Groups[_configuration.TemplateRegexParamInternalGroupName]
+                                    .ToParameterDictionary() :
                                     new Dictionary<string, string>();
                             
                             // Determine target variable
@@ -232,10 +234,13 @@ namespace Vocalsoft.Texticize
             _lastRestult = toReturn;
         }
 
+        /// <summary>
+        /// Processes macros and performs substitutions
+        /// </summary>
         public void ProcessMacros()
         {
             string toReturn = _lastRestult;
-            Regex regex = new Regex("%.+?%");
+            Regex regex = new Regex(_configuration.MacroRegexPattern);
             var plugins = ExtensibilityHelper<SystemMacro, SystemMacroMetaData>.Current;
 
             var matches = regex.Matches(toReturn);
