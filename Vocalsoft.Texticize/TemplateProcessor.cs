@@ -16,7 +16,7 @@ namespace Vocalsoft.Texticize
         private RegexOptions _regexOptions;
         private const string DEFAULT_VARIABLE_KEY = "$$__default";
 
-        #region Constructors        
+        #region Constructors
         public TemplateProcessor(string template)
         {
             _template = template;
@@ -147,13 +147,12 @@ namespace Vocalsoft.Texticize
                 foreach (var map in _maps)
                 {
                     string originalPattern = Regex.Escape(map.Key);
-                    string parameterPattern = @"(?:\[(.+?(?:,.+?)*?)\])?";
+                    string parameterPattern = @"(?:\[(?<paramsGroup90515721005799>.+?(?:,.+?)*?)\])?";
                     string pattern = originalPattern.Insert(originalPattern.Length-1, parameterPattern);
                     Regex regex = new Regex(pattern, _regexOptions);
 
                     // Get all regex matches in template
                     var matches = regex.Matches(toReturn);
-                    Dictionary<string, string> parameterDictionary = new Dictionary<string, string>();
 
                     // Process each match...
                     for (int j = 0; j < matches.Count; j++)
@@ -161,59 +160,32 @@ namespace Vocalsoft.Texticize
                         var match = matches[j];
                         
                         // Process each group in the match...
-                        if (match.Success && match.Groups.Count > 0)
+                        if (match.Success && match.Groups.Count > 0 && match.Groups.Count > 1)
                         {
-                            if (match.Groups.Count > 1)
-                            {
-                                var parameters = match.Groups[1].Value.Split(',').Select(s => s.Trim());
-                                
-                                foreach (string parameter in parameters)
-                                {
-                                    var paramParts = parameter.Split('=');
+                            // Determine variable name
+                            string varName = (map.Key.Contains("!")) ?
+                                map.Key.Substring(1, map.Key.IndexOf('!') - 1) :
+                                _variables.ContainsKey(DEFAULT_VARIABLE_KEY) ?
+                                    DEFAULT_VARIABLE_KEY :
+                                    "None";
 
-                                    if (paramParts.Length > 1)
-                                        parameterDictionary.Add(paramParts[0], paramParts[1]);
-                                }
-                            }
-                                
-
-                            string varName;
-                            string expression;
-                            object target = null;
-
-                            if (map.Key.Contains("!"))
-                            {
-                                // Variable name
-                                varName = map.Key.Substring(1, map.Key.IndexOf('!') - 1);
-
-                                // Expression found in template to be replaced
+                            // Determine expression found in template to be replaced
+                            string expression = (map.Key.Contains("!")) ?
                                 expression = String.Format("{0}{1}",
                                     map.Key.Substring(0, 1),
-                                    map.Key.Substring(map.Key.IndexOf('!') + 1));
+                                    map.Key.Substring(map.Key.IndexOf('!') + 1)) :
+                                match.Value;
 
-                                // Find correct variable in the _variables list
-                                if (_variables.ContainsKey(varName))
-                                    target = _variables[varName];// .Where(s => s.Key == varName).First().Value;
-                                else
-                                    target = new System.Object();
-                            }
-                            else
-                            {
-                                // Find correct variable in the _variables list
-                                if (_variables.ContainsKey(DEFAULT_VARIABLE_KEY))
-                                {
-                                    varName = DEFAULT_VARIABLE_KEY;
-                                    target = _variables[DEFAULT_VARIABLE_KEY];
-                                }
-                                else
-                                {
-                                    target = new System.Object();
-                                    varName = "None";
-                                }
-
-                                // Expression found in template to be replaced
-                                expression = match.Value;                                
-                            }
+                            // Determine parameters within expression
+                            Dictionary<string, string> parameterDictionary =
+                                (match.Groups.Count > 1) ?
+                                    match.Groups["paramsGroup90515721005799"].ToParameterDictionary() :
+                                    new Dictionary<string, string>();
+                            
+                            // Determine target variable
+                            object target = (_variables.ContainsKey(varName)) ?
+                                _variables[varName] :
+                                new System.Object();
 
                             // Create context to be sent to delegate that will provide replacement value
                             IContext context = Utility.CreateContext(
@@ -222,7 +194,7 @@ namespace Vocalsoft.Texticize
                                 expression: expression,
                                 parameters: parameterDictionary);
 
-                            // Perform substitution using map's delegate function sending in context
+                            // Get substitute value
                             var substitute = map.Value.DynamicInvoke(context).ToString();
 
                             // Make replacement in template                            
