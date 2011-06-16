@@ -109,7 +109,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             string result = new TemplateProcessor(template)
                 .CreateMap("{Age}", s => "21")
-                .ProcessTemplate();
+                .Process();
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -129,7 +129,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .CreateMap<Dictionary<string, string>>("{Name}", s => s.Variable["Name"])
                 .CreateMap<Dictionary<string, string>>("{Age}", s => s.Variable["Age"])
                 .SetVariable<Dictionary<string, string>>(testData)
-                .ProcessTemplate();
+                .Process();
 
             Assert.AreEqual<string>(result, "My name is John Doe. I am 27 years old.");
         }
@@ -144,7 +144,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .CreateMap<DateTime>("{MyDate!Yesterday}", s => s.Variable.AddDays(-1).ToShortDateString())
                 .CreateMap<DateTime>("{MyDate!Tomorrow}", s => s.Variable.AddDays(1).ToShortDateString())
                 .SetVariable<DateTime>("MyDate", DateTime.Now)
-                .ProcessTemplate();
+                .Process();
 
             var toCompare = String.Format("{0} is history, {1} is a mystery. {2} is a gift, that's why it's called Present.",
                 DateTime.Today.AddDays(-1).ToShortDateString(),
@@ -167,7 +167,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .SetVariable<CustomerDto>("Customer", _customers[0])
                 .SetVariable<OrderDto>("Order", _orders[0])
                 
-                .ProcessTemplate();
+                .Process();
 
             Assert.AreEqual<string>(result, "Dear Mr. Doe:\nYour order # 1 has been received. Your order total is: $275.49.");
         }
@@ -187,13 +187,13 @@ namespace Vocalsoft.Texticize.UnitTests
                 )
                 
                 .SetVariable<List<ProductDto>>("Product", _products)
-                .ProcessTemplate();
+                .Process();
 
             Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
 
         }
 
-        [TestMethod]
+        [TestMethod]        
         public void LoopingTest()
         {
             string template = @"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}";
@@ -212,9 +212,55 @@ namespace Vocalsoft.Texticize.UnitTests
                 )
 
                 .SetVariable<List<ProductDto>>("Products", _products)
-                .ProcessTemplate();
+                .Process();
             
             Assert.AreEqual<string>(result, toCompare);
         }
+
+        [TestMethod]
+        [TestCategory("Macros")]
+        public void DateTimeMacroTest()
+        {
+            string template = "Today is %DateTime%.  Right not it is %DateTime T%";
+            string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
+            
+            string result = new TemplateProcessor(template)
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+        [TestMethod]
+        [TestCategory("Macros")]
+        public void NewLineMacroTest()
+        {
+            string template = "Today is %DateTime%.%NewLine%Right not it is %DateTime T%";
+            string toCompare = String.Format(
+                "Today is {0}.{1}Right not it is {2}", 
+                DateTime.Now.ToString("d"), System.Environment.NewLine, 
+                DateTime.Now.ToString("T"));
+
+            string result = new TemplateProcessor(template)
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+        [TestMethod]
+        [TestCategory("Macros")]
+        public void UserNameMacroTest()
+        {
+            string template = @"The domain and user name of logged on person is %UserDomainName%\%UserName%";
+            string toCompare = String.Format(
+                @"The domain and user name of logged on person is {0}\{1}", 
+                System.Environment.UserDomainName, 
+                System.Environment.UserName);
+
+            string result = new TemplateProcessor(template)
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
     }
 }
