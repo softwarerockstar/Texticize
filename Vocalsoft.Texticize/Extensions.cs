@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Vocalsoft.Texticize
 {
@@ -34,6 +35,23 @@ namespace Vocalsoft.Texticize
         public static string Lookup<T>(this IList<T> target, Func<T, bool> condition, Func<T, string> value)
         {
             return value(target.Where(x => condition(x)).First());
+        }
+
+        public static Dictionary<string, string> ToParameterDictionary(this Group group)
+        {
+            Dictionary<string, string> parameterDictionary = new Dictionary<string, string>();
+
+            var parameters = group.Value.Split(',').Select(s => s.Trim());
+
+            foreach (string parameter in parameters)
+            {
+                var paramParts = parameter.Split('=');
+
+                if (paramParts.Length > 1)
+                    parameterDictionary.Add(paramParts[0], paramParts[1]);
+            }
+
+            return parameterDictionary;
         }
     }
 }
