@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize
 {
@@ -23,11 +24,13 @@ namespace Vocalsoft.Texticize
         private Dictionary<string, object> _variables;        
         private RegexOptions _regexOptions;
         private const string DEFAULT_VARIABLE_KEY = "$$__default";
+        private string _lastRestult;
 
         #region Constructors
         public TemplateProcessor(string template)
         {
             _template = template;
+            _lastRestult = String.Empty;
             _maps = new Dictionary<string, Delegate>();
             _variables = new Dictionary<string, object>();
             _regexOptions = RegexOptions.None;
@@ -142,11 +145,19 @@ namespace Vocalsoft.Texticize
             return this;
         }
 
+        public string Process()
+        {
+            ProcessTemplate();
+            ProcessMacros();
+
+            return _lastRestult;
+        }
+
         /// <summary>
         /// Processes the template and performs substitution
         /// </summary>
         /// <returns>String result.</returns>
-        public string ProcessTemplate()
+        public void ProcessTemplate()
         {
             string toReturn = _template;            
 
@@ -218,8 +229,35 @@ namespace Vocalsoft.Texticize
                 Console.Error.WriteLine(ex.ToString());
             }
 
-            return toReturn;
+            _lastRestult = toReturn;
         }
+
+        public void ProcessMacros()
+        {
+            string toReturn = _lastRestult;
+            Regex regex = new Regex("%.+?%");
+            var plugins = ExtensibilityHelper<SystemMacro, SystemMacroMetaData>.Current;
+
+            var matches = regex.Matches(toReturn);
+
+            for (int i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+
+                if (match.Success)
+                {
+                    string macro = match.Value.Substring(1, match.Value.Length - 2);
+                    var processor = plugins.GetPlugins(s => macro.StartsWith(s.Metadata.Macro)).FirstOrDefault();
+                    toReturn = toReturn.Replace(match.Value, processor.GetValue(macro));
+                }
+            }
+
+            _lastRestult = toReturn;
+        }
+
+        
         #endregion
+
+
     }
 }
