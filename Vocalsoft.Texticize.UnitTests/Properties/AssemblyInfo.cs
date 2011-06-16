@@ -1,4 +1,12 @@
-﻿using System.Reflection;
+﻿//-----------------------------------------------------------------------
+// <copyright author="Muhammad Haroon">
+//      Texticize
+//      Codeplex Project: http://texticize.codeplex.com/
+//      Copyright (c) Muhammad Haroon, http://www.softwarerockstar.com/
+//      Released under Apache License Version 2.0, http://www.apache.org/licenses///      
+// </copyright>
+//-----------------------------------------------------------------------
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,7 +16,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Vocalsoft.Texticize.UnitTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Vocalsoft")]
 [assembly: AssemblyProduct("Vocalsoft.Texticize.UnitTests")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
