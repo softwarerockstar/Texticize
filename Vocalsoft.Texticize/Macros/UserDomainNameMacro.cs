@@ -7,12 +7,12 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(ISystemMacro))]
-    [ExportMetadata("Macro", "NewLine")]
-    class NewLine : ISystemMacro
+    [ExportMetadata("Macro", "UserDomainName")]
+    class UserDomainNameMacro : ISystemMacro
     {
         public string GetValue(string macro)
         {
-            return System.Environment.NewLine;
+            return System.Environment.UserDomainName;
         }
     }
 }
