@@ -13,7 +13,7 @@ namespace Vocalsoft.Texticize
         string _templateRegexPattern = ".+?(?:,.+?)*?";
         string _templateRegexPatternFormat = @"(?:{0}(?<{1}>{2}){3})?";
         string _templateRegexParamInternalGroupName = "paramsGroup90515721005799";
-
+        
         string _macroRegexPattern = ".+?";
         char _macroRegexPatternBeginChar = '%';
         char _macroRegexPatternEndChar = '%';
@@ -22,6 +22,28 @@ namespace Vocalsoft.Texticize
         char _propertySeperator = '!';        
         string _defaultVariableKey = "$$__default";
         string _noVariableName = "None";
+
+        RegexOptions _templateRegexOptions = RegexOptions.None;
+        RegexOptions _macroRegexOptions = RegexOptions.None;
+
+        List<string> _processors = new List<string> { "Vocabulary", "Macro" };
+
+        public List<string> Processors
+        {
+            get { return _processors; }
+        }
+
+        public RegexOptions TemplateRegexOptions
+        {
+            get { return _templateRegexOptions; }
+            set { _templateRegexOptions = value; }
+        }
+
+        public RegexOptions MacroRegexOptions
+        {
+            get { return _macroRegexOptions; }
+            set { _macroRegexOptions = value; }
+        }
 
         public string DefaultVariableKey
         {

@@ -6,9 +6,9 @@ using System.ComponentModel.Composition;
 
 namespace Vocalsoft.Texticize.Macros
 {
-    [Export(typeof(SystemMacro))]
+    [Export(typeof(ISystemMacro))]
     [ExportMetadata("Macro", "DateTime")]
-    class DateTime : SystemMacro
+    class DateTime : ISystemMacro
     {
         public string GetValue(string macro)
         {
