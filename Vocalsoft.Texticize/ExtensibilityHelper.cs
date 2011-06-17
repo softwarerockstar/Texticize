@@ -1,11 +1,15 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright author="Muhammad Haroon">
+//      Texticize
+//      Codeplex Project: http://texticize.codeplex.com/
+//      Copyright (c) Muhammad Haroon, http://www.softwarerockstar.com/
+//      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
+// </copyright>
+//-----------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.IO;
 
 namespace Vocalsoft.ComponentModel
 {
@@ -28,8 +32,6 @@ namespace Vocalsoft.ComponentModel
         private ExtensibilityHelper()
         {
             AggregateCatalog catalog = new AggregateCatalog();
-            //string codeBase = Assembly.GetExecutingAssembly().GetName().CodeBase;
-            //string path = Path.GetDirectoryName(codeBase);
             catalog.Catalogs.Add(new DirectoryCatalog("."));
 
             _container = new CompositionContainer(catalog);
