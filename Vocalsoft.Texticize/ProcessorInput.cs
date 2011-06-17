@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Vocalsoft.Texticize
 {
-    class ProcessorInput
+    public class ProcessorInput
     {
         public string Target { get; set; }
         public Configuration Configuration { get; set; }
