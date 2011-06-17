@@ -24,17 +24,22 @@ namespace Vocalsoft.Texticize
         private Dictionary<string, object> _variables;        
         private RegexOptions _regexOptions;        
         private string _lastRestult;
-        private Configurator _configuration;
+        private Configuration _configuration;
 
         #region Constructors
         public TemplateProcessor(string template)
+            : this(template, new Configuration())
+        {
+        }
+        
+        public TemplateProcessor(string template, Configuration configuration)
         {
             _template = template;
             _lastRestult = String.Empty;
             _maps = new Dictionary<string, Delegate>();
             _variables = new Dictionary<string, object>();
             _regexOptions = RegexOptions.None;
-            _configuration = new Configurator();
+            _configuration = configuration;
         }
         #endregion
 
@@ -184,7 +189,7 @@ namespace Vocalsoft.Texticize
                         {
                             // Determine variable name
                             string varName = (map.Key.Contains(_configuration.PropertySeperator)) ?
-                                map.Key.Substring(1, map.Key.IndexOf('!') - 1) :
+                                map.Key.Substring(1, map.Key.IndexOf(_configuration.PropertySeperator) - 1) :
                                 _variables.ContainsKey(_configuration.DefaultVariableKey) ?
                                     _configuration.DefaultVariableKey :
                                     _configuration.NoVariableName;
@@ -240,7 +245,7 @@ namespace Vocalsoft.Texticize
         public void ProcessMacros()
         {
             string toReturn = _lastRestult;
-            Regex regex = new Regex(_configuration.MacroRegexPattern);
+            Regex regex = new Regex(_configuration.MacroRegexPatternFormatted);
             var plugins = ExtensibilityHelper<SystemMacro, SystemMacroMetaData>.Current;
 
             var matches = regex.Matches(toReturn);

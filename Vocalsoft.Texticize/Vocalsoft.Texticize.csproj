@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configurator.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="ExtensibilityHelper.cs" />
     <Compile Include="Extensions.cs" />
