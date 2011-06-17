@@ -31,11 +31,19 @@ namespace Vocalsoft.ComponentModel
 
         private ExtensibilityHelper()
         {
-            AggregateCatalog catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog("."));
+            try
+            {
+                AggregateCatalog catalog = new AggregateCatalog();
+                catalog.Catalogs.Add(new DirectoryCatalog("."));
 
-            _container = new CompositionContainer(catalog);
-            _container.ComposeParts(this);
+                _container = new CompositionContainer(catalog);
+                _container.ComposeParts(this);
+            }
+            catch (Exception ex)
+            {
+                string toLog = ex.ToString();
+                Console.Error.WriteLine(toLog);
+            }
         }
 
         public IEnumerable<TPluginInterface> GetPlugins()

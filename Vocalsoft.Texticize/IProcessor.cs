@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Vocalsoft.Texticize
 {
-    public interface SystemMacro
+    interface IProcessor
     {
-        string GetValue(string macro);
+        ProcessorOutput Process(ProcessorInput input);
     }
 }

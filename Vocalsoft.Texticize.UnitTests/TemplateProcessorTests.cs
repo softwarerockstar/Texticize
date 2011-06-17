@@ -305,6 +305,26 @@ namespace Vocalsoft.Texticize.UnitTests
         }
 
 
+        [TestMethod]
+        [TestCategory("Configuration")]
+        public void ProcessPipelineTest()
+        {
+            string template = "[MyDate!Today] is a %DateTime MM/dd/yyyy%.";
+            string toCompare = String.Format("[MyDate!Today] is a {0}.", DateTime.Now.ToString("MM/dd/yyyy"));
+
+            // Remove vocabulary processor so that only macros will be processed
+            Configuration config = new Configuration();
+            config.Processors.RemoveAt(0);
+
+            string result = new TemplateProcessor(template, config)            
+                .CreateMap<DateTime>("[MyDate!Today]", s => s.Variable.ToShortDateString())
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+        
+
+
 
     }
 }
