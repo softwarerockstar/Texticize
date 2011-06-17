@@ -314,7 +314,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             // Remove vocabulary processor so that only macros will be processed
             Configuration config = new Configuration();
-            config.Processors.RemoveAt(0);
+            config.ProcessorPipeline.RemoveAt(0);
 
             string result = new TemplateProcessor(template, config)            
                 .CreateMap<DateTime>("[MyDate!Today]", s => s.Variable.ToShortDateString())
@@ -332,7 +332,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             // Remove vocabulary processor so that only macros will be processed
             Configuration config = new Configuration();
-            config.Processors.Add("Test");
+            config.ProcessorPipeline.Add("Test");
 
             string result = new TemplateProcessor(template, config)
                 .CreateMap<DateTime>("[MyDate!Today]", s => s.Variable.ToShortDateString())

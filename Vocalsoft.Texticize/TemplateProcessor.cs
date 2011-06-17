@@ -132,10 +132,9 @@ namespace Vocalsoft.Texticize
         public string Process()
         {   
             var plugins = ExtensibilityHelper<IProcessor, IProcessorMetaData>.Current;
-
             ProcessorOutput output = new ProcessorOutput { Result = _processInput.Target };
 
-            foreach (var processorName in _processInput.Configuration.Processors)
+            foreach (var processorName in _processInput.Configuration.ProcessorPipeline)
             {
                 var processor = plugins.GetPlugins(s => s.Metadata.Processor == processorName).FirstOrDefault();
                 if (processor != null)
