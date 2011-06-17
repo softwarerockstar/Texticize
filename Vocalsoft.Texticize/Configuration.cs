@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Vocalsoft.Texticize
 {
-    public class Configurator
+    public class Configuration
     {
         char _templateRegexParamBeginChar = '[';
         char _templateRegexParamEndChar = ']';
@@ -14,8 +14,12 @@ namespace Vocalsoft.Texticize
         string _templateRegexPatternFormat = @"(?:{0}(?<{1}>{2}){3})?";
         string _templateRegexParamInternalGroupName = "paramsGroup90515721005799";
 
-        char _propertySeperator = '!';
-        string _macroRegexPattern = "%.+?%";
+        string _macroRegexPattern = ".+?";
+        char _macroRegexPatternBeginChar = '%';
+        char _macroRegexPatternEndChar = '%';
+        string _macroRegexPatternFormat = "{0}{1}{2}";
+
+        char _propertySeperator = '!';        
         string _defaultVariableKey = "$$__default";
         string _noVariableName = "None";
 
@@ -24,12 +28,35 @@ namespace Vocalsoft.Texticize
             get { return _defaultVariableKey; }
             set { _defaultVariableKey = value; }
         }
-        
+
+        public char MacroRegexPatternBeginChar
+        {
+            get { return _macroRegexPatternBeginChar; }
+            set { _macroRegexPatternBeginChar = value; }
+        }
+
+        public char MacroRegexPatternEndChar
+        {
+            get { return _macroRegexPatternEndChar; }
+            set { _macroRegexPatternEndChar = value; }
+        }
 
         public string MacroRegexPattern
         {
             get { return _macroRegexPattern; }
             set { _macroRegexPattern = value; }
+        }
+
+        internal string MacroRegexPatternFormatted
+        {
+            get 
+            {
+                return String.Format(
+                    _macroRegexPatternFormat,
+                    Regex.Escape(_macroRegexPatternBeginChar.ToString()),
+                    _macroRegexPattern,
+                    Regex.Escape(_macroRegexPatternEndChar.ToString()));
+            }            
         }
 
         public char PropertySeperator

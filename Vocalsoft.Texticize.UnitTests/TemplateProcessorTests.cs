@@ -262,5 +262,49 @@ namespace Vocalsoft.Texticize.UnitTests
             Assert.AreEqual<string>(result, toCompare);
         }
 
+        [TestMethod]
+        [TestCategory("Configuration")]
+        public void ConditionalTestWithConfiguration()
+        {
+            string template = "Price for 15MP Camera is <Product.Price(Description=15MP Camera)>.";
+
+            string result = new TemplateProcessor(
+                template,
+                new Configuration
+                {
+                    PropertySeperator = '.',
+                    TemplateRegexParamBeginChar = '(',
+                    TemplateRegexParamEndChar = ')'
+                })
+
+                .CreateMap<List<ProductDto>>(@"<Product.Price>",
+                    s => s.Variable.Lookup(
+                        condition: q => q.Description == s.Parameters["Description"],
+                        value: u => u.Price.ToString("C")
+                    )
+                )
+
+                .SetVariable<List<ProductDto>>("Product", _products)
+
+                .Process();
+
+            Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
+        }
+
+        [TestMethod]
+        [TestCategory("Configuration")]
+        public void DateTimeMacroTestWithConfiguration()
+        {
+            string template = "Today is @DateTime^.  Right not it is @DateTime T^";
+            string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
+
+            string result = new TemplateProcessor(template, new Configuration { MacroRegexPatternBeginChar = '@', MacroRegexPatternEndChar = '^' })
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+
+
     }
 }
