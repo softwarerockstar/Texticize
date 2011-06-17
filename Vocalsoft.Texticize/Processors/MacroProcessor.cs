@@ -22,7 +22,6 @@ namespace Vocalsoft.Texticize.Processors
             Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted, input.Configuration.MacroRegexOptions);
             var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
 
-
             var matches = regex.Matches(output.Result);
 
             for (int i = 0; i < matches.Count; i++)

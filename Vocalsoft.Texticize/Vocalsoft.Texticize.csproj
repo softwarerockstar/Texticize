@@ -49,8 +49,8 @@
     <Compile Include="IProcessor.cs" />
     <Compile Include="IProcessorMetaData.cs" />
     <Compile Include="MacroHelper.cs" />
-    <Compile Include="Macros\UserDomainName.cs" />
-    <Compile Include="Macros\UserName.cs" />
+    <Compile Include="Macros\UserDomainNameMacro.cs" />
+    <Compile Include="Macros\UserNameMacro.cs" />
     <Compile Include="ProcessorInput.cs" />
     <Compile Include="ProcessorOutput.cs" />
     <Compile Include="Processors\MacroProcessor.cs" />
@@ -58,8 +58,8 @@
     <Compile Include="ISystemMacro.cs" />
     <Compile Include="ISystemMacroMetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Macros\DateTime.cs" />
-    <Compile Include="Macros\NewLine.cs" />
+    <Compile Include="Macros\DateTimeMacro.cs" />
+    <Compile Include="Macros\NewLineMacro.cs" />
     <Compile Include="TemplateProcessor.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>

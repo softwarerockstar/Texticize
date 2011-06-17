@@ -8,7 +8,7 @@ namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(ISystemMacro))]
     [ExportMetadata("Macro", "DateTime")]
-    class DateTime : ISystemMacro
+    class DateTimeMacro : ISystemMacro
     {
         public string GetValue(string macro)
         {
