@@ -26,11 +26,11 @@ namespace Vocalsoft.Texticize
         RegexOptions _templateRegexOptions = RegexOptions.None;
         RegexOptions _macroRegexOptions = RegexOptions.None;
 
-        List<string> _processors = new List<string> { "Vocabulary", "Macro" };
+        List<string> _processorPipeline = new List<string> { "Vocabulary", "Macro" };
 
-        public List<string> Processors
+        public List<string> ProcessorPipeline
         {
-            get { return _processors; }
+            get { return _processorPipeline; }
         }
 
         public RegexOptions TemplateRegexOptions
