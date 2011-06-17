@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Vocalsoft.Texticize
 {
-    interface IProcessor
+    public interface IProcessor
     {
         ProcessorOutput Process(ProcessorInput input);
     }
