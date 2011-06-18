@@ -342,6 +342,23 @@ namespace Vocalsoft.Texticize.UnitTests
             Assert.AreEqual<string>(result, toCompare);
         }
 
+        [TestMethod]
+        [TestCategory("Configuration")]
+        public void ExceptionTest()
+        {
+            int i = 0;
+            string template = "{Infitinity}";
+
+            var processor = new TemplateProcessor(template);
+
+            processor
+            .CreateMap("{Infitinity}", s => (2 / i).ToString())
+            .Process();
+
+            Assert.AreEqual<bool>(processor.IsSuccess, false);
+            Assert.AreEqual<int>(processor.Exceptions.Count, 1);
+        }
+
 
 
 

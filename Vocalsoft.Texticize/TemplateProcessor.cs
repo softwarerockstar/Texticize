@@ -20,6 +20,7 @@ namespace Vocalsoft.Texticize
     public class TemplateProcessor
     {   
         private ProcessorInput _processInput;
+        private List<Exception> _exceptions;
 
         #region Constructors
         public TemplateProcessor(string template)
@@ -30,8 +31,17 @@ namespace Vocalsoft.Texticize
         public TemplateProcessor(string template, Configuration configuration)
         {
             _processInput = new ProcessorInput(configuration) { Target = template };
+            _exceptions = new List<Exception>();
         }
         #endregion
+
+        public List<Exception> Exceptions
+        {
+            get { return _exceptions; }
+            set { _exceptions = value; }
+        }
+
+        public bool IsSuccess { get { return _exceptions.Count == 0; } }
 
         #region Public Methods
         /// <summary>
@@ -133,6 +143,7 @@ namespace Vocalsoft.Texticize
         {   
             var plugins = ExtensibilityHelper<IProcessor, IProcessorMetaData>.Current;
             ProcessorOutput output = new ProcessorOutput { Result = _processInput.Target };
+            _exceptions.Clear();
 
             foreach (var processorName in _processInput.Configuration.ProcessorPipeline)
             {
@@ -140,14 +151,22 @@ namespace Vocalsoft.Texticize
                 if (processor != null)
                 {
                     output = processor.Process(_processInput);
+
+                    if (!output.IsSuccess)
+                    {
+                        _exceptions.AddRange(output.Exceptions);
+
+                        if (!_processInput.Configuration.ContinueOnError)
+                            break;
+                    }
+
                     _processInput.Target = output.Result;
                 }
             }
-
+            
             return output.Result;
         }
         #endregion
-
 
     }
 }

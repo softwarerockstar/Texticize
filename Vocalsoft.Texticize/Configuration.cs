@@ -28,6 +28,14 @@ namespace Vocalsoft.Texticize
 
         List<string> _processorPipeline = new List<string> { "Vocabulary", "Macro" };
 
+        bool _continueOnError = false;
+
+        public bool ContinueOnError
+        {
+            get { return _continueOnError; }
+            set { _continueOnError = value; }
+        }
+
         public List<string> ProcessorPipeline
         {
             get { return _processorPipeline; }
