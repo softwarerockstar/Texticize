@@ -19,21 +19,30 @@ namespace Vocalsoft.Texticize.Processors
         {
             ProcessorOutput output = new ProcessorOutput();
             output.Result = input.Target;
-            Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted, input.Configuration.MacroRegexOptions);
-            var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
 
-            var matches = regex.Matches(output.Result);
-
-            for (int i = 0; i < matches.Count; i++)
+            try
             {
-                var match = matches[i];
+                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted, input.Configuration.MacroRegexOptions);
+                var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
 
-                if (match.Success)
+                var matches = regex.Matches(output.Result);
+
+                for (int i = 0; i < matches.Count; i++)
                 {
-                    string macro = match.Value.Substring(1, match.Value.Length - 2);
-                    var processor = plugins.GetPlugins(s => macro.StartsWith(s.Metadata.Macro)).FirstOrDefault();
-                    output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
+                    var match = matches[i];
+
+                    if (match.Success)
+                    {
+                        string macro = match.Value.Substring(1, match.Value.Length - 2);
+                        var processor = plugins.GetPlugins(s => macro.StartsWith(s.Metadata.Macro)).FirstOrDefault();
+                        output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
+                    }
                 }
+                output.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                output.Exceptions.Add(ex);
             }
 
             return output;

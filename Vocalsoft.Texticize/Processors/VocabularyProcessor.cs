@@ -77,16 +77,17 @@ namespace Vocalsoft.Texticize.Processors
                             var substitute = map.Value.DynamicInvoke(context).ToString();
 
                             // Make replacement in template                            
-                            output.Result = output.Result.Replace(match.Value, substitute);
+                            output.Result = output.Result.Replace(match.Value, substitute);                            
                         }
                     }
 
                 }
+
+                output.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                // Log exception
-                Console.Error.WriteLine(ex.ToString());
+                output.Exceptions.Add(ex);                
             }
 
             return output;
