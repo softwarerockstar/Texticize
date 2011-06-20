@@ -8,7 +8,7 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.Processors
 {
     [Export(typeof(IProcessor))]
-    [ExportMetadata("Processor", "Vocabulary")]
+    [ExportMetadata("Processor", SystemProcessors.Vocabulary)]
     class VocabularyProcessor : IProcessor
     {
         /// <summary>

@@ -314,7 +314,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             // Remove vocabulary processor so that only macros will be processed
             Configuration config = new Configuration();
-            config.ProcessorPipeline.RemoveAt(0);
+            config.ProcessorPipeline.Remove(SystemProcessors.Vocabulary);
 
             string result = new TemplateProcessor(template, config)            
                 .CreateMap<DateTime>("[MyDate!Today]", s => s.Variable.ToShortDateString())
@@ -352,7 +352,7 @@ namespace Vocalsoft.Texticize.UnitTests
             var processor = new TemplateProcessor(template);
 
             processor
-            .CreateMap("{Infitinity}", s => (2 / i).ToString())
+            .CreateMap("{Infitinity}", s => (2 / i).ToString())     // This line should error out
             .Process();
 
             Assert.AreEqual<bool>(processor.IsSuccess, false);
@@ -360,6 +360,73 @@ namespace Vocalsoft.Texticize.UnitTests
         }
 
 
+        [TestMethod]
+        [TestCategory("Serialization")]
+        public void SaveLoadTest()
+        {
+            string template = @"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}";
+            string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
+            Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
+
+            new TemplateProcessor(template)
+
+                .CreateMap<List<ProductDto>>("{Products!List}",
+                    s => s.Variable.ToDelimitedText(
+                        columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
+                        colBeginDelimiter: s.Parameters["ColBegin"],
+                        colEndDelimiter: s.Parameters["ColEnd"],
+                        rowBeginDelimiter: s.Parameters["RowBegin"],
+                        rowEndDelimiter: s.Parameters["RowEnd"]
+                    )
+                )
+                .Save(localPath);
+
+            var result = TemplateProcessor.LoadFrom(localPath)
+                .SetVariable<List<ProductDto>>("Products", _products)
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+        [TestMethod]
+        [TestCategory("Macro")]
+        public void IncludeTest()
+        {
+            string template = @"%Include C:\Users\MH\Documents\Temp\Level1.txt%";
+            string toCompare = @"Level1 Level2";
+
+            var result = new TemplateProcessor(template)
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+
+        }
+
+        //[TestMethod]
+        //public void PlainStringDictionaryArrayMapTest()
+        //{
+        //    Dictionary<string, string> testData = new Dictionary<string, string>
+        //    {
+        //        {"Name", "John Doe"},
+        //        {"Age", "27"}
+        //    };
+
+        //    string template = "My name is {Name}. I am {Age} years old.";
+
+        //    Dictionary<string, Func<Context<int>, string>> ff = {{"Name", s => s.Variable.ToString()}, {"Val", s => s.Variable.ToString()}};
+
+        //    string result = new TemplateProcessor(template)
+        //        .CreateMaps<Dictionary<string, string>>(
+        //            {"Name", s => s.Variable["Name"]}
+        //    );
+                    
+
+        //        //.CreateMap<Dictionary<string, string>>("{Age}", s => s.Variable["Age"])
+        //        //.SetVariable<Dictionary<string, string>>(testData)
+        //        //.Process();
+
+        //    Assert.AreEqual<string>(result, "My name is John Doe. I am 27 years old.");
+        //}
 
 
     }

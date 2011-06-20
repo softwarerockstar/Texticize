@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.Composition;
+using System.IO;
 
 namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(ISystemMacro))]
-    [ExportMetadata("Macro", SystemMacros.UserDomainName)]
-    class UserDomainNameMacro : ISystemMacro
+    [ExportMetadata("Macro", SystemMacros.Include)]
+    class IncludeMacro : ISystemMacro
     {
         public string GetValue(string macro)
         {
-            return System.Environment.UserDomainName;
+            string filePath = MacroHelper.ParseParameters(macro, ' ')[0];
+            return File.ReadAllText(filePath);
         }
     }
 }
