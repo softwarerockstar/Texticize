@@ -175,7 +175,7 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void ConditionalTest()
         {
-            string template = "Price for 15MP Camera is {Product!Price[Description=15MP Camera]}.";
+            string template = "Price for 15MP Camera is {Product!Price[Description = 15MP Camera]}.";
 
             string result = new TemplateProcessor(template)
                 

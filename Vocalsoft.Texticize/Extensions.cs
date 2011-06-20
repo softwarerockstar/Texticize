@@ -56,7 +56,7 @@ namespace Vocalsoft.Texticize
                 var paramParts = parameter.Split('=');
 
                 if (paramParts.Length > 1)
-                    parameterDictionary.Add(paramParts[0], paramParts[1]);
+                    parameterDictionary.Add(paramParts[0].Trim(), paramParts[1].Trim());
             }
 
             return parameterDictionary;
