@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Vocalsoft.Texticize
 {
+    [Serializable]
     public class ProcessorOutput
     {
         List<Exception> _exceptions = new List<Exception>();

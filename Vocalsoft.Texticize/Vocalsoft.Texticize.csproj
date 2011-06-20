@@ -41,19 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinarySerializer.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="DefaultConfigValues.cs" />
     <Compile Include="ExtensibilityHelper.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="IProcessor.cs" />
     <Compile Include="IProcessorMetaData.cs" />
     <Compile Include="MacroHelper.cs" />
+    <Compile Include="Macros\IncludeMacro.cs" />
     <Compile Include="Macros\UserDomainNameMacro.cs" />
     <Compile Include="Macros\UserNameMacro.cs" />
     <Compile Include="ProcessorInput.cs" />
     <Compile Include="ProcessorOutput.cs" />
     <Compile Include="Processors\MacroProcessor.cs" />
+    <Compile Include="SystemMacros.cs" />
+    <Compile Include="SystemProcessors.cs" />
     <Compile Include="Processors\VocabularyProcessor.cs" />
     <Compile Include="ISystemMacro.cs" />
     <Compile Include="ISystemMacroMetaData.cs" />

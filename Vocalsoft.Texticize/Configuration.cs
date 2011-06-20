@@ -6,29 +6,30 @@ using System.Text.RegularExpressions;
 
 namespace Vocalsoft.Texticize
 {
+    [Serializable]
     public class Configuration
     {
-        char _templateRegexParamBeginChar = '[';
-        char _templateRegexParamEndChar = ']';
-        string _templateRegexPattern = ".+?(?:,.+?)*?";
-        string _templateRegexPatternFormat = @"(?:{0}(?<{1}>{2}){3})?";
-        string _templateRegexParamInternalGroupName = "paramsGroup90515721005799";
-        
-        string _macroRegexPattern = ".+?";
-        char _macroRegexPatternBeginChar = '%';
-        char _macroRegexPatternEndChar = '%';
-        string _macroRegexPatternFormat = "{0}{1}{2}";
+        char _templateRegexParamBeginChar = DefaultConfigValues.TemplateRegexParamBeginChar;
+        char _templateRegexParamEndChar = DefaultConfigValues.TemplateRegexParamEndChar;
+        string _templateRegexPattern = DefaultConfigValues.TemplateRegexPattern;
+        string _templateRegexPatternFormat = DefaultConfigValues.TemplateRegexPatternFormat;
+        string _templateRegexParamInternalGroupName = DefaultConfigValues.TemplateRegexParamInternalGroupName;
 
-        char _propertySeperator = '!';        
-        string _defaultVariableKey = "$$__default";
-        string _noVariableName = "None";
+        string _macroRegexPattern = DefaultConfigValues.MacroRegexPattern;
+        char _macroRegexPatternBeginChar = DefaultConfigValues.MacroRegexPatternBeginChar;
+        char _macroRegexPatternEndChar = DefaultConfigValues.MacroRegexPatternEndChar;
+        string _macroRegexPatternFormat = DefaultConfigValues.MacroRegexPatternFormat;
 
-        RegexOptions _templateRegexOptions = RegexOptions.None;
-        RegexOptions _macroRegexOptions = RegexOptions.None;
+        char _propertySeperator = DefaultConfigValues.PropertySeperator;
+        string _defaultVariableKey = DefaultConfigValues.DefaultVariableKey;
+        string _noVariableName = DefaultConfigValues.NoVariableName;
 
-        List<string> _processorPipeline = new List<string> { "Vocabulary", "Macro" };
+        RegexOptions _templateRegexOptions = DefaultConfigValues.TemplateRegexOptions;
+        RegexOptions _macroRegexOptions = DefaultConfigValues.MacroRegexOptions;
 
-        bool _continueOnError = false;
+        List<string> _processorPipeline = new List<string>(DefaultConfigValues.ProcessorPipelineSteps);
+
+        bool _continueOnError = DefaultConfigValues.ContinueOnError;
 
         public bool ContinueOnError
         {

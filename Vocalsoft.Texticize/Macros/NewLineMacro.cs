@@ -7,7 +7,7 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(ISystemMacro))]
-    [ExportMetadata("Macro", "NewLine")]
+    [ExportMetadata("Macro", SystemMacros.NewLine)]
     class NewLineMacro : ISystemMacro
     {
         public string GetValue(string macro)

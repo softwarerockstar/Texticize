@@ -13,6 +13,7 @@ using System.Text;
 
 namespace Vocalsoft.Texticize
 {
+    [Serializable]
     public class Context<T> : IContext
     {
         public T Variable { get; private set; }

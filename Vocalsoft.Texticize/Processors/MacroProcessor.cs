@@ -9,7 +9,7 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.Processors
 {
     [Export(typeof(IProcessor))]
-    [ExportMetadata("Processor", "Macro")]
+    [ExportMetadata("Processor", SystemProcessors.Macro)]
     class MacroProcessor : IProcessor
     {
         /// <summary>
@@ -27,17 +27,24 @@ namespace Vocalsoft.Texticize.Processors
 
                 var matches = regex.Matches(output.Result);
 
-                for (int i = 0; i < matches.Count; i++)
+                while (matches.Count > 0)
                 {
-                    var match = matches[i];
-
-                    if (match.Success)
+                    for (int i = 0; i < matches.Count; i++)
                     {
-                        string macro = match.Value.Substring(1, match.Value.Length - 2);
-                        var processor = plugins.GetPlugins(s => macro.StartsWith(s.Metadata.Macro)).FirstOrDefault();
-                        output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
+                        var match = matches[i];
+
+                        if (match.Success)
+                        {
+                            string macro = match.Value.Substring(1, match.Value.Length - 2);
+                            var processor = plugins.GetPlugins(s => macro.StartsWith(s.Metadata.Macro)).FirstOrDefault();
+                            output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
+                        }
                     }
+
+                    matches = regex.Matches(output.Result);
                 }
+                
+                
                 output.IsSuccess = true;
             }
             catch (Exception ex)

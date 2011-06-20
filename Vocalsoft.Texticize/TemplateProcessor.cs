@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Vocalsoft.ComponentModel;
+using Vocalsoft.Serialization;
 
 namespace Vocalsoft.Texticize
-{
+{    
+    [Serializable]
     /// <summary>
     /// TemplateProcessor
     /// </summary>
@@ -65,6 +67,14 @@ namespace Vocalsoft.Texticize
             return this;
         }
 
+        //public TemplateProcessor CreateMaps<T>(string pattern, Func<Context<int>, string>[])
+        //{
+        //    //foreach (var item in maps)
+        //    //    CreateMap<T>(item.Key, item.Value);
+
+        //    return this;
+        //}
+
         public TemplateProcessor CreateMap(string pattern, Func<Context<object>, string> func)
         {
             if (String.IsNullOrEmpty(pattern))
@@ -78,6 +88,14 @@ namespace Vocalsoft.Texticize
 
             return this;
         }
+
+        //public TemplateProcessor CreateMap(string pattern, params Func<Context<object>, string>[] funcs)
+        //{   
+        //    foreach (var func in funcs)
+        //        CreateMap(pattern, func);
+
+        //    return this;
+        //}
 
         /// <summary>
         /// Sets an execution variable.
@@ -166,7 +184,29 @@ namespace Vocalsoft.Texticize
             
             return output.Result;
         }
+
         #endregion
+
+        public void Save(Uri localPath)
+        {
+            BinarySerializer.ObjectToFile(localPath, this);
+        }
+
+        public static TemplateProcessor LoadFrom(TemplateProcessor source)
+        {
+            return BinarySerializer.Base64StringToObject<TemplateProcessor>(BinarySerializer.ObjectToBase64String(source));
+        }
+
+        public static TemplateProcessor LoadFrom(Uri localPath)
+        {
+            return BinarySerializer.FileToObject<TemplateProcessor>(localPath);    
+        }
+
+        public static TemplateProcessor LoadFrom(string base64String)
+        {
+            return BinarySerializer.Base64StringToObject<TemplateProcessor>(base64String);
+        }
+
 
     }
 }
