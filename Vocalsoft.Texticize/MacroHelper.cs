@@ -11,7 +11,10 @@ namespace Vocalsoft.Texticize
         {
             var toReturn = new List<string>(macro.Split(seperator));
             if (toReturn.Count > 0)
+            {
                 toReturn.RemoveAt(0);
+                toReturn.RemoveAll(s => s.Trim() == String.Empty);
+            }
 
             return toReturn;
         }
