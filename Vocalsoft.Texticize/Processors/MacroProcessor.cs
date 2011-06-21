@@ -20,16 +20,16 @@ namespace Vocalsoft.Texticize.Processors
         /// <summary>
         /// Processes macros and performs substitutions
         /// </summary>
-        internal ProcessorOutput Process(ProcessorInput input, string overridePattern = null)
+        internal ProcessorOutput Process(ProcessorInput input, string macroName = null)
         {
             ProcessorOutput output = new ProcessorOutput();
             output.Result = input.Target;
 
             try
             {
-                overridePattern = overridePattern ?? String.Empty;
+                macroName = macroName ?? String.Empty;
 
-                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, overridePattern), input.Configuration.MacroRegexOptions);
+                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, macroName), input.Configuration.MacroRegexOptions);
                 var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
                 var matches = regex.Matches(output.Result);
 
