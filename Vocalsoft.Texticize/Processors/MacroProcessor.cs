@@ -12,19 +12,25 @@ namespace Vocalsoft.Texticize.Processors
     [ExportMetadata("Processor", SystemProcessors.Macro)]
     class MacroProcessor : IProcessor
     {
+        public ProcessorOutput Process(ProcessorInput input)
+        {
+            return Process(input, null);
+        }
+
         /// <summary>
         /// Processes macros and performs substitutions
         /// </summary>
-        public ProcessorOutput Process(ProcessorInput input)
+        internal ProcessorOutput Process(ProcessorInput input, string overridePattern = null)
         {
             ProcessorOutput output = new ProcessorOutput();
             output.Result = input.Target;
 
             try
             {
-                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted, input.Configuration.MacroRegexOptions);
-                var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
+                overridePattern = overridePattern ?? String.Empty;
 
+                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, overridePattern), input.Configuration.MacroRegexOptions);
+                var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
                 var matches = regex.Matches(output.Result);
 
                 while (matches.Count > 0)
@@ -42,8 +48,7 @@ namespace Vocalsoft.Texticize.Processors
                     }
 
                     matches = regex.Matches(output.Result);
-                }
-                
+                }                
                 
                 output.IsSuccess = true;
             }

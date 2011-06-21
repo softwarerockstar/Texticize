@@ -402,6 +402,24 @@ namespace Vocalsoft.Texticize.UnitTests
 
         }
 
+        [TestMethod]
+        [TestCategory("Macro")]
+        public void SaveTestWithPrefetchIncludes()
+        {
+            string template = @"%Include C:\Users\MH\Documents\Temp\Level1.txt%";
+            string toCompare = @"Level1 Level2";
+            Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
+
+            new TemplateProcessor(template)
+                .Save(localPath, TemplateSaveOptions.PreFetchIncludes);
+
+            var result = TemplateProcessor.LoadFrom(localPath)                
+                .Process();
+
+            Assert.AreEqual<string>(result, toCompare);
+
+        }
+
         //[TestMethod]
         //public void PlainStringDictionaryArrayMapTest()
         //{

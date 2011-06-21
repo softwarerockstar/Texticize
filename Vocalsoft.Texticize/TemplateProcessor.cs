@@ -189,6 +189,19 @@ namespace Vocalsoft.Texticize
 
         public void Save(Uri localPath)
         {
+            Save(localPath, TemplateSaveOptions.None);
+        }
+
+        public void Save(Uri localPath, TemplateSaveOptions options)
+        {
+            if (options.HasFlag(TemplateSaveOptions.PreFetchIncludes))
+            {
+                var output = new Processors.MacroProcessor().Process(_processInput, SystemMacros.Include);
+
+                if (output.IsSuccess)
+                    _processInput.Target = output.Result;
+            }
+
             BinarySerializer.ObjectToFile(localPath, this);
         }
 
@@ -206,7 +219,5 @@ namespace Vocalsoft.Texticize
         {
             return BinarySerializer.Base64StringToObject<TemplateProcessor>(base64String);
         }
-
-
     }
 }
