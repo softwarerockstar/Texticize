@@ -14,13 +14,13 @@ namespace Vocalsoft.Texticize.Processors
     {
         public ProcessorOutput Process(ProcessorInput input)
         {
-            return Process(input, null);
+            return ProcessMacro(input);
         }
 
         /// <summary>
         /// Processes macros and performs substitutions
         /// </summary>
-        internal ProcessorOutput Process(ProcessorInput input, string macroName = null)
+        internal ProcessorOutput ProcessMacro(ProcessorInput input, string macroName = null)
         {
             ProcessorOutput output = new ProcessorOutput();
             output.Result = input.Target;

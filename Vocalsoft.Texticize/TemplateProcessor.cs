@@ -196,7 +196,7 @@ namespace Vocalsoft.Texticize
         {
             if (options.HasFlag(TemplateSaveOptions.PreFetchIncludes))
             {
-                var output = new Processors.MacroProcessor().Process(_processInput, SystemMacros.Include);
+                var output = new Processors.MacroProcessor().ProcessMacro(_processInput, SystemMacros.Include);
 
                 if (output.IsSuccess)
                     _processInput.Target = output.Result;
