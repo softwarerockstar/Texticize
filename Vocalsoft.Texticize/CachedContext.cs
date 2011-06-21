@@ -13,11 +13,11 @@ using System.Text;
 
 namespace Vocalsoft.Texticize
 {
-    static class Utility
+    static class CachedContext
     {
         private static IDictionary<string, IContext> ContextCache = new Dictionary<string, IContext>();
 
-        public static IContext CreateContext(object variable, string variableName, string expression, Dictionary<string, string> parameters)
+        public static IContext GetContext(object variable, string variableName, string expression, Dictionary<string, string> parameters)
         {
             Type elementType = variable.GetType();
             string cacheKey = variableName;

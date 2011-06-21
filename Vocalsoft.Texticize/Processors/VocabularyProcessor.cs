@@ -67,7 +67,7 @@ namespace Vocalsoft.Texticize.Processors
                                 new System.Object();
 
                             // Create context to be sent to delegate that will provide replacement value
-                            IContext context = Utility.CreateContext(
+                            IContext context = CachedContext.GetContext(
                                 variable: target,
                                 variableName: varName,
                                 expression: expression,
