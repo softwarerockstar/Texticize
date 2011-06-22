@@ -10,8 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Vocalsoft.ComponentModel;
-using Vocalsoft.Serialization;
+using Vocalsoft.Texticize.Factories;
 
 namespace Vocalsoft.Texticize
 {    
@@ -139,23 +138,19 @@ namespace Vocalsoft.Texticize
 
         public ProcessorOutput Process()
         {   
-            var plugins = ExtensibilityHelper<IProcessor, IProcessorMetaData>.Current;            
-            ProcessorOutput toReturn = new ProcessorOutput();
+            var exceptions = new List<Exception>();
 
             ProcessorOutput currentProcessorOutput = new ProcessorOutput { Result = _processInput.Target };
             foreach (var processorName in _processInput.Configuration.ProcessorPipeline)
             {
-                var processor = plugins
-                    .GetPlugins(s => s.Metadata.Processor == processorName)
-                    .FirstOrDefault();
-                
+                var processor = ProcessorFactory.GetProcessor(processorName);                
                 if (processor != null)
                 {
                     currentProcessorOutput = processor.Process(_processInput);
 
                     if (!currentProcessorOutput.IsSuccess)
                     {
-                        toReturn.Exceptions.AddRange(currentProcessorOutput.Exceptions);
+                        exceptions.AddRange(currentProcessorOutput.Exceptions);
 
                         if (!_processInput.Configuration.ContinueOnError)
                             break;
@@ -165,10 +160,10 @@ namespace Vocalsoft.Texticize
                 }
             }
 
-            toReturn.Result = currentProcessorOutput.Result;
-            toReturn.IsSuccess = (toReturn.Exceptions.Count == 0);
-
-            return toReturn;
+            return new ProcessorOutput(
+                currentProcessorOutput.Result, 
+                (exceptions.Count == 0), 
+                exceptions);
         }
 
         #endregion

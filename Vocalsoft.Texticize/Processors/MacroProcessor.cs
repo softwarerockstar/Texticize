@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Vocalsoft.ComponentModel;
 using System.ComponentModel.Composition;
+using Vocalsoft.Texticize.Factories;
 
 namespace Vocalsoft.Texticize.Processors
 {
@@ -29,8 +29,7 @@ namespace Vocalsoft.Texticize.Processors
             {
                 macroName = macroName ?? String.Empty;
 
-                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, macroName), input.Configuration.MacroRegexOptions);
-                var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
+                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, macroName), input.Configuration.MacroRegexOptions);                
                 var matches = regex.Matches(output.Result);
 
                 while (matches.Count > 0)
@@ -42,7 +41,7 @@ namespace Vocalsoft.Texticize.Processors
                         if (match.Success)
                         {
                             string macro = match.Value.Substring(1, match.Value.Length - 2);
-                            var processor = plugins.GetPlugins(s => macro.StartsWith(s.Metadata.Macro)).FirstOrDefault();
+                            var processor = SystemMacroFactory.GetMacro(macro);
                             output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
                         }
                     }
