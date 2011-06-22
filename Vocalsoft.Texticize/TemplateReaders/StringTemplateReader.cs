@@ -9,6 +9,10 @@ namespace Vocalsoft.Texticize.TemplateReaders
     {
         string _value;
 
+        public StringTemplateReader(StringBuilder value) : this(value.ToString())
+        {            
+        }
+
         public StringTemplateReader(string value)
         {
             _value = value;
