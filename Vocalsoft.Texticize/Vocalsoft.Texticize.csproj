@@ -47,6 +47,8 @@
     <Compile Include="DefaultConfigValues.cs" />
     <Compile Include="ExtensibilityHelper.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Factories\SystemMacroFactory.cs" />
+    <Compile Include="Factories\ProcessorFactory.cs" />
     <Compile Include="PersistenceManager.cs" />
     <Compile Include="TemplateReaders\FileTemplateReader.cs" />
     <Compile Include="IContext.cs" />

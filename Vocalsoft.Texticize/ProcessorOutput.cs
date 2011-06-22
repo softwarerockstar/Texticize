@@ -8,7 +8,23 @@ namespace Vocalsoft.Texticize
     [Serializable]
     public class ProcessorOutput
     {
-        List<Exception> _exceptions = new List<Exception>();
+        List<Exception> _exceptions;
+
+        public ProcessorOutput(): this(null, false, null)
+        {
+        }
+
+        public ProcessorOutput(string result, bool isSuccess, IEnumerable<Exception> exceptions)
+        {
+            _exceptions = new List<Exception>();
+            this.Result = result;
+            this.IsSuccess = isSuccess;
+
+            if (exceptions != null)
+                _exceptions.AddRange(exceptions);
+        }
+        
+        
 
         public string Result { get; set; }
         public bool IsSuccess { get; set; }
