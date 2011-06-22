@@ -369,7 +369,7 @@ namespace Vocalsoft.Texticize.UnitTests
             string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
             Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
 
-            new TemplateProcessor(new StringTemplateReader(template))
+            var processor = new TemplateProcessor(new StringTemplateReader(template))
 
                 .CreateMap<List<ProductDto>>("{Products!List}",
                     s => s.Variable.ToDelimitedText(
@@ -379,10 +379,11 @@ namespace Vocalsoft.Texticize.UnitTests
                         rowBeginDelimiter: s.Parameters["RowBegin"],
                         rowEndDelimiter: s.Parameters["RowEnd"]
                     )
-                )
-                .Save(localPath);
+                );
 
-            var result = TemplateProcessor.LoadFrom(localPath)
+            PersistenceManager.Save(processor, localPath);
+
+            var result = PersistenceManager.LoadFrom(localPath)
                 .SetVariable<List<ProductDto>>("Products", _products)
                 .Process().Result;
 
@@ -411,10 +412,10 @@ namespace Vocalsoft.Texticize.UnitTests
             string toCompare = @"Level1 Level2";
             Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
 
-            new TemplateProcessor(new StringTemplateReader(template))
-                .Save(localPath, TemplateSaveOptions.PreFetchIncludes);
+            var processor = new TemplateProcessor(new StringTemplateReader(template));
+            PersistenceManager.Save(processor, localPath, TemplateSaveOptions.PreFetchIncludes);
 
-            var result = TemplateProcessor.LoadFrom(localPath)                
+            var result = PersistenceManager.LoadFrom(localPath)                
                 .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);

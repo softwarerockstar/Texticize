@@ -20,9 +20,8 @@ namespace Vocalsoft.Texticize
     /// TemplateProcessor
     /// </summary>
     public class TemplateProcessor
-    {   
+    {
         private ProcessorInput _processInput;
-        //private List<Exception> _exceptions;
 
         #region Constructors
         public TemplateProcessor(ITemplateReader templateReader)
@@ -35,6 +34,12 @@ namespace Vocalsoft.Texticize
             _processInput = new ProcessorInput(configuration) { Target = templateReader.Read() };            
         }
         #endregion
+
+        protected internal ProcessorInput ProcessInput
+        {
+            get { return _processInput; }            
+        }        
+
 
         #region Public Methods
         /// <summary>
@@ -168,37 +173,6 @@ namespace Vocalsoft.Texticize
 
         #endregion
 
-        public void Save(Uri localPath)
-        {
-            Save(localPath, TemplateSaveOptions.None);
-        }
 
-        public void Save(Uri localPath, TemplateSaveOptions options)
-        {
-            if (options.HasFlag(TemplateSaveOptions.PreFetchIncludes))
-            {
-                var output = new Processors.MacroProcessor().ProcessMacro(_processInput, SystemMacros.Include);
-
-                if (output.IsSuccess)
-                    _processInput.Target = output.Result;
-            }
-
-            BinarySerializer.ObjectToFile(localPath, this);
-        }
-
-        public static TemplateProcessor LoadFrom(TemplateProcessor source)
-        {
-            return BinarySerializer.Base64StringToObject<TemplateProcessor>(BinarySerializer.ObjectToBase64String(source));
-        }
-
-        public static TemplateProcessor LoadFrom(Uri localPath)
-        {
-            return BinarySerializer.FileToObject<TemplateProcessor>(localPath);    
-        }
-
-        public static TemplateProcessor LoadFrom(string base64String)
-        {
-            return BinarySerializer.Base64StringToObject<TemplateProcessor>(base64String);
-        }
     }
 }
