@@ -110,7 +110,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             string result = new TemplateProcessor(new StringTemplateReader(template))
                 .CreateMap("{Age}", s => "21")
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -130,7 +130,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .CreateMap<Dictionary<string, string>>("{Name}", s => s.Variable["Name"])
                 .CreateMap<Dictionary<string, string>>("{Age}", s => s.Variable["Age"])
                 .SetVariable<Dictionary<string, string>>(testData)
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, "My name is John Doe. I am 27 years old.");
         }
@@ -145,7 +145,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .CreateMap<DateTime>("{MyDate!Yesterday}", s => s.Variable.AddDays(-1).ToShortDateString())
                 .CreateMap<DateTime>("{MyDate!Tomorrow}", s => s.Variable.AddDays(1).ToShortDateString())
                 .SetVariable<DateTime>("MyDate", DateTime.Now)
-                .Process();
+                .Process().Result;
 
             var toCompare = String.Format("{0} is history, {1} is a mystery. {2} is a gift, that's why it's called Present.",
                 DateTime.Today.AddDays(-1).ToShortDateString(),
@@ -168,7 +168,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .SetVariable<CustomerDto>("Customer", _customers[0])
                 .SetVariable<OrderDto>("Order", _orders[0])
                 
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, "Dear Mr. Doe:\nYour order # 1 has been received. Your order total is: $275.49.");
         }
@@ -188,7 +188,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 )
                 
                 .SetVariable<List<ProductDto>>("Product", _products)
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
 
@@ -213,7 +213,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 )
 
                 .SetVariable<List<ProductDto>>("Products", _products)
-                .Process();
+                .Process().Result;
             
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -226,7 +226,7 @@ namespace Vocalsoft.Texticize.UnitTests
             string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
             
             string result = new TemplateProcessor(new StringTemplateReader(template))
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -242,7 +242,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 DateTime.Now.ToString("T"));
 
             string result = new TemplateProcessor(new StringTemplateReader(template))
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -258,7 +258,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 System.Environment.UserName);
 
             string result = new TemplateProcessor(new StringTemplateReader(template))
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -287,7 +287,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
                 .SetVariable<List<ProductDto>>("Product", _products)
 
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
         }
@@ -300,7 +300,7 @@ namespace Vocalsoft.Texticize.UnitTests
             string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
 
             string result = new TemplateProcessor(new StringTemplateReader(template), new Configuration { MacroRegexPatternBeginChar = '@', MacroRegexPatternEndChar = '^' })
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -319,7 +319,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             string result = new TemplateProcessor(new StringTemplateReader(template), config)            
                 .CreateMap<DateTime>("[MyDate!Today]", s => s.Variable.ToShortDateString())
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -338,7 +338,7 @@ namespace Vocalsoft.Texticize.UnitTests
             string result = new TemplateProcessor(new StringTemplateReader(template), config)
                 .CreateMap<DateTime>("[MyDate!Today]", s => s.Variable.ToShortDateString())
                 .SetVariable<DateTime>("MyDate", DateTime.Now)
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -352,12 +352,12 @@ namespace Vocalsoft.Texticize.UnitTests
 
             var processor = new TemplateProcessor(new StringTemplateReader(template));
 
-            processor
-            .CreateMap("{Infitinity}", s => (2 / i).ToString())     // This line should error out
-            .Process();
+            var output = processor
+                .CreateMap("{Infitinity}", s => (2 / i).ToString())     // This line should error out
+                .Process();
 
-            Assert.AreEqual<bool>(processor.IsSuccess, false);
-            Assert.AreEqual<int>(processor.Exceptions.Count, 1);
+            Assert.AreEqual<bool>(output.IsSuccess, false);
+            Assert.AreEqual<int>(output.Exceptions.Count, 1);
         }
 
 
@@ -384,7 +384,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             var result = TemplateProcessor.LoadFrom(localPath)
                 .SetVariable<List<ProductDto>>("Products", _products)
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -397,7 +397,7 @@ namespace Vocalsoft.Texticize.UnitTests
             string toCompare = @"Level1 Level2";
 
             var result = new TemplateProcessor(new StringTemplateReader(template))
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
 
@@ -415,7 +415,7 @@ namespace Vocalsoft.Texticize.UnitTests
                 .Save(localPath, TemplateSaveOptions.PreFetchIncludes);
 
             var result = TemplateProcessor.LoadFrom(localPath)                
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
 
@@ -434,7 +434,7 @@ namespace Vocalsoft.Texticize.UnitTests
                     "Vocalsoft.Texticize.UnitTests.Resources.TestResource",
                     "Template"
                 )
-            ).Process();
+            ).Process().Result;
             
 
             Assert.AreEqual<string>(result, toCompare);
@@ -448,7 +448,7 @@ namespace Vocalsoft.Texticize.UnitTests
             string toCompare = @"Level1 Level2";
 
             var result = new TemplateProcessor(new FileTemplateReader(@"C:\Users\MH\Documents\Temp\Level1.txt"))
-                .Process();
+                .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -474,7 +474,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
         //        //.CreateMap<Dictionary<string, string>>("{Age}", s => s.Variable["Age"])
         //        //.SetVariable<Dictionary<string, string>>(testData)
-        //        //.Process();
+        //        //.Process().Result;
 
         //    Assert.AreEqual<string>(result, "My name is John Doe. I am 27 years old.");
         //}
