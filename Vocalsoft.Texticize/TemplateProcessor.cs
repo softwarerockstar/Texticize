@@ -22,7 +22,7 @@ namespace Vocalsoft.Texticize
     public class TemplateProcessor
     {   
         private ProcessorInput _processInput;
-        private List<Exception> _exceptions;
+        //private List<Exception> _exceptions;
 
         #region Constructors
         public TemplateProcessor(ITemplateReader templateReader)
@@ -32,18 +32,9 @@ namespace Vocalsoft.Texticize
         
         public TemplateProcessor(ITemplateReader templateReader, Configuration configuration)
         {
-            _processInput = new ProcessorInput(configuration) { Target = templateReader.Read() };
-            _exceptions = new List<Exception>();
+            _processInput = new ProcessorInput(configuration) { Target = templateReader.Read() };            
         }
         #endregion
-
-        public List<Exception> Exceptions
-        {
-            get { return _exceptions; }
-            set { _exceptions = value; }
-        }
-
-        public bool IsSuccess { get { return _exceptions.Count == 0; } }
 
         #region Public Methods
         /// <summary>
@@ -67,14 +58,6 @@ namespace Vocalsoft.Texticize
             return this;
         }
 
-        //public TemplateProcessor CreateMaps<T>(string pattern, Func<Context<int>, string>[])
-        //{
-        //    //foreach (var item in maps)
-        //    //    CreateMap<T>(item.Key, item.Value);
-
-        //    return this;
-        //}
-
         public TemplateProcessor CreateMap(string pattern, Func<Context<object>, string> func)
         {
             if (String.IsNullOrEmpty(pattern))
@@ -88,14 +71,6 @@ namespace Vocalsoft.Texticize
 
             return this;
         }
-
-        //public TemplateProcessor CreateMap(string pattern, params Func<Context<object>, string>[] funcs)
-        //{   
-        //    foreach (var func in funcs)
-        //        CreateMap(pattern, func);
-
-        //    return this;
-        //}
 
         /// <summary>
         /// Sets an execution variable.
@@ -157,32 +132,38 @@ namespace Vocalsoft.Texticize
             return this;
         }
 
-        public string Process()
+        public ProcessorOutput Process()
         {   
-            var plugins = ExtensibilityHelper<IProcessor, IProcessorMetaData>.Current;
-            ProcessorOutput output = new ProcessorOutput { Result = _processInput.Target };
-            _exceptions.Clear();
+            var plugins = ExtensibilityHelper<IProcessor, IProcessorMetaData>.Current;            
+            ProcessorOutput toReturn = new ProcessorOutput();
 
+            ProcessorOutput currentProcessorOutput = new ProcessorOutput { Result = _processInput.Target };
             foreach (var processorName in _processInput.Configuration.ProcessorPipeline)
             {
-                var processor = plugins.GetPlugins(s => s.Metadata.Processor == processorName).FirstOrDefault();
+                var processor = plugins
+                    .GetPlugins(s => s.Metadata.Processor == processorName)
+                    .FirstOrDefault();
+                
                 if (processor != null)
                 {
-                    output = processor.Process(_processInput);
+                    currentProcessorOutput = processor.Process(_processInput);
 
-                    if (!output.IsSuccess)
+                    if (!currentProcessorOutput.IsSuccess)
                     {
-                        _exceptions.AddRange(output.Exceptions);
+                        toReturn.Exceptions.AddRange(currentProcessorOutput.Exceptions);
 
                         if (!_processInput.Configuration.ContinueOnError)
                             break;
                     }
 
-                    _processInput.Target = output.Result;
+                    _processInput.Target = currentProcessorOutput.Result;
                 }
             }
-            
-            return output.Result;
+
+            toReturn.Result = currentProcessorOutput.Result;
+            toReturn.IsSuccess = (toReturn.Exceptions.Count == 0);
+
+            return toReturn;
         }
 
         #endregion
