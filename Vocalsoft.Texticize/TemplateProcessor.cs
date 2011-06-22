@@ -25,14 +25,14 @@ namespace Vocalsoft.Texticize
         private List<Exception> _exceptions;
 
         #region Constructors
-        public TemplateProcessor(string template)
-            : this(template, new Configuration())
+        public TemplateProcessor(ITemplateReader templateReader)
+            : this(templateReader, new Configuration())
         {
         }
         
-        public TemplateProcessor(string template, Configuration configuration)
+        public TemplateProcessor(ITemplateReader templateReader, Configuration configuration)
         {
-            _processInput = new ProcessorInput(configuration) { Target = template };
+            _processInput = new ProcessorInput(configuration) { Target = templateReader.Read() };
             _exceptions = new List<Exception>();
         }
         #endregion

@@ -47,9 +47,11 @@
     <Compile Include="DefaultConfigValues.cs" />
     <Compile Include="ExtensibilityHelper.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="TemplateReaders\FileTemplateReader.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="IProcessor.cs" />
     <Compile Include="IProcessorMetaData.cs" />
+    <Compile Include="ITemplateReader.cs" />
     <Compile Include="MacroHelper.cs" />
     <Compile Include="Macros\IncludeMacro.cs" />
     <Compile Include="Macros\UserDomainNameMacro.cs" />
@@ -66,6 +68,8 @@
     <Compile Include="Macros\DateTimeMacro.cs" />
     <Compile Include="Macros\NewLineMacro.cs" />
     <Compile Include="TemplateProcessor.cs" />
+    <Compile Include="TemplateReaders\EmbeddedResourceTemplateReader.cs" />
+    <Compile Include="TemplateReaders\StringTemplateReader.cs" />
     <Compile Include="TemplateSaveOptions.cs" />
     <Compile Include="CachedContext.cs" />
   </ItemGroup>
