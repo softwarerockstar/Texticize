@@ -11,10 +11,24 @@ namespace Vocalsoft.Texticize.Macros
     [ExportMetadata("Macro", SystemMacros.Include)]
     class IncludeMacro : ISystemMacro
     {
-        public string GetValue(string macro)
+        static Dictionary<string, string> _runtimeFileCache;
+
+        public IncludeMacro()
         {
+            _runtimeFileCache = new Dictionary<string, string>();
+        }
+
+        public string GetValue(string macro)
+        {            
             string filePath = MacroHelper.ParseParameters(macro, ' ')[0];
-            return File.ReadAllText(filePath);
+
+            if (!_runtimeFileCache.ContainsKey(filePath))
+            {
+                string content = File.ReadAllText(filePath);
+                _runtimeFileCache[filePath] = content;
+            }
+
+            return _runtimeFileCache[filePath];
         }
     }
 }
