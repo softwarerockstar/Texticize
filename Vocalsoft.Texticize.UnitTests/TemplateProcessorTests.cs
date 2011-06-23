@@ -447,7 +447,7 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Include")]
         public void LoopingIncludeTest()
         {
-            string template = "Following products are currently in inventory%NewLine%{Products!List[ColBegin=<,ColEnd=>,RowEnd=%Include C:\Users\MH\Documents\Temp\NewLine.txt%]}";
+            string template = @"Following products are currently in inventory%NewLine%{Products!List[ColBegin=<,ColEnd=>,RowEnd=%Include C:\Users\MH\Documents\Temp\NewLine.txt%]}";
             string toCompare = "Following products are currently in inventory\r\n<50MP Camera><$150.29>\r\n\r\n<20MP Camera><$150.29>\r\n\r\n<15MP Camera><$150.29>\r\n\r\n<12MP Camera><$150.29>\r\n\r\n<10MP Camera><$150.29>\r\n\r\n";
 
             string result = new StringTemplateReader(template)
