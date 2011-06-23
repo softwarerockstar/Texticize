@@ -49,11 +49,8 @@ namespace Vocalsoft.Texticize
                 if (String.IsNullOrEmpty(item.Key))
                     throw new ArgumentNullException("Key");
 
-                if (_processInput.Maps.ContainsKey(item.Key))
-                    throw new ArgumentException("Specified pattern already exists for given type.");
-
-                // Add key, func to _processInput.Maps dictionary            
-                _processInput.Maps.Add(item.Key, item.Value);
+                // Add key, func to _processInput.Maps dictionary
+                _processInput.Maps[item.Key] = item.Value;
 
             }
 
@@ -63,12 +60,7 @@ namespace Vocalsoft.Texticize
         public TemplateProcessor SetVariables(params KeyValuePair<string, object>[] variables)
         {
             foreach (var item in variables)
-            {
-                if (_processInput.Variables.ContainsKey(item.Key))
-                    throw new ArgumentException("Specified variable name already exists.", "Key");
-
-                _processInput.Variables.Add(item.Key, item.Value);
-            }
+                _processInput.Variables[item.Key] = item.Value;
 
             return this;
         }
