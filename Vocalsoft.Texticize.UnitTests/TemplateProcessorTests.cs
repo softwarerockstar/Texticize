@@ -430,7 +430,7 @@ namespace Vocalsoft.Texticize.UnitTests
         }
 
         [TestMethod]
-        [TestCategory("Macro")]
+        [TestCategory("Include")]
         public void IncludeTest()
         {
             string template = @"%Include C:\Users\MH\Documents\Temp\Level1.txt%";
@@ -441,11 +441,37 @@ namespace Vocalsoft.Texticize.UnitTests
                 .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
-
         }
 
         [TestMethod]
-        [TestCategory("Macro")]
+        [TestCategory("Include")]
+        public void LoopingIncludeTest()
+        {
+            string template = "Following products are currently in inventory%NewLine%{Products!List[ColBegin=<,ColEnd=>,RowEnd=%Include C:\Users\MH\Documents\Temp\NewLine.txt%]}";
+            string toCompare = "Following products are currently in inventory\r\n<50MP Camera><$150.29>\r\n\r\n<20MP Camera><$150.29>\r\n\r\n<15MP Camera><$150.29>\r\n\r\n<12MP Camera><$150.29>\r\n\r\n<10MP Camera><$150.29>\r\n\r\n";
+
+            string result = new StringTemplateReader(template)
+                .CreateTemplateProcessor()
+                .CreateMaps
+                (
+                    "{Products!List}".MapTo<List<ProductDto>>
+                    (
+                        s => s.Variable.ToDelimitedText(
+                            columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
+                            colBeginDelimiter: s.Parameters["ColBegin"],
+                            colEndDelimiter: s.Parameters["ColEnd"],
+                            rowEndDelimiter: s.Parameters["RowEnd"]
+                        )
+                    )
+                )
+                .SetVariables("Products".ToVariable(_products))
+                .Process().Result;
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+        [TestMethod]
+        [TestCategory("Include")]
         public void SaveTestWithPrefetchIncludesTest()
         {
             string template = @"%Include C:\Users\MH\Documents\Temp\Level1.txt%";
@@ -493,64 +519,5 @@ namespace Vocalsoft.Texticize.UnitTests
 
             Assert.AreEqual<string>(result, toCompare);
         }
-
-        [TestMethod]
-        [TestCategory("")]
-        public void CreateMapsTest()
-        {
-            string template = "Dear Mr. {Customer!LastName}:\nYour order # {Order!OrderID} has been received. Your order total is: ${Order!OrderTotal}.";
-            string toCompare = "Dear Mr. Doe:\nYour order # 1 has been received. Your order total is: $275.49.";
-
-            string result = new StringTemplateReader(template)
-                .CreateTemplateProcessor()
-                .CreateMaps
-                (
-                    "{Customer!LastName}".MapTo<CustomerDto>(s => s.Variable.LastName),
-                    "{Order!OrderID}".MapTo<OrderDto>(s => s.Variable.OrderID.ToString()),                    
-                    "{Order!OrderTotal}".MapTo<OrderDto>(s => s.Variable.Total.ToString())
-                )
-                .SetVariables
-                (
-                    "Customer".ToVariable(_customers[0]),
-                    "Order".ToVariable(_orders[0])
-                )
-                
-                .Process().Result;
-
-            Assert.AreEqual<string>(result, toCompare);
-        }
-
-            
-
-            
-        //}
-
-        //[TestMethod]
-        //public void LoopingTest()
-        //{
-        //    string template = @"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}";
-        //    string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
-
-        //    string result = new TemplateProcessor(new StringTemplateReader(template))
-
-        //        .CreateMap<List<ProductDto>>("{Products!List}",
-        //            s => s.Variable.ToDelimitedText(
-        //                columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
-        //                colBeginDelimiter: s.Parameters["ColBegin"],
-        //                colEndDelimiter: s.Parameters["ColEnd"],
-        //                rowBeginDelimiter: s.Parameters["RowBegin"],
-        //                rowEndDelimiter: s.Parameters["RowEnd"]
-        //            )
-        //        )
-
-        //        .SetVariable<List<ProductDto>>("Products", _products)
-        //        .Process().Result;
-
-        //    Assert.AreEqual<string>(result, toCompare);
-        //}
-
-
-
-
     }
 }
