@@ -61,5 +61,26 @@ namespace Vocalsoft.Texticize
 
             return parameterDictionary;
         }
+        
+        public static TemplateProcessor CreateTemplateProcessor(this ITemplateReader reader, Configuration configuration = null)
+        {
+            return (configuration == null) ? new TemplateProcessor(reader) : new TemplateProcessor(reader, configuration);
+        }
+        
+        public static KeyValuePair<string, Delegate> MapTo<T>(this string pattern, Func<Context<T>, string> mapsTo)
+        {
+            return new KeyValuePair<string, Delegate>(pattern, mapsTo);
+        }
+
+        public static KeyValuePair<string, Delegate> MapTo(this string pattern, Func<Context<object>, string> mapsTo)
+        {
+            return new KeyValuePair<string, Delegate>(pattern, mapsTo);
+        }
+
+        public static KeyValuePair<string, object> ToVariable(this string variableName, object variable)
+        {
+            return new KeyValuePair<string, object>(variableName, variable);
+        }
+
     }
 }

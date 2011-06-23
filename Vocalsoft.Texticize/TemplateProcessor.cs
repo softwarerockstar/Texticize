@@ -41,74 +41,37 @@ namespace Vocalsoft.Texticize
 
 
         #region Public Methods
-        /// <summary>
-        /// For a given type parameter T, creates a mapping between given pattern and a delegate to perform replacement for that pattern.
-        /// </summary>
-        /// <typeparam name="T">Type parameter.</typeparam>
-        /// <param name="pattern">The pattern.</param>
-        /// <param name="func">The delegate function that will perform replacement.</param>
-        /// <returns>This instance.</returns>
-        public TemplateProcessor CreateMap<T>(string pattern, Func<Context<T>, string> func)
+
+        public TemplateProcessor CreateMaps(params KeyValuePair<string, Delegate>[] maps)
         {
-            if (String.IsNullOrEmpty(pattern))
-                throw new ArgumentNullException("pattern");
+            foreach (var item in maps)
+            {
+                if (String.IsNullOrEmpty(item.Key))
+                    throw new ArgumentNullException("Key");
 
-            if (_processInput.Maps.ContainsKey(pattern))
-                throw new ArgumentException("Specified pattern already exists for given type.");
+                if (_processInput.Maps.ContainsKey(item.Key))
+                    throw new ArgumentException("Specified pattern already exists for given type.");
 
-            // Add key, func to _processInput.Maps dictionary            
-            _processInput.Maps.Add(pattern, func);
+                // Add key, func to _processInput.Maps dictionary            
+                _processInput.Maps.Add(item.Key, item.Value);
+
+            }
 
             return this;
         }
 
-        public TemplateProcessor CreateMap(string pattern, Func<Context<object>, string> func)
+        public TemplateProcessor SetVariables(params KeyValuePair<string, object>[] variables)
         {
-            if (String.IsNullOrEmpty(pattern))
-                throw new ArgumentNullException("pattern");
+            foreach (var item in variables)
+            {
+                if (_processInput.Variables.ContainsKey(item.Key))
+                    throw new ArgumentException("Specified variable name already exists.", "Key");
 
-            if (_processInput.Maps.ContainsKey(pattern))
-                throw new ArgumentException("Specified pattern already exists for given type.");
-
-            // Add key, func to _processInput.Maps dictionary            
-            _processInput.Maps.Add(pattern, func);
+                _processInput.Variables.Add(item.Key, item.Value);
+            }
 
             return this;
         }
-
-        /// <summary>
-        /// Sets an execution variable.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="variableName">Name of the variable.</param>
-        /// <param name="variable">The variable.</param>
-        /// <returns>This instance.</returns>
-        public TemplateProcessor SetVariable<T>(string variableName, T variable)
-        {
-            return SetVariable(variableName, (object)variable);
-        }
-
-        public TemplateProcessor SetVariable(string variableName, object variable)
-        {
-            if (_processInput.Variables.ContainsKey(variableName))
-                throw new ArgumentException("Specified variable name already exists.", "variableName");
-
-            _processInput.Variables.Add(variableName, variable);
-            return this;
-        }
-
-        /// <summary>
-        /// Sets default execution variable.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="variableName">Name of the variable.</param>
-        /// <param name="variable">The variable.</param>
-        /// <returns>This instance.</returns>
-        public TemplateProcessor SetVariable<T>(T variable)
-        {
-            return SetVariable((object)variable);
-        }
-
 
         public TemplateProcessor SetVariable(object variable)
         {
