@@ -11,11 +11,11 @@ using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.Factories
 {
-    public static class SystemMacroFactory
+    public static class MacroFactory
     {
-        public static ISystemMacro GetMacro(string macroName)
+        public static IMacro GetMacro(string macroName)
         {
-            var plugins = ExtensibilityHelper<ISystemMacro, ISystemMacroMetaData>.Current;
+            var plugins = ExtensibilityHelper<IMacro, IMacroMetaData>.Current;
 
             return plugins
                 .GetPlugins(s => macroName.StartsWith(s.Metadata.Macro))

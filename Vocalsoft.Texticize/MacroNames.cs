@@ -9,9 +9,12 @@
 
 namespace Vocalsoft.Texticize
 {
-    public static class SystemProcessors
-    {        
-        public const string Macro = "Macro";
-        public const string Vocabulary = "Vocabulary";
+    public static class MacroNames
+    {
+        public const string DateTime = "DateTime";
+        public const string NewLine = "NewLine";
+        public const string UserDomainName = "UserDomainName";
+        public const string UserName = "UserName";
+        public const string Include = "Include";
     }
 }

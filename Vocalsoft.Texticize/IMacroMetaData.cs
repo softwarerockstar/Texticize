@@ -9,7 +9,7 @@
 
 namespace Vocalsoft.Texticize
 {
-    public interface ISystemMacroMetaData
+    public interface IMacroMetaData
     {
         string Macro { get; }
     }

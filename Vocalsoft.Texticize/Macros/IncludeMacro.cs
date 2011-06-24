@@ -12,9 +12,9 @@ using System.IO;
 
 namespace Vocalsoft.Texticize.Macros
 {
-    [Export(typeof(ISystemMacro))]
-    [ExportMetadata("Macro", SystemMacros.Include)]
-    class IncludeMacro : ISystemMacro
+    [Export(typeof(IMacro))]
+    [ExportMetadata("Macro", MacroNames.Include)]
+    class IncludeMacro : IMacro
     {
         static Dictionary<string, string> _runtimeFileCache;
 
