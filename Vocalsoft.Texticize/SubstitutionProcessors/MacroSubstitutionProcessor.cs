@@ -11,11 +11,11 @@ using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using Vocalsoft.Texticize.Factories;
 
-namespace Vocalsoft.Texticize.Processors
+namespace Vocalsoft.Texticize.SubstitutionProcessors
 {
-    [Export(typeof(IProcessor))]
-    [ExportMetadata("UniqueName", ProcessorNames.Macro)]
-    class MacroProcessor : IProcessor
+    [Export(typeof(ISubstitutionProcessor))]
+    [ExportMetadata("UniqueName", SubstitutionProcessorNames.Macro)]
+    class MacroSubstitutionProcessor : ISubstitutionProcessor
     {
         public ProcessorOutput Process(ProcessorInput input)
         {

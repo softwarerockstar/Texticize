@@ -13,9 +13,9 @@ namespace Vocalsoft.Texticize.Factories
 {
     public static class ProcessorFactory
     {
-        public static IProcessor GetProcessor(string processorName)
+        public static ISubstitutionProcessor GetProcessor(string processorName)
         {
-            var plugins = ExtensibilityHelper<IProcessor, IExtensionUniqueName>.Current;
+            var plugins = ExtensibilityHelper<ISubstitutionProcessor, IExtensionUniqueName>.Current;
 
             return plugins
                 .GetPlugins(s => s.Metadata.UniqueName == processorName)

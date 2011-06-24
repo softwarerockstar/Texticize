@@ -12,11 +12,11 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Vocalsoft.Texticize.Processors
+namespace Vocalsoft.Texticize.SubstitutionProcessors
 {
-    [Export(typeof(IProcessor))]
-    [ExportMetadata("UniqueName", ProcessorNames.Vocabulary)]
-    class VocabularyProcessor : IProcessor
+    [Export(typeof(ISubstitutionProcessor))]
+    [ExportMetadata("UniqueName", SubstitutionProcessorNames.Vocabulary)]
+    class VocabularySubstitutionProcessor : ISubstitutionProcessor
     {
         /// <summary>
         /// Processes the template and performs substitution

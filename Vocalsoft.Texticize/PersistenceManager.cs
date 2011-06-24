@@ -22,7 +22,7 @@ namespace Vocalsoft.Texticize
         {
             if (options.HasFlag(TemplateSaveOptions.PreFetchIncludes))
             {
-                var output = new Processors.MacroProcessor().ProcessMacro(processor.ProcessInput, MacroNames.Include);
+                var output = new SubstitutionProcessors.MacroSubstitutionProcessor().ProcessMacro(processor.ProcessInput, MacroNames.Include);
 
                 if (output.IsSuccess)
                     processor.ProcessInput.Target = output.Result;

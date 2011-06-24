@@ -9,7 +9,7 @@
 
 namespace Vocalsoft.Texticize
 {
-    public interface IProcessor
+    public interface ISubstitutionProcessor
     {
         ProcessorOutput Process(ProcessorInput input);
     }
