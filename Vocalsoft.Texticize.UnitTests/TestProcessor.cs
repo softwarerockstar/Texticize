@@ -10,9 +10,9 @@ using System.ComponentModel.Composition;
 
 namespace Vocalsoft.Texticize.UnitTests
 {
-    [Export(typeof(IProcessor))]
+    [Export(typeof(ISubstitutionProcessor))]
     [ExportMetadata("UniqueName", "Test")]
-    class TestProcessor : IProcessor
+    class TestProcessor : ISubstitutionProcessor
     {
         /// <summary>
         /// Processes macros and performs substitutions
