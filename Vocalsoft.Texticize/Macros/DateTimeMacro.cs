@@ -10,9 +10,9 @@ using System.ComponentModel.Composition;
 
 namespace Vocalsoft.Texticize.Macros
 {
-    [Export(typeof(ISystemMacro))]
-    [ExportMetadata("Macro", SystemMacros.DateTime)]
-    class DateTimeMacro : ISystemMacro
+    [Export(typeof(IMacro))]
+    [ExportMetadata("Macro", MacroNames.DateTime)]
+    class DateTimeMacro : IMacro
     {
         public string GetValue(string macro)
         {

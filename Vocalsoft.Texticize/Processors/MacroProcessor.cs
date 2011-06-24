@@ -14,7 +14,7 @@ using Vocalsoft.Texticize.Factories;
 namespace Vocalsoft.Texticize.Processors
 {
     [Export(typeof(IProcessor))]
-    [ExportMetadata("Processor", SystemProcessors.Macro)]
+    [ExportMetadata("Processor", ProcessorNames.Macro)]
     class MacroProcessor : IProcessor
     {
         public ProcessorOutput Process(ProcessorInput input)
@@ -46,7 +46,7 @@ namespace Vocalsoft.Texticize.Processors
                         if (match.Success)
                         {
                             string macro = match.Value.Substring(1, match.Value.Length - 2);
-                            var processor = SystemMacroFactory.GetMacro(macro);
+                            var processor = MacroFactory.GetMacro(macro);
                             output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
                         }
                     }

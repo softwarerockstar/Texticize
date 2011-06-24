@@ -10,9 +10,9 @@ using System.ComponentModel.Composition;
 
 namespace Vocalsoft.Texticize.Macros
 {
-    [Export(typeof(ISystemMacro))]
-    [ExportMetadata("Macro", SystemMacros.UserName)]
-    class UserNameMacro : ISystemMacro
+    [Export(typeof(IMacro))]
+    [ExportMetadata("Macro", MacroNames.UserName)]
+    class UserNameMacro : IMacro
     {
         public string GetValue(string macro)
         {

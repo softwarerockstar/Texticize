@@ -342,7 +342,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             // Remove vocabulary processor so that only macros will be processed
             Configuration config = new Configuration();
-            config.ProcessorPipeline.Remove(SystemProcessors.Vocabulary);
+            config.ProcessorPipeline.Remove(ProcessorNames.Vocabulary);
 
             string result = TemplateProcessor
                 .FromReader(new StringTemplateReader(template))

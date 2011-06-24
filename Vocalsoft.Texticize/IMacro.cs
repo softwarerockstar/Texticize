@@ -9,7 +9,7 @@
 
 namespace Vocalsoft.Texticize
 {
-    public interface ISystemMacro
+    public interface IMacro
     {
         string GetValue(string macro);
     }
