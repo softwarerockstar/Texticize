@@ -7,15 +7,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Text.RegularExpressions;
-using System.Data;
-using Vocalsoft.Texticize.UnitTests.DTO;
-using System.Diagnostics;
 using Vocalsoft.Texticize.TemplateReaders;
+using Vocalsoft.Texticize.UnitTests.DTO;
 
 namespace Vocalsoft.Texticize.UnitTests
 {
