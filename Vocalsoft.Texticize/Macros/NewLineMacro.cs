@@ -11,7 +11,7 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(IMacro))]
-    [ExportMetadata("Macro", MacroNames.NewLine)]
+    [ExportMetadata("UniqueName", MacroNames.NewLine)]
     class NewLineMacro : IMacro
     {
         public string GetValue(string macro)

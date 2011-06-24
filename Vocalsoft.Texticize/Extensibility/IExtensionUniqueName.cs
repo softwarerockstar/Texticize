@@ -6,20 +6,11 @@
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
-using System.Linq;
-using Vocalsoft.ComponentModel;
 
-namespace Vocalsoft.Texticize.Factories
+namespace Vocalsoft.ComponentModel
 {
-    public static class MacroFactory
+    public interface IExtensionUniqueName
     {
-        public static IMacro GetMacro(string macroName)
-        {
-            var plugins = ExtensibilityHelper<IMacro, IExtensionUniqueName>.Current;
-
-            return plugins
-                .GetPlugins(s => macroName.StartsWith(s.Metadata.UniqueName))
-                .FirstOrDefault();
-        }
+        string UniqueName { get; }        
     }
 }

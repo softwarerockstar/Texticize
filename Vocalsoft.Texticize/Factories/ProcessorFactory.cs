@@ -15,10 +15,10 @@ namespace Vocalsoft.Texticize.Factories
     {
         public static IProcessor GetProcessor(string processorName)
         {
-            var plugins = ExtensibilityHelper<IProcessor, IProcessorMetaData>.Current;
+            var plugins = ExtensibilityHelper<IProcessor, IExtensionUniqueName>.Current;
 
             return plugins
-                .GetPlugins(s => s.Metadata.Processor == processorName)
+                .GetPlugins(s => s.Metadata.UniqueName == processorName)
                 .FirstOrDefault();
         }
     }

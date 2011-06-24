@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 namespace Vocalsoft.Texticize.Processors
 {
     [Export(typeof(IProcessor))]
-    [ExportMetadata("Processor", ProcessorNames.Vocabulary)]
+    [ExportMetadata("UniqueName", ProcessorNames.Vocabulary)]
     class VocabularyProcessor : IProcessor
     {
         /// <summary>

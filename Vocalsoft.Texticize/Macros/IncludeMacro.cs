@@ -13,7 +13,7 @@ using System.IO;
 namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(IMacro))]
-    [ExportMetadata("Macro", MacroNames.Include)]
+    [ExportMetadata("UniqueName", MacroNames.Include)]
     class IncludeMacro : IMacro
     {
         static Dictionary<string, string> _runtimeFileCache;

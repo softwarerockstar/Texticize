@@ -30,7 +30,7 @@ namespace Vocalsoft.Texticize
         public static RegexOptions TemplateRegexOptions = RegexOptions.None;
         public static RegexOptions MacroRegexOptions = RegexOptions.None;
 
-        public static string[] ProcessorPipelineSteps = new string[] { "Vocabulary", "Macro" };
+        public static string[] ProcessorPipelineSteps = new string[] { ProcessorNames.Vocabulary, ProcessorNames.Macro };
 
         public static bool ContinueOnError = false;
     }
