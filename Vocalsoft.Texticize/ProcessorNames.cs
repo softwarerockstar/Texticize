@@ -11,7 +11,7 @@ namespace Vocalsoft.Texticize
 {
     public static class ProcessorNames
     {        
-        public const string Macro = "Macro";
-        public const string Vocabulary = "Vocabulary";
+        public const string Macro = "Vocalsoft.Texticize.Processors.MacroProcessor";
+        public const string Vocabulary = "Vocalsoft.Texticize.Processors.VocabularyProcessor";
     }
 }

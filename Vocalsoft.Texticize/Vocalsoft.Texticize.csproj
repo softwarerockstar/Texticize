@@ -41,11 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinarySerializer.cs" />
+    <Compile Include="Extensibility\IExtensionUniqueName.cs" />
+    <Compile Include="Serialization\BinarySerializer.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="DefaultConfigValues.cs" />
-    <Compile Include="ExtensibilityHelper.cs" />
+    <Compile Include="Extensibility\ExtensibilityHelper.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Factories\MacroFactory.cs" />
     <Compile Include="Factories\ProcessorFactory.cs" />
@@ -53,7 +54,6 @@
     <Compile Include="TemplateReaders\FileTemplateReader.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="IProcessor.cs" />
-    <Compile Include="IProcessorMetaData.cs" />
     <Compile Include="ITemplateReader.cs" />
     <Compile Include="MacroHelper.cs" />
     <Compile Include="Macros\IncludeMacro.cs" />
@@ -66,7 +66,6 @@
     <Compile Include="ProcessorNames.cs" />
     <Compile Include="Processors\VocabularyProcessor.cs" />
     <Compile Include="IMacro.cs" />
-    <Compile Include="IMacroMetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Macros\DateTimeMacro.cs" />
     <Compile Include="Macros\NewLineMacro.cs" />

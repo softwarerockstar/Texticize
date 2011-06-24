@@ -11,7 +11,7 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.UnitTests
 {
     [Export(typeof(IProcessor))]
-    [ExportMetadata("Processor", "Test")]
+    [ExportMetadata("UniqueName", "Test")]
     class TestProcessor : IProcessor
     {
         /// <summary>

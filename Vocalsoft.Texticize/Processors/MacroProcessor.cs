@@ -14,7 +14,7 @@ using Vocalsoft.Texticize.Factories;
 namespace Vocalsoft.Texticize.Processors
 {
     [Export(typeof(IProcessor))]
-    [ExportMetadata("Processor", ProcessorNames.Macro)]
+    [ExportMetadata("UniqueName", ProcessorNames.Macro)]
     class MacroProcessor : IProcessor
     {
         public ProcessorOutput Process(ProcessorInput input)

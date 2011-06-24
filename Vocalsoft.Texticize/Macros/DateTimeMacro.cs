@@ -11,7 +11,7 @@ using System.ComponentModel.Composition;
 namespace Vocalsoft.Texticize.Macros
 {
     [Export(typeof(IMacro))]
-    [ExportMetadata("Macro", MacroNames.DateTime)]
+    [ExportMetadata("UniqueName", MacroNames.DateTime)]
     class DateTimeMacro : IMacro
     {
         public string GetValue(string macro)
