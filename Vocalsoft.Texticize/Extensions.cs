@@ -27,7 +27,7 @@ namespace Vocalsoft.Texticize
         /// <param name="rowBegin"></param>
         /// <param name="rowEnd"></param>
         /// <returns></returns>
-        public static string ToDelimitedText<T>(this IList<T> target, Func<T, string>[] columns, string colBeginDelimiter = "", string colEndDelimiter = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
+        public static string ToStructuredText<T>(this IList<T> target, Func<T, string>[] columns, string colBeginDelimiter = "", string colEndDelimiter = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
         {
             StringBuilder sb = new StringBuilder();
             foreach (var t in target)
@@ -61,12 +61,7 @@ namespace Vocalsoft.Texticize
 
             return parameterDictionary;
         }
-        
-        public static TemplateProcessor CreateTemplateProcessor(this ITemplateReader reader, Configuration configuration = null)
-        {
-            return (configuration == null) ? new TemplateProcessor(reader) : new TemplateProcessor(reader, configuration);
-        }
-        
+
         public static KeyValuePair<string, Delegate> MapTo<T>(this string pattern, Func<Context<T>, string> mapsTo)
         {
             return new KeyValuePair<string, Delegate>(pattern, mapsTo);

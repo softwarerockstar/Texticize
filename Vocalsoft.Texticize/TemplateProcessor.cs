@@ -8,8 +8,6 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Vocalsoft.Texticize.Factories;
 
 namespace Vocalsoft.Texticize
@@ -20,7 +18,11 @@ namespace Vocalsoft.Texticize
     /// </summary>
     public class TemplateProcessor
     {
-        private ProcessorInput _processInput;
+        #region Private Members
+
+        private ProcessorInput _processInput; 
+        
+        #endregion
 
         #region Constructors
         public TemplateProcessor(ITemplateReader templateReader)
@@ -30,19 +32,19 @@ namespace Vocalsoft.Texticize
         
         public TemplateProcessor(ITemplateReader templateReader, Configuration configuration)
         {
-            _processInput = new ProcessorInput(configuration) { Target = templateReader.Read() };            
+            _processInput = new ProcessorInput(configuration) { Target = templateReader.Read() };                
         }
         #endregion
 
-        protected internal ProcessorInput ProcessInput
-        {
-            get { return _processInput; }            
-        }        
-
-
         #region Public Methods
 
-        public TemplateProcessor CreateMaps(params KeyValuePair<string, Delegate>[] maps)
+        public TemplateProcessor SetConfiguration(Configuration configuration)
+        {
+            _processInput.Configuration = configuration;
+            return this;
+        }
+
+        public TemplateProcessor SetMaps(params KeyValuePair<string, Delegate>[] maps)
         {
             foreach (var item in maps)
             {
@@ -123,6 +125,22 @@ namespace Vocalsoft.Texticize
 
         #endregion
 
+        #region Protected Members
 
+        protected internal ProcessorInput ProcessInput
+        {
+            get { return _processInput; }
+        }
+
+        #endregion
+
+        #region Static Methods
+
+        public static TemplateProcessor FromReader(ITemplateReader reader)
+        {
+            return new TemplateProcessor(reader);
+        }
+
+        #endregion
     }
 }
