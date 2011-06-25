@@ -24,10 +24,12 @@ namespace Vocalsoft.Serialization
         /// <returns>Base64 string representation of the source.</returns>
         public static string ObjectToBase64String(object source)
         {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, source);
-            return Convert.ToBase64String(stream.ToArray());
+            using (MemoryStream stream = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, source);
+                return Convert.ToBase64String(stream.ToArray());
+            }
         }
 
         public static void ObjectToFile(Uri path, object source)
@@ -42,15 +44,10 @@ namespace Vocalsoft.Serialization
         /// <returns>Original object that this Base64 string was generated from.</returns>
         public static object Base64StringToObject(string source)
         {
-            try
+            using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(source)))
             {
-                MemoryStream stream = new MemoryStream(Convert.FromBase64String(source));
                 BinaryFormatter formatter = new BinaryFormatter();
                 return formatter.Deserialize(stream);
-            }
-            catch
-            {
-                return source;
             }
         }
 

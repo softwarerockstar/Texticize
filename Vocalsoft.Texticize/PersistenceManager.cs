@@ -11,39 +11,38 @@ using Vocalsoft.Serialization;
 
 namespace Vocalsoft.Texticize
 {
-    public class PersistenceManager
+    public static class PersistenceManager
     {
-        public static void Save(TemplateProcessor processor, Uri localPath)
+        public static void Save(ITemplateProcessor processor, Uri localPath)
         {
-            Save(processor, localPath, TemplateSaveOptions.None);
+            if (processor != null)
+                Save(processor, localPath, TemplateSaveOptions.None);
         }
 
-        public static void Save(TemplateProcessor processor, Uri localPath, TemplateSaveOptions options)
+        public static void Save(ITemplateProcessor processor, Uri localPath, TemplateSaveOptions options)
         {
-            if (options.HasFlag(TemplateSaveOptions.PreFetchIncludes))
+            if (processor != null)
             {
-                var output = new SubstitutionProcessors.MacroSubstitutionProcessor().ProcessMacro(processor.ProcessInput, MacroNames.Include);
+                if (options.HasFlag(TemplateSaveOptions.PreFetchIncludes))
+                    processor.FetchIncludes();
 
-                if (output.IsSuccess)
-                    processor.ProcessInput.Target = output.Result;
+                BinarySerializer.ObjectToFile(localPath, processor);
             }
-
-            BinarySerializer.ObjectToFile(localPath, processor);
         }
 
-        public static TemplateProcessor LoadFrom(TemplateProcessor source)
+        public static ITemplateProcessor LoadFrom(ITemplateProcessor source)
         {
-            return BinarySerializer.Base64StringToObject<TemplateProcessor>(BinarySerializer.ObjectToBase64String(source));
+            return BinarySerializer.Base64StringToObject<ITemplateProcessor>(BinarySerializer.ObjectToBase64String(source));
         }
 
-        public static TemplateProcessor LoadFrom(Uri localPath)
+        public static ITemplateProcessor LoadFrom(Uri localPath)
         {
-            return BinarySerializer.FileToObject<TemplateProcessor>(localPath);
+            return BinarySerializer.FileToObject<ITemplateProcessor>(localPath);
         }
 
-        public static TemplateProcessor LoadFrom(string base64String)
+        public static ITemplateProcessor LoadFrom(string base64String)
         {
-            return BinarySerializer.Base64StringToObject<TemplateProcessor>(base64String);
+            return BinarySerializer.Base64StringToObject<ITemplateProcessor>(base64String);
         }
     }
 }

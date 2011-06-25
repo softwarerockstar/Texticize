@@ -25,76 +25,80 @@ namespace Vocalsoft.Texticize.SubstitutionProcessors
         public ProcessorOutput Process(ProcessorInput input)
         {
             ProcessorOutput output = new ProcessorOutput();
-            output.Result = input.Target;
 
-            try
+            if (input != null)
             {
-                foreach (var map in input.Maps)
+                output.Result = input.Target;
+
+                try
                 {
-                    string originalPattern = Regex.Escape(map.Key);
-                    string parameterPattern = input.Configuration.TemplateRegexPatternFormatted;
-                    string pattern = originalPattern.Insert(originalPattern.Length - 1, parameterPattern);
-                    Regex regex = new Regex(pattern, input.Configuration.TemplateRegexOptions);
-
-                    // Get all regex matches in template
-                    var matches = regex.Matches(output.Result);
-
-                    // Process each match...
-                    for (int j = 0; j < matches.Count; j++)
+                    foreach (var map in input.Maps)
                     {
-                        var match = matches[j];
+                        string originalPattern = Regex.Escape(map.Key);
+                        string parameterPattern = input.Configuration.TemplateRegexPatternFormatted;
+                        string pattern = originalPattern.Insert(originalPattern.Length - 1, parameterPattern);
+                        Regex regex = new Regex(pattern, input.Configuration.TemplateRegexOptions);
 
-                        // Process each group in the match...
-                        if (match.Success && match.Groups.Count > 0 && match.Groups.Count > 1)
+                        // Get all regex matches in template
+                        var matches = regex.Matches(output.Result);
+
+                        // Process each match...
+                        for (int j = 0; j < matches.Count; j++)
                         {
-                            // Determine variable name
-                            string varName = (map.Key.Contains(input.Configuration.PropertySeperator)) ?
-                                map.Key.Substring(1, map.Key.IndexOf(input.Configuration.PropertySeperator) - 1) :
-                                input.Variables.ContainsKey(input.Configuration.DefaultVariableKey) ?
-                                    input.Configuration.DefaultVariableKey :
-                                    input.Configuration.NoVariableName;
+                            var match = matches[j];
 
-                            // Determine expression found in template to be replaced
-                            string expression = (map.Key.Contains(input.Configuration.PropertySeperator)) ?
-                                expression = String.Format("{0}{1}",
-                                    map.Key.Substring(0, 1),
-                                    map.Key.Substring(map.Key.IndexOf(input.Configuration.PropertySeperator) + 1)) :
-                                match.Value;
+                            // Process each group in the match...
+                            if (match.Success && match.Groups.Count > 0 && match.Groups.Count > 1)
+                            {
+                                // Determine variable name
+                                string varName = (map.Key.Contains(input.Configuration.PropertySeperator)) ?
+                                    map.Key.Substring(1, map.Key.IndexOf(input.Configuration.PropertySeperator) - 1) :
+                                    input.Variables.ContainsKey(input.Configuration.DefaultVariableKey) ?
+                                        input.Configuration.DefaultVariableKey :
+                                        input.Configuration.NoVariableName;
 
-                            // Determine parameters within expression
-                            Dictionary<string, string> parameterDictionary =
-                                (match.Groups.Count > 1) ?
-                                    match.Groups[input.Configuration.TemplateRegexParamInternalGroupName]
-                                    .ToParameterDictionary() :
-                                    new Dictionary<string, string>();
+                                // Determine expression found in template to be replaced
+                                string expression = (map.Key.Contains(input.Configuration.PropertySeperator)) ?
+                                    expression = String.Format("{0}{1}",
+                                        map.Key.Substring(0, 1),
+                                        map.Key.Substring(map.Key.IndexOf(input.Configuration.PropertySeperator) + 1)) :
+                                    match.Value;
 
-                            // Determine target variable
-                            object target = (input.Variables.ContainsKey(varName)) ?
-                                input.Variables[varName] :
-                                new System.Object();
+                                // Determine parameters within expression
+                                Dictionary<string, string> parameterDictionary =
+                                    (match.Groups.Count > 1) ?
+                                        match.Groups[input.Configuration.TemplateRegexParamInternalGroupName]
+                                        .ToParameterDictionary() :
+                                        new Dictionary<string, string>();
 
-                            // Create context to be sent to delegate that will provide replacement value
-                            IContext context = CachedContext.GetContext(
-                                variable: target,
-                                variableName: varName,
-                                expression: expression,
-                                parameters: parameterDictionary);
+                                // Determine target variable
+                                object target = (input.Variables.ContainsKey(varName)) ?
+                                    input.Variables[varName] :
+                                    new System.Object();
 
-                            // Get substitute value
-                            var substitute = map.Value.DynamicInvoke(context).ToString();
+                                // Create context to be sent to delegate that will provide replacement value
+                                IContext context = CachedContext.GetContext(
+                                    variable: target,
+                                    variableName: varName,
+                                    expression: expression,
+                                    parameters: parameterDictionary);
 
-                            // Make replacement in template                            
-                            output.Result = output.Result.Replace(match.Value, substitute);                            
+                                // Get substitute value
+                                var substitute = map.Value.DynamicInvoke(context).ToString();
+
+                                // Make replacement in template                            
+                                output.Result = output.Result.Replace(match.Value, substitute);
+                            }
                         }
+
                     }
 
+                    output.IsSuccess = true;
                 }
-
-                output.IsSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                output.Exceptions.Add(ex);                
+                catch (ApplicationException ex)
+                {
+                    output.Exceptions.Add(ex);
+                }
             }
 
             return output;

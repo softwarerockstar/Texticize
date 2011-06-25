@@ -17,4 +17,15 @@ namespace Vocalsoft.Texticize
         public const string UserName = "UserName";
         public const string Include = "Include";
     }
+
+    public static class SubstitutionProcessorNames
+    {
+        public const string Macro = "Vocalsoft.Texticize.Processors.MacroProcessor";
+        public const string Vocabulary = "Vocalsoft.Texticize.Processors.VocabularyProcessor";
+    }
+
+    public static class TemplateProcessorNames
+    {
+        public const string Default = "Default";
+    }
 }

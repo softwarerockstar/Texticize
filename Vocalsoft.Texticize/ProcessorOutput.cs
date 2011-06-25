@@ -8,6 +8,7 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Vocalsoft.Texticize
 {
@@ -32,6 +33,6 @@ namespace Vocalsoft.Texticize
 
         public string Result { get; set; }
         public bool IsSuccess { get; set; }
-        public List<Exception> Exceptions { get {return _exceptions; } } 
+        public IList<Exception> Exceptions { get {return _exceptions; } } 
     }
 }

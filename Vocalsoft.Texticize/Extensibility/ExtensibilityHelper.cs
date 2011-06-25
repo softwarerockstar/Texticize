@@ -13,58 +13,76 @@ using System.ComponentModel.Composition.Hosting;
 
 namespace Vocalsoft.ComponentModel
 {
-    public class ExtensibilityHelper<TPluginInterface, KMetadataInterface>
+    public class ExtensibilityHelper<T> : IDisposable
     {
         [ImportMany]
-        private IEnumerable<Lazy<TPluginInterface, KMetadataInterface>> _plugins;
+        private IEnumerable<Lazy<T, IExtensionUniqueName>> _plugins;
 
         private CompositionContainer _container;
 
-        private static ExtensibilityHelper<TPluginInterface, KMetadataInterface> _instance;
+        private static ExtensibilityHelper<T> _instance = new ExtensibilityHelper<T>();
 
-        static ExtensibilityHelper()
-        {
-            _instance = new ExtensibilityHelper<TPluginInterface, KMetadataInterface>();
+        public static ExtensibilityHelper<T> Current 
+        { 
+            get 
+            {
+                var isStateful = (typeof(T).GetCustomAttributes(typeof(StatefulExtension), true).Length > 0);
+                return (isStateful) ? new ExtensibilityHelper<T>() : _instance;
+            } 
         }
-
-        public static ExtensibilityHelper<TPluginInterface, KMetadataInterface> Current { get { return _instance; } }
 
         private ExtensibilityHelper()
         {
-            try
+            using (AggregateCatalog catalog = new AggregateCatalog())
             {
-                AggregateCatalog catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new DirectoryCatalog("."));
 
                 _container = new CompositionContainer(catalog);
                 _container.ComposeParts(this);
             }
-            catch (Exception ex)
-            {
-                string toLog = ex.ToString();
-                Console.Error.WriteLine(toLog);
-            }
         }
 
-        public IEnumerable<TPluginInterface> GetPlugins()
+        public IEnumerable<T> GetPlugins()
         {
             foreach (var plugin in _plugins)
                 yield return plugin.Value;
         }
 
-        public IEnumerable<TPluginInterface> GetPlugins(Func<Lazy<TPluginInterface, KMetadataInterface>, bool> selector)
+        public IEnumerable<T> GetPlugins(Func<Lazy<T, IExtensionUniqueName>, bool> selector)
         {
-            foreach (Lazy<TPluginInterface, KMetadataInterface> processor in _plugins)
+            foreach (Lazy<T, IExtensionUniqueName> processor in _plugins)
                 if (selector(processor))
                     yield return processor.Value;
         }
 
-        public IEnumerable<TPluginInterface> GetPlugins<T>(Func<KMetadataInterface, T> metadataProperty, T metedataPropertyValue)
+        public T GetPluginByUniqueName(string uniqueName)
         {
-            foreach (Lazy<TPluginInterface, KMetadataInterface> processor in _plugins)
-                if (metadataProperty(processor.Metadata).Equals(metedataPropertyValue))
-                    yield return processor.Value;
+            T toReturn = default(T);
+            var plugins = new List<T>(GetPlugins(s => s.Metadata.UniqueName == uniqueName));
 
+            if (plugins.Count > 0)
+                toReturn = plugins[0];
+
+            return toReturn;
+        }
+
+        public void Dispose()
+        {   
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (_container != null)
+                {
+                    _container.Dispose();
+                    _container = null;
+                }
+            }
         }
     }
 }

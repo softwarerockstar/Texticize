@@ -19,7 +19,7 @@ namespace Vocalsoft.Texticize
             if (toReturn.Count > 0)
             {
                 toReturn.RemoveAt(0);
-                toReturn.RemoveAll(s => s.Trim() == String.Empty);
+                toReturn.RemoveAll(s => String.IsNullOrEmpty(s.Trim()));
             }
 
             return toReturn;
