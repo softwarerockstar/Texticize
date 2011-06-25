@@ -15,7 +15,7 @@ namespace Vocalsoft.Texticize.Factories
     {
         public static IMacro GetMacro(string macroName)
         {
-            var plugins = ExtensibilityHelper<IMacro, IExtensionUniqueName>.Current;
+            var plugins = ExtensibilityHelper<IMacro>.Current;
 
             return plugins
                 .GetPlugins(s => macroName.StartsWith(s.Metadata.UniqueName))

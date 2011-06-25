@@ -16,14 +16,14 @@ namespace Vocalsoft.Texticize
     {
         public string Target { get; set; }
         public Configuration Configuration { get; set; }
-        public Dictionary<string, Delegate> Maps { get; set; }
-        public Dictionary<string, object> Variables { get; set; }        
+        public Dictionary<string, Delegate> Maps { get; private set; }
+        public Dictionary<string, object> Variables { get; private set; }        
 
-        public ProcessorInput(Configuration configuration)
+        public ProcessorInput()
         {
             Maps = new Dictionary<string, Delegate>();
             Variables = new Dictionary<string, object>();
-            Configuration = configuration;
+            Configuration = new Configuration();
         }
     }
 }

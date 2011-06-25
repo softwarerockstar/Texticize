@@ -43,7 +43,7 @@ namespace Vocalsoft.Texticize
             set { _continueOnError = value; }
         }
 
-        public List<string> ProcessorPipeline
+        public IList<string> ProcessorPipeline
         {
             get { return _processorPipeline; }
         }

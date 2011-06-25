@@ -11,15 +11,11 @@ using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.Factories
 {
-    public static class ProcessorFactory
+    public static class SubstitutionProcessorFactory
     {
         public static ISubstitutionProcessor GetProcessor(string processorName)
         {
-            var plugins = ExtensibilityHelper<ISubstitutionProcessor, IExtensionUniqueName>.Current;
-
-            return plugins
-                .GetPlugins(s => s.Metadata.UniqueName == processorName)
-                .FirstOrDefault();
+            return ExtensibilityHelper<ISubstitutionProcessor>.Current.GetPluginByUniqueName(processorName);
         }
     }
 }

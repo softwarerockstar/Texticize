@@ -11,6 +11,6 @@ namespace Vocalsoft.ComponentModel
 {
     public interface IExtensionUniqueName
     {
-        string UniqueName { get; }        
+        string UniqueName { get; }
     }
 }

@@ -56,7 +56,7 @@ namespace Vocalsoft.Texticize.SubstitutionProcessors
                 
                 output.IsSuccess = true;
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 output.Exceptions.Add(ex);
             }

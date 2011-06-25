@@ -30,35 +30,40 @@ namespace Vocalsoft.Texticize
         public static string ToStructuredText<T>(this IList<T> target, Func<T, string>[] columns, string colBeginDelimiter = "", string colEndDelimiter = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var t in target)
-            {
-                sb.Append(rowBeginDelimiter);
-                sb.Append(columns.Select(w => w(t)).Aggregate((a, b) => colBeginDelimiter + a + colEndDelimiter + colBeginDelimiter + b + colEndDelimiter));
-                sb.Append(rowEndDelimiter);
-            }
+
+            if (target != null)
+                foreach (var t in target)
+                {
+                    sb.Append(rowBeginDelimiter);
+                    sb.Append(columns.Select(w => w(t)).Aggregate((a, b) => colBeginDelimiter + a + colEndDelimiter + colBeginDelimiter + b + colEndDelimiter));
+                    sb.Append(rowEndDelimiter);
+                }
+
             return sb.ToString();
         }
 
 
         public static string Lookup<T>(this IList<T> target, Func<T, bool> condition, Func<T, string> value)
         {
-            return value(target.Where(x => condition(x)).First());
+            return (value != null) ? value(target.Where(x => condition(x)).First()) : String.Empty;
         }
 
         public static Dictionary<string, string> ToParameterDictionary(this Group group)
         {
             Dictionary<string, string> parameterDictionary = new Dictionary<string, string>();
 
-            var parameters = group.Value.Split(',').Select(s => s.Trim());
-
-            foreach (string parameter in parameters)
+            if (group != null)
             {
-                var paramParts = parameter.Split('=');
+                var parameters = group.Value.Split(',').Select(s => s.Trim());
 
-                if (paramParts.Length > 1)
-                    parameterDictionary.Add(paramParts[0].Trim(), paramParts[1].Trim());
+                foreach (string parameter in parameters)
+                {
+                    var paramParts = parameter.Split('=');
+
+                    if (paramParts.Length > 1)
+                        parameterDictionary.Add(paramParts[0].Trim(), paramParts[1].Trim());
+                }
             }
-
             return parameterDictionary;
         }
 
