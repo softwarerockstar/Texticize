@@ -46,12 +46,12 @@
   <ItemGroup>
     <Compile Include="Factories\TemplateReaderFactory.cs" />
     <Compile Include="TemplateProcessors\DefaultTemplateProcessor.cs" />
-    <Compile Include="Extensibility\AbstractExtensionFactory.cs" />
-    <Compile Include="Extensibility\IExtensionUniqueName.cs" />
+    <Compile Include="ComponentModel\Extensibility\AbstractExtensionFactory.cs" />
+    <Compile Include="ComponentModel\Extensibility\IExtensionUniqueName.cs" />
     <Compile Include="Factories\TemplateProcessorFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ITemplateProcessor.cs" />
-    <Compile Include="Serialization\BinarySerializer.cs" />
+    <Compile Include="ComponentModel\Serialization\BinarySerializer.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="DefaultConfigValues.cs" />

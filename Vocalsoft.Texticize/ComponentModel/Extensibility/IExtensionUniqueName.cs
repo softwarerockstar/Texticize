@@ -6,18 +6,16 @@
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
-using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.MacroProcessors
+namespace Vocalsoft.ComponentModel.Extensibility
 {
-    [Export(typeof(IMacroProcessor))]
-    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemMacroProcessorNames.UserName)]
-    class UserNameMacroProcessor : IMacroProcessor
+    public interface IUniquenessEvidence
     {
-        public string GetValue(string macro)
-        {
-            return System.Environment.UserName;
-        }
+        string UniqueName { get; }        
+    }
+
+    public static class UniquenessEvidenceFields
+    {
+        public const string UniqueName = "UniqueName";
     }
 }

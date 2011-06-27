@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize
 {    

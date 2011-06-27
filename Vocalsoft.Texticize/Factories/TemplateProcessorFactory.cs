@@ -7,7 +7,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.Linq;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize
 {

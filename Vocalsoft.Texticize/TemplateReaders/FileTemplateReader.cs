@@ -10,7 +10,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Text;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize.TemplateReaders
 {

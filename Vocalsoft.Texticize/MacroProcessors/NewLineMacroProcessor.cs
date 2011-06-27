@@ -7,7 +7,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize.MacroProcessors
 {

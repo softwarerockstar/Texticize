@@ -7,7 +7,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System;
-using Vocalsoft.Serialization;
+using Vocalsoft.ComponentModel.Serialization;
 
 namespace Vocalsoft.Texticize
 {

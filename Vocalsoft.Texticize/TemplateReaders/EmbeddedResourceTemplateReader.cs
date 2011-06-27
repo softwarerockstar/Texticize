@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize.TemplateReaders
 {

@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
 using System.Text;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize.TemplateReaders
 {

@@ -10,7 +10,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using Vocalsoft.Texticize.Factories;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize.SubstitutionProcessors
 {
