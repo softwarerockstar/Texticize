@@ -6,11 +6,18 @@
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
+using System.ComponentModel.Composition;
+using Vocalsoft.ComponentModel;
 
-namespace Vocalsoft.Texticize
+namespace Vocalsoft.Texticize.MacroProcessors
 {
-    public interface IMacro
+    [Export(typeof(IMacroProcessor))]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, MacroProcessorNames.UserDomainName)]
+    class UserDomainNameMacroProcessor : IMacroProcessor
     {
-        string GetValue(string macro);
+        public string GetValue(string macro)
+        {
+            return System.Environment.UserDomainName;
+        }
     }
 }

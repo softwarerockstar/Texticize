@@ -7,16 +7,24 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
+using Vocalsoft.ComponentModel;
 
-namespace Vocalsoft.Texticize.Macros
+namespace Vocalsoft.Texticize.MacroProcessors
 {
-    [Export(typeof(IMacro))]
-    [ExportMetadata("UniqueName", MacroNames.NewLine)]
-    class NewLineMacro : IMacro
+    [Export(typeof(IMacroProcessor))]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, MacroProcessorNames.DateTime)]
+    class DateTimeMacroProcessor : IMacroProcessor
     {
         public string GetValue(string macro)
         {
-            return System.Environment.NewLine;
+            string format = "M/d/yyyy";
+            
+            var parameters = MacroHelper.ParseParameters(macro, ' ');
+
+            if (parameters.Count > 0)
+                format = parameters[0];
+
+            return System.DateTime.Now.ToString(format);
         }
     }
 }

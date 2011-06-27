@@ -11,22 +11,19 @@ using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize
 {
-    public static class TemplateProcessorFactory
+    public class TemplateProcessorFactory : AbstractExtensionFactory<ITemplateProcessor>
     {
         public static ITemplateProcessor Create(ITemplateReader reader, string templateProcessorUniqueName = TemplateProcessorNames.Default)
         {
-            return GetTemplateProcessor(templateProcessorUniqueName, reader);
-        }
+            using (var factory = new TemplateProcessorFactory())
+            {
+                ITemplateProcessor processor = factory.GetGetExtensionByUniqueName(templateProcessorUniqueName);
 
-        public static ITemplateProcessor GetTemplateProcessor(string processorName, ITemplateReader reader)
-        {
-            var plugin = ExtensibilityHelper<ITemplateProcessor>.Current.GetPluginByUniqueName(processorName);
+                if (reader != null)
+                    processor.SetTemplate(reader.Read());
 
-            if (reader != null)
-                plugin.SetTemplate(reader.Read());
-            
-            return plugin;
-
+                return processor;
+            }
         }
 
     }

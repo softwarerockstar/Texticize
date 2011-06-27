@@ -11,11 +11,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.SubstitutionProcessors
 {
     [Export(typeof(ISubstitutionProcessor))]
-    [ExportMetadata("UniqueName", SubstitutionProcessorNames.Vocabulary)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SubstitutionProcessorNames.Vocabulary)]
     class VocabularySubstitutionProcessor : ISubstitutionProcessor
     {
         /// <summary>

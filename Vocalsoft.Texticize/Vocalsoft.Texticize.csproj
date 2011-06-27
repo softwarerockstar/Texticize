@@ -44,8 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultTemplateProcessor.cs" />
+    <Compile Include="Extensibility\AbstractExtensionFactory.cs" />
     <Compile Include="Extensibility\IExtensionUniqueName.cs" />
-    <Compile Include="Extensibility\StatefulExtensionAttribute.cs" />
     <Compile Include="Factories\TemplateProcessorFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ITemplateProcessor.cs" />
@@ -53,9 +53,8 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="DefaultConfigValues.cs" />
-    <Compile Include="Extensibility\ExtensibilityHelper.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Factories\MacroFactory.cs" />
+    <Compile Include="Factories\MacroProcessorFactory.cs" />
     <Compile Include="Factories\SubstitutionProcessorFactory.cs" />
     <Compile Include="PersistenceManager.cs" />
     <Compile Include="TemplateReaders\FileTemplateReader.cs" />
@@ -63,18 +62,18 @@
     <Compile Include="ISubstitutionProcessor.cs" />
     <Compile Include="ITemplateReader.cs" />
     <Compile Include="MacroHelper.cs" />
-    <Compile Include="Macros\IncludeMacro.cs" />
-    <Compile Include="Macros\UserDomainNameMacro.cs" />
-    <Compile Include="Macros\UserNameMacro.cs" />
+    <Compile Include="MacroProcessors\IncludeMacroProcessor.cs" />
+    <Compile Include="MacroProcessors\UserDomainNameMacroProcessor.cs" />
+    <Compile Include="MacroProcessors\UserNameMacroProcessor.cs" />
     <Compile Include="ProcessorInput.cs" />
     <Compile Include="ProcessorOutput.cs" />
     <Compile Include="SubstitutionProcessors\MacroSubstitutionProcessor.cs" />
     <Compile Include="DefaultExtensionNames.cs" />
     <Compile Include="SubstitutionProcessors\VocabularySubstitutionProcessor.cs" />
-    <Compile Include="IMacro.cs" />
+    <Compile Include="IMacroProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Macros\DateTimeMacro.cs" />
-    <Compile Include="Macros\NewLineMacro.cs" />
+    <Compile Include="MacroProcessors\DateTimeMacroProcessor.cs" />
+    <Compile Include="MacroProcessors\NewLineMacroProcessor.cs" />
     <Compile Include="AbstractTemplateProcessor.cs" />
     <Compile Include="TemplateReaders\EmbeddedResourceTemplateReader.cs" />
     <Compile Include="TemplateReaders\StringTemplateReader.cs" />

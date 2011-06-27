@@ -95,7 +95,7 @@ namespace Vocalsoft.Texticize
 
         public ITemplateProcessor FetchIncludes()
         {
-            var output = new MacroSubstitutionProcessor().ProcessMacro(_processInput, MacroNames.Include);
+            var output = new MacroSubstitutionProcessor().ProcessMacro(_processInput, MacroProcessorNames.Include);
 
             if (output.IsSuccess)
                 _processInput.Target = output.Result;
