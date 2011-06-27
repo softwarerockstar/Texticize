@@ -9,10 +9,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Vocalsoft.Texticize.TemplateReaders;
-using Vocalsoft.Texticize.UnitTests.DTO;
+using SoftwareRockstar.Texticize.TemplateReaders;
+using SoftwareRockstar.Texticize.UnitTests.DTO;
 
-namespace Vocalsoft.Texticize.UnitTests
+namespace SoftwareRockstar.Texticize.UnitTests
 {
     [TestClass]
     public class TemplateProcessorTests
@@ -431,7 +431,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             PersistenceManager.Save(processor, localPath);
 
-            var result = PersistenceManager.LoadFrom(localPath)
+            var result = PersistenceManager.LoadFromFile(localPath)
                 .SetVariables("Products".ToVariable(_products))
                 .Process().Result;
 
@@ -494,7 +494,7 @@ namespace Vocalsoft.Texticize.UnitTests
 
             PersistenceManager.Save(processor, localPath, TemplateSaveOptions.PreFetchIncludes);
 
-            var result = PersistenceManager.LoadFrom(localPath)                
+            var result = PersistenceManager.LoadFromFile(localPath)                
                 .Process().Result;
 
             Assert.AreEqual<string>(result, toCompare);
@@ -507,7 +507,7 @@ namespace Vocalsoft.Texticize.UnitTests
         {
             var reader = TemplateReaderFactory.CreateEmbeddedResourceTemplateReader(
                         this.GetType().Assembly.GetName().CodeBase,
-                        "Vocalsoft.Texticize.UnitTests.Resources.TestResource",
+                        "SoftwareRockstar.Texticize.UnitTests.Resources.TestResource",
                         "Template");
 
             string toCompare = String.Format("{0} is the date.", DateTime.Now.ToString("MM/dd/yyyy"));
