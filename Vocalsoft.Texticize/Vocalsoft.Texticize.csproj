@@ -44,7 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultTemplateProcessor.cs" />
+    <Compile Include="Factories\TemplateReaderFactory.cs" />
+    <Compile Include="TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Extensibility\AbstractExtensionFactory.cs" />
     <Compile Include="Extensibility\IExtensionUniqueName.cs" />
     <Compile Include="Factories\TemplateProcessorFactory.cs" />

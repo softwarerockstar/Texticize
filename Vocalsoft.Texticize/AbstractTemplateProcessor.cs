@@ -27,9 +27,11 @@ namespace Vocalsoft.Texticize
         #endregion
 
         #region Public Methods
-        public ITemplateProcessor SetTemplate(string template)
+        public ITemplateProcessor SetTemplateReader(ITemplateReader reader)
         {
-            _processInput.Target = template;
+            if (reader != null)
+                _processInput.Target = reader.Read();
+
             return this;
         }
 

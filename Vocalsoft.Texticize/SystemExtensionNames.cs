@@ -6,7 +6,6 @@
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
-
 namespace Vocalsoft.Texticize
 {
     public static class SystemMacroProcessorNames
@@ -27,5 +26,12 @@ namespace Vocalsoft.Texticize
     public static class SystemTemplateProcessorNames
     {
         public const string Default = "Default";
+    }
+
+    public static class SystemTemplateReaders
+    {
+        public const string EmbeddedResource = "Vocalsoft.Texticize.TemplateReaders.EmbeddedResourceTemplateReader";
+        public const string File = "Vocalsoft.Texticize.TemplateReaders.FileTemplateReader";
+        public const string String = "Vocalsoft.Texticize.TemplateReaders.StringTemplateReader";
     }
 }
