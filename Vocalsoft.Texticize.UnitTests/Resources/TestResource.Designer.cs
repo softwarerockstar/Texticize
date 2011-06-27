@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Vocalsoft.Texticize.UnitTests.Resources {
+namespace SoftwareRockstar.Texticize.UnitTests.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Vocalsoft.Texticize.UnitTests.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Vocalsoft.Texticize.UnitTests.Resources.TestResource", typeof(TestResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SoftwareRockstar.Texticize.UnitTests.Resources.TestResource", typeof(TestResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

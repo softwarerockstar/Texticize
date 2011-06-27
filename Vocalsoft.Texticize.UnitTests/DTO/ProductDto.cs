@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Vocalsoft.Texticize.UnitTests.DTO
+namespace SoftwareRockstar.Texticize.UnitTests.DTO
 {
     public class ProductDto
     {

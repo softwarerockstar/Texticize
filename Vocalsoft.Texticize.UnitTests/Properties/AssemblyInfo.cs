@@ -13,12 +13,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Vocalsoft.Texticize.UnitTests")]
+[assembly: AssemblyTitle("SoftwareRockstar.Texticize.UnitTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Vocalsoft")]
-[assembly: AssemblyProduct("Vocalsoft.Texticize.UnitTests")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCompany("SoftwareRockstar.com")]
+[assembly: AssemblyProduct("SoftwareRockstar.Texticize.UnitTests")]
+[assembly: AssemblyCopyright("Copyright © SoftwareRockstar.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

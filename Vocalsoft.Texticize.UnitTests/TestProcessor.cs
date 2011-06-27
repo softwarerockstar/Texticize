@@ -7,9 +7,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.UnitTests
+namespace SoftwareRockstar.Texticize.UnitTests
 {
     [Export(typeof(ISubstitutionProcessor))]
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, "Test")]
