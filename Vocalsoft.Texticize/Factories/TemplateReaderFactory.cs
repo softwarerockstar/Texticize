@@ -37,7 +37,7 @@ namespace Vocalsoft.Texticize
 
         public static ITemplateReader CreateStringTemplateReader(StringBuilder input)
         {
-            return CreateStringTemplateReader(input.ToString());
+            return (input != null) ? CreateStringTemplateReader(input.ToString()) : null;
         }
 
 
