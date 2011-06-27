@@ -101,13 +101,14 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void SimpleNonGenericTest()
         {
-            string template = "Your age is {Age}";
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("Your age is {Age}");
             string toCompare = "Your age is 21";
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+                .CreateDefault(reader)
                 .SetMaps("{Age}".MapTo(s => "21"))
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -115,7 +116,7 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void PlainStringDictionaryTest()
         {
-            string template = "My name is {Name}. I am {Age} years old.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("My name is {Name}. I am {Age} years old.");
             string toCompare = "My name is John Doe. I am 27 years old.";
 
             Dictionary<string, string> testData = new Dictionary<string, string>
@@ -125,7 +126,7 @@ namespace Vocalsoft.Texticize.UnitTests
             };
             
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)               
                 .SetMaps
                 (
                     "{Name}".MapTo<Dictionary<string, string>>(s => s.Variable["Name"]),
@@ -140,14 +141,14 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void SingleVariableDateTest()
         {
-            string template = "{MyDate!Yesterday} is history, {MyDate!Tomorrow} is a mystery. {MyDate!Today} is a gift, that's why it's called Present.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("{MyDate!Yesterday} is history, {MyDate!Tomorrow} is a mystery. {MyDate!Today} is a gift, that's why it's called Present.");
             var toCompare = String.Format("{0} is history, {1} is a mystery. {2} is a gift, that's why it's called Present.",
                 DateTime.Today.AddDays(-1).ToShortDateString(),
                 DateTime.Today.AddDays(1).ToShortDateString(),
                 DateTime.Today.ToShortDateString());
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)               
                 .SetMaps
                 (
                     "{MyDate!Today}".MapTo<DateTime>(s => s.Variable.ToShortDateString()),
@@ -163,10 +164,10 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void MultiVariableTest()
         {
-            string template = "Dear Mr. {Customer!LastName}:\nYour order # {Order!OrderID} has been received. Your order total is: ${Order!OrderTotal}.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Dear Mr. {Customer!LastName}:\nYour order # {Order!OrderID} has been received. Your order total is: ${Order!OrderTotal}.");
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)                
                 .SetMaps
                 (
                     "{Customer!LastName}".MapTo<CustomerDto>(s => s.Variable.LastName),
@@ -178,7 +179,8 @@ namespace Vocalsoft.Texticize.UnitTests
                     "Customer".ToVariable(_customers[0]),
                     "Order".ToVariable(_orders[0])
                 )                
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, "Dear Mr. Doe:\nYour order # 1 has been received. Your order total is: $275.49.");
         }
@@ -186,11 +188,11 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         public void ConditionalTest()
         {
-            string template = "Price for 15MP Camera is {Product!Price[Description = 15MP Camera]}.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Price for 15MP Camera is {Product!Price[Description = 15MP Camera]}.");
             string toCompare = "Price for 15MP Camera is $150.29.";
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)                
                 .SetMaps
                 (
                     "{Product!Price}".MapTo<List<ProductDto>>
@@ -201,7 +203,8 @@ namespace Vocalsoft.Texticize.UnitTests
                     )
                 )                
                 .SetVariables("Product".ToVariable(_products))
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -209,11 +212,11 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]        
         public void LoopingTest()
         {
-            string template = @"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}");
             string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)                
                 .SetMaps(
                     "{Products!List}".MapTo<List<ProductDto>>(
                         s => s.Variable.ToStructuredText(
@@ -226,7 +229,8 @@ namespace Vocalsoft.Texticize.UnitTests
                     )
                 )
                 .SetVariables("Products".ToVariable(_products))
-                .Process().Result;
+                .Process()
+                .Result;
             
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -235,12 +239,13 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Macros")]
         public void DateTimeMacroTest()
         {
-            string template = "Today is %DateTime%.  Right not it is %DateTime T%";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is %DateTime%.  Right not it is %DateTime T%");
             string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
-                .Process().Result;
+				.CreateDefault(reader)                
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -249,15 +254,16 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Macros")]
         public void NewLineMacroTest()
         {
-            string template = "Today is %DateTime%.%NewLine%Right not it is %DateTime T%";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is %DateTime%.%NewLine%Right not it is %DateTime T%");
             string toCompare = String.Format(
                 "Today is {0}.{1}Right not it is {2}", 
                 DateTime.Now.ToString("d"), System.Environment.NewLine, 
                 DateTime.Now.ToString("T"));
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
-                .Process().Result;
+				.CreateDefault(reader)                
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -266,15 +272,16 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Macros")]
         public void UserNameMacroTest()
         {
-            string template = @"The domain and user name of logged on person is %UserDomainName%\%UserName%";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"The domain and user name of logged on person is %UserDomainName%\%UserName%");
             string toCompare = String.Format(
                 @"The domain and user name of logged on person is {0}\{1}", 
                 System.Environment.UserDomainName, 
                 System.Environment.UserName);
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
-                .Process().Result;
+				.CreateDefault(reader)                
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -283,11 +290,11 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Configuration")]
         public void ConditionalTestWithConfiguration()
         {
-            string template = "Price for 15MP Camera is <Product.Price(Description=15MP Camera)>.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Price for 15MP Camera is <Product.Price(Description=15MP Camera)>.");
 
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))                
+				.CreateDefault(reader)                                
                 .SetConfiguration(
                     new Configuration
                     {
@@ -306,7 +313,8 @@ namespace Vocalsoft.Texticize.UnitTests
                     )
                 )
                 .SetVariables("Product".ToVariable(_products))
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
         }
@@ -315,11 +323,11 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Configuration")]
         public void DateTimeMacroTestWithConfiguration()
         {
-            string template = "Today is @DateTime^.  Right not it is @DateTime T^";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is @DateTime^.  Right not it is @DateTime T^");
             string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)                
                 .SetConfiguration
                 (
                     new Configuration 
@@ -328,7 +336,8 @@ namespace Vocalsoft.Texticize.UnitTests
                         MacroRegexPatternEndChar = '^' 
                     }
                 )
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -338,7 +347,7 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Configuration")]
         public void ProcessPipelineRemoveTest()
         {
-            string template = "[MyDate!Today] is a %DateTime MM/dd/yyyy%.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("[MyDate!Today] is a %DateTime MM/dd/yyyy%.");
             string toCompare = String.Format("[MyDate!Today] is a {0}.", DateTime.Now.ToString("MM/dd/yyyy"));
 
             // Remove vocabulary processor so that only macros will be processed
@@ -346,10 +355,11 @@ namespace Vocalsoft.Texticize.UnitTests
             config.ProcessorPipeline.Remove(SystemSubstitutionProcessorNames.Vocabulary);
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)                
                 .SetConfiguration(config)
                 .SetMaps("[MyDate!Today]".MapTo<DateTime>(s => s.Variable.ToShortDateString()))            
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -358,19 +368,20 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Configuration")]
         public void ProcessPipelineAddTest()
         {
-            string template = "[MyDate!Today] is a %DateTime MM/dd/yyyy%.";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("[MyDate!Today] is a %DateTime MM/dd/yyyy%.");
             string toCompare = String.Format("I am tested: {0} is a {1}.", DateTime.Now.ToShortDateString(), DateTime.Now.ToString("MM/dd/yyyy"));
 
-            // Remove vocabulary processor so that only macros will be processed
+            // Add custom processor to the end of the pipeline
             Configuration config = new Configuration();
             config.ProcessorPipeline.Add("Test");
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+				.CreateDefault(reader)                
                 .SetConfiguration(config)
                 .SetMaps("[MyDate!Today]".MapTo<DateTime>(s => s.Variable.ToShortDateString()))
                 .SetVariables("MyDate".ToVariable(DateTime.Now))
-                .Process().Result;                
+                .Process()
+                .Result;                
            
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -380,10 +391,10 @@ namespace Vocalsoft.Texticize.UnitTests
         public void ExceptionTest()
         {
             int i = 0;
-            string template = "{Infitinity}";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("{Infitinity}");
 
             var processor = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template));
+                .CreateDefault(reader);
 
             var output = processor
                 .SetMaps("{Infitinity}".MapTo(s => (2 / i).ToString()))     // This line should error out
@@ -398,12 +409,12 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Serialization")]
         public void SaveLoadTest()
         {
-            string template = @"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}");
             string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
             Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
 
             var processor = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+                .CreateDefault(reader)                
                 .SetMaps
                 (
                     "{Products!List}".MapTo <List<ProductDto>>
@@ -431,12 +442,13 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Include")]
         public void IncludeTest()
         {
-            string template = @"%Include C:\Users\MH\Documents\Temp\Level1.txt%";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"%Include C:\Users\MH\Documents\Temp\Level1.txt%");
             string toCompare = @"Level1 Level2";
 
             var result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
-                .Process().Result;
+                .CreateDefault(reader)                
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -445,11 +457,11 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Include")]
         public void LoopingIncludeTest()
         {
-            string template = @"Following products are currently in inventory%NewLine%{Products!List[ColBegin=<,ColEnd=>,RowEnd=%Include C:\Users\MH\Documents\Temp\NewLine.txt%]}";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"Following products are currently in inventory%NewLine%{Products!List[ColBegin=<,ColEnd=>,RowEnd=%Include C:\Users\MH\Documents\Temp\NewLine.txt%]}");
             string toCompare = "Following products are currently in inventory\r\n<50MP Camera><$150.29>\r\n\r\n<20MP Camera><$150.29>\r\n\r\n<15MP Camera><$150.29>\r\n\r\n<12MP Camera><$150.29>\r\n\r\n<10MP Camera><$150.29>\r\n\r\n";
 
             string result = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template))
+                .CreateDefault(reader)                
                 .SetMaps
                 (
                     "{Products!List}".MapTo<List<ProductDto>>
@@ -463,7 +475,8 @@ namespace Vocalsoft.Texticize.UnitTests
                     )
                 )
                 .SetVariables("Products".ToVariable(_products))
-                .Process().Result;
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -472,12 +485,12 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("Include")]
         public void SaveTestWithPrefetchIncludesTest()
         {
-            string template = @"%Include C:\Users\MH\Documents\Temp\Level1.txt%";
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"%Include C:\Users\MH\Documents\Temp\Level1.txt%");
             string toCompare = @"Level1 Level2";
             Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
 
             var processor = TemplateProcessorFactory
-                .Create(new StringTemplateReader(template));
+                .CreateDefault(reader);
 
             PersistenceManager.Save(processor, localPath, TemplateSaveOptions.PreFetchIncludes);
 
@@ -492,19 +505,17 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestCategory("TemplateLoader")]
         public void EmbeddedResourceTemplateLoaderTest()
         {
+            var reader = TemplateReaderFactory.CreateEmbeddedResourceTemplateReader(
+                        this.GetType().Assembly.GetName().CodeBase,
+                        "Vocalsoft.Texticize.UnitTests.Resources.TestResource",
+                        "Template");
+
             string toCompare = String.Format("{0} is the date.", DateTime.Now.ToString("MM/dd/yyyy"));
 
             var result = TemplateProcessorFactory
-                .Create
-                (
-                    new EmbeddedResourceTemplateReader
-                    (
-                        this.GetType().Assembly.GetName().CodeBase,
-                        "Vocalsoft.Texticize.UnitTests.Resources.TestResource",
-                        "Template"
-                    )
-                )            
-                .Process().Result;            
+                .CreateDefault(reader)                
+                .Process()
+                .Result;            
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -513,12 +524,14 @@ namespace Vocalsoft.Texticize.UnitTests
         [TestMethod]
         [TestCategory("TemplateLoader")]
         public void FileTemplateLoaderTest()
-        {   
+        {
+            var reader = TemplateReaderFactory.CreateFileTemplateReader(@"C:\Users\MH\Documents\Temp\Level1.txt");
             string toCompare = @"Level1 Level2";
 
             var result = TemplateProcessorFactory
-                .Create(new FileTemplateReader(@"C:\Users\MH\Documents\Temp\Level1.txt"))
-                .Process().Result;
+                .CreateDefault(reader)
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }

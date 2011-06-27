@@ -1,11 +1,16 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright author="Muhammad Haroon">
+//      Texticize
+//      Codeplex Project: http://texticize.codeplex.com/
+//      Copyright (c) Muhammad Haroon, http://www.softwarerockstar.com/
+//      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
+// </copyright>
+//-----------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Vocalsoft.Texticize.Factories;
 using System.ComponentModel.Composition;
-using Vocalsoft.Texticize.SubstitutionProcessors;
 using Vocalsoft.ComponentModel;
+using Vocalsoft.Texticize.Factories;
 
 namespace Vocalsoft.Texticize
 {   

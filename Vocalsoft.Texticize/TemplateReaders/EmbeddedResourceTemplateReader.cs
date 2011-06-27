@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Reflection;
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright author="Muhammad Haroon">
 //      Texticize
 //      Codeplex Project: http://texticize.codeplex.com/
@@ -8,23 +6,26 @@ using System.Reflection;
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
+using System;
+using System.Globalization;
+using System.Reflection;
 using System.Resources;
+using System.ComponentModel.Composition;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.TemplateReaders
 {
+    [Export(typeof(ITemplateReader))]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemTemplateReaders.EmbeddedResource)]
     public class EmbeddedResourceTemplateReader : ITemplateReader
     {
         string _resourceName;
         string _resourceBaseName;
-        Assembly _assembly;
+        string _assemblyName;
         CultureInfo _cultureInfo;
 
-        public EmbeddedResourceTemplateReader(string assemblyName, string resourcePath = null, string resourceName = null, CultureInfo cultureInfo = null)
+        public EmbeddedResourceTemplateReader()
         {            
-            _resourceBaseName = resourcePath;
-            _assembly = Assembly.LoadFrom(assemblyName);
-            _resourceName = resourceName;
-            _cultureInfo = (cultureInfo != null) ? cultureInfo : CultureInfo.CurrentCulture;
         }
 
         public string ResourceBaseName
@@ -39,10 +40,35 @@ namespace Vocalsoft.Texticize.TemplateReaders
             set { _resourceName = value; }
         }
 
+        public string AssemblyName
+        {
+            get { return _assemblyName; }
+            set { _assemblyName = value; }
+        }
+
+        public CultureInfo CultureInfo
+        {
+            get { return _cultureInfo; }
+            set { _cultureInfo = value; }
+        }
+
         public string Read()
         {
-            return new ResourceManager(_resourceBaseName, _assembly).GetString(_resourceName, _cultureInfo);
-            //return new ResourceManager("Vocalsoft.Texticize.UnitTests.Resources.TestResource", _assembly).GetString(_resourceName, _cultureInfo);
+            if (String.IsNullOrEmpty(_assemblyName))
+                throw new InvalidOperationException("AssemblyName cannot be null");
+
+            if (String.IsNullOrEmpty(_resourceBaseName))
+                throw new InvalidOperationException("ResourceBaseName cannot be null");
+
+            if (String.IsNullOrEmpty(_resourceName))
+                throw new InvalidOperationException("ResourceName cannot be null");
+
+            if (_cultureInfo == null)
+                _cultureInfo = CultureInfo.CurrentCulture;
+
+            return new ResourceManager(
+                _resourceBaseName, 
+                Assembly.LoadFrom(_assemblyName)).GetString(_resourceName, _cultureInfo);
         }
     }
 }

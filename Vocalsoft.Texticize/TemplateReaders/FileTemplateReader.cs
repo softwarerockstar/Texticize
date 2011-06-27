@@ -1,5 +1,4 @@
-﻿using System.IO;
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright author="Muhammad Haroon">
 //      Texticize
 //      Codeplex Project: http://texticize.codeplex.com/
@@ -7,28 +6,43 @@
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
+using System;
+using System.ComponentModel.Composition;
+using System.IO;
 using System.Text;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.TemplateReaders
 {
+    [Export(typeof(ITemplateReader))]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemTemplateReaders.File)]
     public class FileTemplateReader : ITemplateReader
     {
         string _filePath;
         Encoding _encoding;
 
-        public FileTemplateReader(string filePath)
-            : this(filePath, Encoding.Default)
+        public FileTemplateReader()
         {
+            _encoding = Encoding.Default;
         }
 
-        public FileTemplateReader(string filePath, Encoding encoding)
+        public string FilePath
         {
-            _filePath = filePath;
-            _encoding = encoding;
+            get { return _filePath; }
+            set { _filePath = value; }
+        }
+
+        public Encoding Encoding
+        {
+            get { return _encoding; }
+            set { _encoding = value; }
         }
 
         public string Read()
         {
+            if (String.IsNullOrEmpty(_filePath))
+                throw new InvalidOperationException("FilePath cannot be null.");
+
             return File.ReadAllText(_filePath, _encoding);
         }
     }
