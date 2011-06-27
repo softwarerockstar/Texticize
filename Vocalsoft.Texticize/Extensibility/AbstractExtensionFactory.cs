@@ -20,7 +20,7 @@ namespace Vocalsoft.ComponentModel
 
         private CompositionContainer _container;
 
-        public AbstractExtensionFactory()
+        protected AbstractExtensionFactory()
         {
             using (AggregateCatalog catalog = new AggregateCatalog())
             {

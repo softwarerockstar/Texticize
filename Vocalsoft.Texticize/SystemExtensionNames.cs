@@ -9,7 +9,7 @@
 
 namespace Vocalsoft.Texticize
 {
-    public static class MacroProcessorNames
+    public static class SystemMacroProcessorNames
     {
         public const string DateTime = "DateTime";
         public const string NewLine = "NewLine";
@@ -18,13 +18,13 @@ namespace Vocalsoft.Texticize
         public const string Include = "Include";
     }
 
-    public static class SubstitutionProcessorNames
+    public static class SystemSubstitutionProcessorNames
     {
         public const string Macro = "Vocalsoft.Texticize.Processors.MacroProcessor";
         public const string Vocabulary = "Vocalsoft.Texticize.Processors.VocabularyProcessor";
     }
 
-    public static class TemplateProcessorNames
+    public static class SystemTemplateProcessorNames
     {
         public const string Default = "Default";
     }

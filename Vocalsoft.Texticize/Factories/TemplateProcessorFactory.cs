@@ -13,7 +13,7 @@ namespace Vocalsoft.Texticize
 {
     public class TemplateProcessorFactory : AbstractExtensionFactory<ITemplateProcessor>
     {
-        public static ITemplateProcessor Create(ITemplateReader reader, string templateProcessorUniqueName = TemplateProcessorNames.Default)
+        public static ITemplateProcessor Create(ITemplateReader reader, string templateProcessorUniqueName = SystemTemplateProcessorNames.Default)
         {
             using (var factory = new TemplateProcessorFactory())
             {
