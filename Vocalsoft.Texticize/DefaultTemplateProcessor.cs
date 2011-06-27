@@ -11,7 +11,7 @@ namespace Vocalsoft.Texticize
 {   
     [Serializable]
     [Export(typeof(ITemplateProcessor))]
-    [ExportMetadata(UniquenessEvidenceFields.UniqueName, TemplateProcessorNames.Default)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemTemplateProcessorNames.Default)]
     public class DefaultTemplateProcessor : AbstractTemplateProcessor
     {
         public override ProcessorOutput Process()

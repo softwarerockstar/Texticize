@@ -16,7 +16,7 @@ using Vocalsoft.ComponentModel;
 namespace Vocalsoft.Texticize.SubstitutionProcessors
 {
     [Export(typeof(ISubstitutionProcessor))]
-    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SubstitutionProcessorNames.Vocabulary)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemSubstitutionProcessorNames.Vocabulary)]
     class VocabularySubstitutionProcessor : ISubstitutionProcessor
     {
         /// <summary>

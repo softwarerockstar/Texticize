@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Vocalsoft.Texticize.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,7 +69,7 @@
     <Compile Include="ProcessorInput.cs" />
     <Compile Include="ProcessorOutput.cs" />
     <Compile Include="SubstitutionProcessors\MacroSubstitutionProcessor.cs" />
-    <Compile Include="DefaultExtensionNames.cs" />
+    <Compile Include="SystemExtensionNames.cs" />
     <Compile Include="SubstitutionProcessors\VocabularySubstitutionProcessor.cs" />
     <Compile Include="IMacroProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

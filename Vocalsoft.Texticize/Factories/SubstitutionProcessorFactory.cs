@@ -13,7 +13,7 @@ namespace Vocalsoft.Texticize.Factories
 {
     public class SubstitutionProcessorFactory : AbstractExtensionFactory<ISubstitutionProcessor>
     {
-        public static ISubstitutionProcessor Create(string substitutionProcessorUniqueName = TemplateProcessorNames.Default)
+        public static ISubstitutionProcessor Create(string substitutionProcessorUniqueName = SystemTemplateProcessorNames.Default)
         {
             using (var factory = new SubstitutionProcessorFactory())
             {

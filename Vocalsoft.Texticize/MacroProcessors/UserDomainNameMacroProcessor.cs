@@ -12,7 +12,7 @@ using Vocalsoft.ComponentModel;
 namespace Vocalsoft.Texticize.MacroProcessors
 {
     [Export(typeof(IMacroProcessor))]
-    [ExportMetadata(UniquenessEvidenceFields.UniqueName, MacroProcessorNames.UserDomainName)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemMacroProcessorNames.UserDomainName)]
     class UserDomainNameMacroProcessor : IMacroProcessor
     {
         public string GetValue(string macro)

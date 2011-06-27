@@ -14,7 +14,7 @@ using Vocalsoft.ComponentModel;
 namespace Vocalsoft.Texticize.MacroProcessors
 {
     [Export(typeof(IMacroProcessor))]
-    [ExportMetadata(UniquenessEvidenceFields.UniqueName, MacroProcessorNames.Include)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemMacroProcessorNames.Include)]
     class IncludeMacroProcessor : IMacroProcessor
     {
         static Dictionary<string, string> _runtimeFileCache;
