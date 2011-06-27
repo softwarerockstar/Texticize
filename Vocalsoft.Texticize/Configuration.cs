@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     [Serializable]
     public class Configuration

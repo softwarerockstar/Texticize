@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     public static class Extensions
     {
@@ -48,13 +48,13 @@ namespace Vocalsoft.Texticize
             return (value != null) ? value(target.Where(x => condition(x)).First()) : String.Empty;
         }
 
-        public static Dictionary<string, string> ToParameterDictionary(this Group group)
+        public static Dictionary<string, string> ToParameterDictionary(this Capture capture)
         {
             Dictionary<string, string> parameterDictionary = new Dictionary<string, string>();
 
-            if (group != null)
+            if (capture != null)
             {
-                var parameters = group.Value.Split(',').Select(s => s.Trim());
+                var parameters = capture.Value.Split(',').Select(s => s.Trim());
 
                 foreach (string parameter in parameters)
                 {

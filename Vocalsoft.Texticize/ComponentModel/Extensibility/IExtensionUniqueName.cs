@@ -6,7 +6,7 @@
 //      Released under Apache License Version 2.0, http://www.apache.org/licenses/      
 // </copyright>
 //-----------------------------------------------------------------------
-namespace Vocalsoft.ComponentModel.Extensibility
+namespace SoftwareRockstar.ComponentModel.Extensibility
 {
     public interface IUniquenessEvidence
     {

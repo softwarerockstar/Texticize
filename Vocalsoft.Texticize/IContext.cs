@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------
 using System.Collections.Generic;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     interface IContext
     {

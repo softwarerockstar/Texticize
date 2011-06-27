@@ -11,9 +11,9 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.TemplateReaders
+namespace SoftwareRockstar.Texticize.TemplateReaders
 {
     [Export(typeof(ITemplateReader))]
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemTemplateReaders.EmbeddedResource)]

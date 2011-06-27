@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace Vocalsoft.ComponentModel.Extensibility
+namespace SoftwareRockstar.ComponentModel.Extensibility
 {
     public abstract class AbstractExtensionFactory<T> : IDisposable
     {

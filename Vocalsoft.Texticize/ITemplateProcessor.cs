@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {    
     /// <summary>
     /// ITemplateProcessor

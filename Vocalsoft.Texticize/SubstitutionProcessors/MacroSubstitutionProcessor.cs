@@ -9,10 +9,10 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
-using Vocalsoft.Texticize.Factories;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.Texticize.Factories;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.SubstitutionProcessors
+namespace SoftwareRockstar.Texticize.SubstitutionProcessors
 {
     [Export(typeof(ISubstitutionProcessor))]
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemSubstitutionProcessorNames.Macro)]

@@ -11,7 +11,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
-namespace Vocalsoft.ComponentModel.Serialization
+namespace SoftwareRockstar.ComponentModel.Serialization
 {
     public static class BinarySerializer
     {

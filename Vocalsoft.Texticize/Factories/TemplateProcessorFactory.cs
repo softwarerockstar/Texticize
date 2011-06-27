@@ -7,9 +7,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.Linq;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     public class TemplateProcessorFactory : AbstractExtensionFactory<ITemplateProcessor>
     {

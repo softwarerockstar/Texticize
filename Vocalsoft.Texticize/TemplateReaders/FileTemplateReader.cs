@@ -10,9 +10,9 @@ using System;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Text;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.TemplateReaders
+namespace SoftwareRockstar.Texticize.TemplateReaders
 {
     [Export(typeof(ITemplateReader))]
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemTemplateReaders.File)]

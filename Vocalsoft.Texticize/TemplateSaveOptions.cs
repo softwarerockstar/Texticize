@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------
 using System;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     [Flags]
     public enum TemplateSaveOptions
