@@ -7,9 +7,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.MacroProcessors
+namespace SoftwareRockstar.Texticize.MacroProcessors
 {
     [Export(typeof(IMacroProcessor))]
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemMacroProcessorNames.UserName)]

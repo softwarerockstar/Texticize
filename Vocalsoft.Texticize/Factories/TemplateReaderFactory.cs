@@ -11,10 +11,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Vocalsoft.ComponentModel.Extensibility;
-using Vocalsoft.Texticize.TemplateReaders;
+using SoftwareRockstar.ComponentModel.Extensibility;
+using SoftwareRockstar.Texticize.TemplateReaders;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     public class TemplateReaderFactory : AbstractExtensionFactory<ITemplateReader>
     {

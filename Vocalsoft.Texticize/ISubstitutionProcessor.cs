@@ -7,7 +7,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     public interface ISubstitutionProcessor
     {

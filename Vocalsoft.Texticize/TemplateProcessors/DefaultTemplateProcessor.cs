@@ -9,10 +9,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel.Extensibility;
-using Vocalsoft.Texticize.Factories;
+using SoftwareRockstar.ComponentModel.Extensibility;
+using SoftwareRockstar.Texticize.Factories;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {   
     [Serializable]
     [Export(typeof(ITemplateProcessor))]

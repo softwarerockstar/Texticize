@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     [Serializable]
     public class ProcessorOutput

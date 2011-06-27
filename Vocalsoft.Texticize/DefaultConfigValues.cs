@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------
 using System.Text.RegularExpressions;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     static class DefaultConfigValues
     {

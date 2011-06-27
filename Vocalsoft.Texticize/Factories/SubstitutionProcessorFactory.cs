@@ -7,9 +7,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.Linq;
-using Vocalsoft.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Extensibility;
 
-namespace Vocalsoft.Texticize.Factories
+namespace SoftwareRockstar.Texticize.Factories
 {
     public class SubstitutionProcessorFactory : AbstractExtensionFactory<ISubstitutionProcessor>
     {

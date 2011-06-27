@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using Vocalsoft.Texticize.SubstitutionProcessors;
+using SoftwareRockstar.Texticize.SubstitutionProcessors;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {    
     [Serializable]
     public abstract class AbstractTemplateProcessor : ITemplateProcessor

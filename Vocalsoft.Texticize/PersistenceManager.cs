@@ -7,9 +7,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System;
-using Vocalsoft.ComponentModel.Serialization;
+using SoftwareRockstar.ComponentModel.Serialization;
 
-namespace Vocalsoft.Texticize
+namespace SoftwareRockstar.Texticize
 {
     public static class PersistenceManager
     {
@@ -30,17 +30,17 @@ namespace Vocalsoft.Texticize
             }
         }
 
-        public static ITemplateProcessor LoadFrom(ITemplateProcessor source)
+        public static ITemplateProcessor LoadFromTemplateProcessor(ITemplateProcessor source)
         {
             return BinarySerializer.Base64StringToObject<ITemplateProcessor>(BinarySerializer.ObjectToBase64String(source));
         }
 
-        public static ITemplateProcessor LoadFrom(Uri localPath)
+        public static ITemplateProcessor LoadFromFile(Uri localPath)
         {
             return BinarySerializer.FileToObject<ITemplateProcessor>(localPath);
         }
 
-        public static ITemplateProcessor LoadFrom(string base64String)
+        public static ITemplateProcessor LoadFromBase64String(string base64String)
         {
             return BinarySerializer.Base64StringToObject<ITemplateProcessor>(base64String);
         }
