@@ -13,23 +13,22 @@ namespace Vocalsoft.Texticize
 {
     public class TemplateProcessorFactory : AbstractExtensionFactory<ITemplateProcessor>
     {
-        public static ITemplateProcessor Create(string templateProcessorUniqueName)
+        public static ITemplateProcessor Create(string templateProcessorUniqueName, ITemplateReader reader = null)
         {
             using (var factory = new TemplateProcessorFactory())
             {
-                ITemplateProcessor processor = factory.GetGetExtensionByUniqueName(templateProcessorUniqueName);                
+                ITemplateProcessor processor = factory.GetGetExtensionByUniqueName(templateProcessorUniqueName);
+
+                if (reader != null)
+                    processor.SetTemplateReader(reader);
+
                 return processor;
             }
         }
 
         public static ITemplateProcessor CreateDefault(ITemplateReader reader = null)
         {
-            var processor = Create(SystemTemplateProcessorNames.Default);
-
-            if (reader != null)
-                processor.SetTemplateReader(reader);
-
-            return processor;
+            return Create(SystemTemplateProcessorNames.Default, reader);
         }
 
     }
