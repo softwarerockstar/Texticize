@@ -9,7 +9,7 @@
 
 namespace Vocalsoft.Texticize
 {
-    public static class MacroNames
+    public static class MacroProcessorNames
     {
         public const string DateTime = "DateTime";
         public const string NewLine = "NewLine";

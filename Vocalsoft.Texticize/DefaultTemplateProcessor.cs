@@ -5,12 +5,13 @@ using System.Text;
 using Vocalsoft.Texticize.Factories;
 using System.ComponentModel.Composition;
 using Vocalsoft.Texticize.SubstitutionProcessors;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize
 {   
     [Serializable]
     [Export(typeof(ITemplateProcessor))]
-    [ExportMetadata("UniqueName", TemplateProcessorNames.Default)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, TemplateProcessorNames.Default)]
     public class DefaultTemplateProcessor : AbstractTemplateProcessor
     {
         public override ProcessorOutput Process()
@@ -20,7 +21,7 @@ namespace Vocalsoft.Texticize
             ProcessorOutput currentProcessorOutput = new ProcessorOutput { Result = base.ProcessInput.Target };
             foreach (var processorName in base.ProcessInput.Configuration.ProcessorPipeline)
             {
-                var processor = SubstitutionProcessorFactory.GetProcessor(processorName);
+                var processor = SubstitutionProcessorFactory.Create(processorName);
                 if (processor != null)
                 {
                     currentProcessorOutput = processor.Process(base.ProcessInput);

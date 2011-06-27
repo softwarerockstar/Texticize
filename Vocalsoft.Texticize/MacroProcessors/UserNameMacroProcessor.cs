@@ -7,12 +7,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
+using Vocalsoft.ComponentModel;
 
-namespace Vocalsoft.Texticize.Macros
+namespace Vocalsoft.Texticize.MacroProcessors
 {
-    [Export(typeof(IMacro))]
-    [ExportMetadata("UniqueName", MacroNames.UserName)]
-    class UserNameMacro : IMacro
+    [Export(typeof(IMacroProcessor))]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, MacroProcessorNames.UserName)]
+    class UserNameMacroProcessor : IMacroProcessor
     {
         public string GetValue(string macro)
         {

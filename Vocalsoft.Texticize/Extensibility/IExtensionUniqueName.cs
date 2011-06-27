@@ -9,8 +9,13 @@
 
 namespace Vocalsoft.ComponentModel
 {
-    public interface IExtensionUniqueName
+    public interface IUniquenessEvidence
     {
-        string UniqueName { get; }
+        string UniqueName { get; }        
+    }
+
+    public static class UniquenessEvidenceFields
+    {
+        public const string UniqueName = "UniqueName";
     }
 }

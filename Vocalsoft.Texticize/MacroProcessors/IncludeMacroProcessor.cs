@@ -9,16 +9,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using Vocalsoft.ComponentModel;
 
-namespace Vocalsoft.Texticize.Macros
+namespace Vocalsoft.Texticize.MacroProcessors
 {
-    [Export(typeof(IMacro))]
-    [ExportMetadata("UniqueName", MacroNames.Include)]
-    class IncludeMacro : IMacro
+    [Export(typeof(IMacroProcessor))]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, MacroProcessorNames.Include)]
+    class IncludeMacroProcessor : IMacroProcessor
     {
         static Dictionary<string, string> _runtimeFileCache;
 
-        public IncludeMacro()
+        public IncludeMacroProcessor()
         {
             _runtimeFileCache = new Dictionary<string, string>();
         }

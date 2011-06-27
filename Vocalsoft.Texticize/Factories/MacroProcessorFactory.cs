@@ -11,15 +11,16 @@ using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.Factories
 {
-    public static class MacroFactory
+    public class MacroProcessorFactory : AbstractExtensionFactory<IMacroProcessor>
     {
-        public static IMacro GetMacro(string macroName)
+        public static IMacroProcessor Create(string macroUniqueName)
         {
-            var plugins = ExtensibilityHelper<IMacro>.Current;
-
-            return plugins
-                .GetPlugins(s => macroName.StartsWith(s.Metadata.UniqueName))
-                .FirstOrDefault();
+            using (var factory = new MacroProcessorFactory())
+            {
+                return factory
+                    .GetExtensions(s => macroUniqueName.StartsWith(s.Metadata.UniqueName))
+                    .FirstOrDefault();
+            }
         }
     }
 }

@@ -10,11 +10,12 @@ using System;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using Vocalsoft.Texticize.Factories;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.SubstitutionProcessors
 {
     [Export(typeof(ISubstitutionProcessor))]
-    [ExportMetadata("UniqueName", SubstitutionProcessorNames.Macro)]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, SubstitutionProcessorNames.Macro)]
     class MacroSubstitutionProcessor : ISubstitutionProcessor
     {
         public ProcessorOutput Process(ProcessorInput input)
@@ -46,7 +47,7 @@ namespace Vocalsoft.Texticize.SubstitutionProcessors
                         if (match.Success)
                         {
                             string macro = match.Value.Substring(1, match.Value.Length - 2);
-                            var processor = MacroFactory.GetMacro(macro);
+                            var processor = MacroProcessorFactory.Create(macro);
                             output.Result = output.Result.Replace(match.Value, processor.GetValue(macro));
                         }
                     }

@@ -7,11 +7,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System.ComponentModel.Composition;
+using Vocalsoft.ComponentModel;
 
 namespace Vocalsoft.Texticize.UnitTests
 {
     [Export(typeof(ISubstitutionProcessor))]
-    [ExportMetadata("UniqueName", "Test")]
+    [ExportMetadata(UniquenessEvidenceFields.UniqueName, "Test")]
     class TestProcessor : ISubstitutionProcessor
     {
         /// <summary>
