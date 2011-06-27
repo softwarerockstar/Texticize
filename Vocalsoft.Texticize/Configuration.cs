@@ -84,7 +84,7 @@ namespace Vocalsoft.Texticize
             set { _macroRegexPattern = value; }
         }
 
-        internal string MacroRegexPatternFormatted
+        protected internal string MacroRegexPatternFormatted
         {
             get 
             {
@@ -120,7 +120,7 @@ namespace Vocalsoft.Texticize
             set { _templateRegexParamEndChar = value; }
         }
 
-        internal string TemplateRegexPatternFormatted
+        protected internal string TemplateRegexPatternFormatted
         {
             get
             {
@@ -133,13 +133,13 @@ namespace Vocalsoft.Texticize
             }
         }
 
-        internal string TemplateRegexParamInternalGroupName
+        protected internal string TemplateRegexParamInternalGroupName
         {
             get { return _templateRegexParamInternalGroupName; }
             set { _templateRegexParamInternalGroupName = value; }
         }
 
-        internal string NoVariableName
+        protected internal string NoVariableName
         {
             get { return _noVariableName; }
             set { _noVariableName = value; }
