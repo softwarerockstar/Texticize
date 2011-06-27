@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 using Vocalsoft.Texticize.TemplateReaders;
 
 namespace Vocalsoft.Texticize

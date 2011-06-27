@@ -9,7 +9,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 
 namespace Vocalsoft.Texticize.MacroProcessors
 {

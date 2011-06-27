@@ -9,7 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Vocalsoft.ComponentModel;
+using Vocalsoft.ComponentModel.Extensibility;
 using Vocalsoft.Texticize.Factories;
 
 namespace Vocalsoft.Texticize
