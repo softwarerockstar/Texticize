@@ -23,7 +23,7 @@ namespace SoftwareRockstar.Texticize
         ITemplateProcessor SetConfiguration(Configuration configuration);
         ITemplateProcessor SetMaps(params KeyValuePair<string, Delegate>[] maps);
         ITemplateProcessor SetTemplateReader(ITemplateReader reader);
-        ITemplateProcessor SetVariable(object variable);
+        ITemplateProcessor SetDefaultVariable(object variable);
         ITemplateProcessor SetVariables(params KeyValuePair<string, object>[] variables);
         ProcessorOutput Process();
     }

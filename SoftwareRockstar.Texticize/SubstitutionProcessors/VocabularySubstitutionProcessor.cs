@@ -12,6 +12,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SoftwareRockstar.ComponentModel.Extensibility;
+using System.Collections;
 
 namespace SoftwareRockstar.Texticize.SubstitutionProcessors
 {
@@ -19,11 +20,52 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemSubstitutionProcessorNames.Vocabulary)]
     class VocabularySubstitutionProcessor : ISubstitutionProcessor
     {
+        public ProcessorOutput Process(ProcessorInput input)
+        {
+            // Process regular vocabulary with provided maps
+            ProcessorOutput toReturn = ProcessMaps(input);
+
+            // If no mpas specified but a default variable is specified then see if default variable is a 
+            // dictionary and then perform dictionary subsitutions
+            if (input.Maps.Count == 0 && input.Variables.ContainsKey(input.Configuration.DefaultVariableKey))
+            {
+                if (toReturn.IsSuccess || input.Configuration.ContinueOnError)
+                {
+                    input.Target = toReturn.Result;
+                    toReturn = ProcessDefaultVariableDictionary(input);
+                }
+            }            
+            
+            return toReturn;
+        }
+
         /// <summary>
-        /// Processes the template and performs substitution
+        /// If default variable is an IDictionary performs subsitutions based on it's keys and values.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        protected ProcessorOutput ProcessDefaultVariableDictionary(ProcessorInput input)
+        {
+            ProcessorOutput output = new ProcessorOutput();
+
+            if (input != null)
+            {
+                output.Result = input.Target;
+                var dictionary = input.Variables[input.Configuration.DefaultVariableKey] as IDictionary;
+                
+                if (dictionary != null)
+                    foreach (DictionaryEntry item in dictionary)
+                        output.Result = output.Result.Replace(item.Key.ToString(), item.Value.ToString());
+
+            }
+            
+            return output;
+        }
+        /// <summary>
+        /// Iterates through provided maps and processes the template performing substitutions specified by maps.
         /// </summary>
         /// <returns>String result.</returns>
-        public ProcessorOutput Process(ProcessorInput input)
+        protected ProcessorOutput ProcessMaps(ProcessorInput input)
         {
             ProcessorOutput output = new ProcessorOutput();
 

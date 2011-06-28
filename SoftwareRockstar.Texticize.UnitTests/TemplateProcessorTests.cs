@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SoftwareRockstar.Texticize.TemplateReaders;
 using SoftwareRockstar.Texticize.UnitTests.DTO;
+using System.Collections;
 
 namespace SoftwareRockstar.Texticize.UnitTests
 {
@@ -101,12 +102,33 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestMethod]
         public void SimpleNonGenericTest()
         {
-            var reader = TemplateReaderFactory.CreateStringTemplateReader("Your age is {Age}");
-            string toCompare = "Your age is 21";
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("Your order number is {OrderNumber}");
+            string toCompare = "Your order number is 00201767";
 
             string result = TemplateProcessorFactory
                 .CreateDefault(reader)
-                .SetMaps("{Age}".MapTo(s => "21"))
+                .SetMaps("{OrderNumber}".MapTo(s => "00201767"))
+                .Process()
+                .Result;
+
+            Assert.AreEqual<string>(result, toCompare);
+        }
+
+        [TestMethod]
+        public void AutoDictionaryTest()
+        {
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("Your order number is {OrderNumber}. Your order total is ${OrderTotal}.");
+            string toCompare = "Your order number is 00201767. Your order total is $147.99.";
+
+            Dictionary<string, string> testData = new Dictionary<string, string>
+            {
+                {"{OrderNumber}", "00201767"},
+                {"{OrderTotal}", "147.99"}
+            };
+
+            string result = TemplateProcessorFactory
+                .CreateDefault(reader)
+                .SetDefaultVariable(testData)
                 .Process()
                 .Result;
 
@@ -116,24 +138,25 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestMethod]
         public void PlainStringDictionaryTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("My name is {Name}. I am {Age} years old.");
-            string toCompare = "My name is John Doe. I am 27 years old.";
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("Your order number is {OrderNumber}. Your order total is ${OrderTotal}.");
+            string toCompare = "Your order number is 00201767. Your order total is $147.99.";
 
             Dictionary<string, string> testData = new Dictionary<string, string>
             {
-                {"Name", "John Doe"},
-                {"Age", "27"}
+                {"OrderNumber", "00201767"},
+                {"OrderTotal", "147.99"}
             };
-            
+
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)               
                 .SetMaps
                 (
-                    "{Name}".MapTo<Dictionary<string, string>>(s => s.Variable["Name"]),
-                    "{Age}".MapTo<Dictionary<string, string>>(s => s.Variable["Age"])
+                    "{OrderNumber}".MapTo<Dictionary<string, string>>(s => s.Variable["OrderNumber"]),
+                    "{OrderTotal}".MapTo<Dictionary<string, string>>(s => s.Variable["OrderTotal"])
                 )
-                .SetVariable(testData)                
-                .Process().Result;
+                .SetDefaultVariable(testData)                
+                .Process()
+                .Result;
 
             Assert.AreEqual<string>(result, toCompare);
         }
@@ -164,7 +187,8 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestMethod]
         public void MultiVariableTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Dear Mr. {Customer!LastName}:\nYour order # {Order!OrderID} has been received. Your order total is: ${Order!OrderTotal}.");
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Hi Mr. {Customer!LastName}. Your order # {Order!OrderID} has been received. Your order total is: ${Order!OrderTotal}.");
+            var toCompare = "Hi Mr. Doe. Your order # 1 has been received. Your order total is: $275.49.";
 
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                
@@ -182,11 +206,11 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, "Dear Mr. Doe:\nYour order # 1 has been received. Your order total is: $275.49.");
+            Assert.AreEqual<string>(result, toCompare);
         }
 
         [TestMethod]
-        public void ConditionalTest()
+        public void ConditionalLookupTest()
         {
             var reader =  TemplateReaderFactory.CreateStringTemplateReader("Price for 15MP Camera is {Product!Price[Description = 15MP Camera]}.");
             string toCompare = "Price for 15MP Camera is $150.29.";
@@ -210,7 +234,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
         }
 
         [TestMethod]        
-        public void LoopingTest()
+        public void StructuredTextTest()
         {
             var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"Following products are currently in inventory<br/> {Products!List[ColBegin=<td>,ColEnd=</td>,RowBegin=<tr>,RowEnd=</tr>]}");
             string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
@@ -239,8 +263,8 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestCategory("Macros")]
         public void DateTimeMacroTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is %DateTime%.  Right not it is %DateTime T%");
-            string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is %DateTime%.  Right now it is %DateTime T%");
+            string toCompare = String.Format("Today is {0}.  Right now it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
 
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                
@@ -254,11 +278,10 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestCategory("Macros")]
         public void NewLineMacroTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is %DateTime%.%NewLine%Right not it is %DateTime T%");
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Dear Mr. Doe:%NewLine%Your order has been received.");
             string toCompare = String.Format(
-                "Today is {0}.{1}Right not it is {2}", 
-                DateTime.Now.ToString("d"), System.Environment.NewLine, 
-                DateTime.Now.ToString("T"));
+                "Dear Mr. Doe:{0}Your order has been received.", 
+                System.Environment.NewLine);
 
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                
@@ -292,16 +315,17 @@ namespace SoftwareRockstar.Texticize.UnitTests
         {
             var reader =  TemplateReaderFactory.CreateStringTemplateReader("Price for 15MP Camera is <Product.Price(Description=15MP Camera)>.");
 
+            Configuration config = new Configuration
+            {
+                PropertySeperator = '.',
+                TemplateRegexParamBeginChar = '(',
+                TemplateRegexParamEndChar = ')'
+            };
+
 
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                                
-                .SetConfiguration(
-                    new Configuration
-                    {
-                        PropertySeperator = '.',
-                        TemplateRegexParamBeginChar = '(',
-                        TemplateRegexParamEndChar = ')'
-                    })
+                .SetConfiguration(config)
                 .SetMaps
                 (
                     "<Product.Price>".MapTo<List<ProductDto>>
@@ -319,45 +343,21 @@ namespace SoftwareRockstar.Texticize.UnitTests
             Assert.AreEqual<string>(result, "Price for 15MP Camera is $150.29.");
         }
 
-        [TestMethod]
-        [TestCategory("Configuration")]
-        public void DateTimeMacroTestWithConfiguration()
-        {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is @DateTime^.  Right not it is @DateTime T^");
-            string toCompare = String.Format("Today is {0}.  Right not it is {1}", DateTime.Now.ToString("d"), DateTime.Now.ToString("T"));
-
-            string result = TemplateProcessorFactory
-				.CreateDefault(reader)                
-                .SetConfiguration
-                (
-                    new Configuration 
-                    { 
-                        MacroRegexPatternBeginChar = '@', 
-                        MacroRegexPatternEndChar = '^' 
-                    }
-                )
-                .Process()
-                .Result;
-
-            Assert.AreEqual<string>(result, toCompare);
-        }
-
 
         [TestMethod]
         [TestCategory("Configuration")]
         public void ProcessPipelineRemoveTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("[MyDate!Today] is a %DateTime MM/dd/yyyy%.");
-            string toCompare = String.Format("[MyDate!Today] is a {0}.", DateTime.Now.ToString("MM/dd/yyyy"));
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Today is a %DateTime MM/dd/yyyy%.");
+            string toCompare = "Today is a %DateTime MM/dd/yyyy%.";
 
             // Remove vocabulary processor so that only macros will be processed
             Configuration config = new Configuration();
-            config.ProcessorPipeline.Remove(SystemSubstitutionProcessorNames.Vocabulary);
+            config.ProcessorPipeline.Remove(SystemSubstitutionProcessorNames.Macro);
 
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                
-                .SetConfiguration(config)
-                .SetMaps("[MyDate!Today]".MapTo<DateTime>(s => s.Variable.ToShortDateString()))            
+                .SetConfiguration(config)                
                 .Process()
                 .Result;
 
@@ -368,8 +368,8 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestCategory("Configuration")]
         public void ProcessPipelineAddTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("[MyDate!Today] is a %DateTime MM/dd/yyyy%.");
-            string toCompare = String.Format("I am tested: {0} is a {1}.", DateTime.Now.ToShortDateString(), DateTime.Now.ToString("MM/dd/yyyy"));
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Dear Mr. Doe:%NewLine%");
+            string toCompare = String.Format("I am tested: Dear Mr. Doe:{0}", System.Environment.NewLine);
 
             // Add custom processor to the end of the pipeline
             Configuration config = new Configuration();
@@ -378,8 +378,6 @@ namespace SoftwareRockstar.Texticize.UnitTests
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                
                 .SetConfiguration(config)
-                .SetMaps("[MyDate!Today]".MapTo<DateTime>(s => s.Variable.ToShortDateString()))
-                .SetVariables("MyDate".ToVariable(DateTime.Now))
                 .Process()
                 .Result;                
            

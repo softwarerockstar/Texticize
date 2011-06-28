@@ -69,7 +69,7 @@ namespace SoftwareRockstar.Texticize
             return this;
         }
 
-        public ITemplateProcessor SetVariable(object variable)
+        public ITemplateProcessor SetDefaultVariable(object variable)
         {
             _processInput.Variables[_processInput.Configuration.DefaultVariableKey] = variable;
             return this;
