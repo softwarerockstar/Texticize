@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentModel\Extensibility\AbstractExtensionFactory.cs" />
+    <Compile Include="ComponentModel\Extensibility\IExtensionUniqueName.cs" />
     <Compile Include="Factories\TemplateReaderFactory.cs" />
     <Compile Include="TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Factories\TemplateProcessorFactory.cs" />
@@ -80,9 +82,7 @@
     <Compile Include="TemplateSaveOptions.cs" />
     <Compile Include="CachedContext.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ComponentModel\Extensibility\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
