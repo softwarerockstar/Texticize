@@ -17,14 +17,14 @@ namespace SoftwareRockstar.Texticize.MacroProcessors
     {
         public string GetValue(string macro)
         {
-            string format = "M/d/yyyy";
+            string defaultFormat = "M/d/yyyy";
             
             var parameters = MacroHelper.ParseParameters(macro, ' ');
 
             if (parameters.Count > 0)
-                format = parameters[0];
+                defaultFormat = parameters[0];
 
-            return System.DateTime.Now.ToString(format);
+            return System.DateTime.Now.ToString(defaultFormat);
         }
     }
 }
