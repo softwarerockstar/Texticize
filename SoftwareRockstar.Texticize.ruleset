@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Texticize Ruleset (Microsoft Extended Design Guideline Rules)" Description="These rules expand on the basic design guideline rules to maximize the usability and maintainability issues that are reported. Extra emphasis is placed on naming guidelines. Consider including this rule set if your project includes library code or if you want to enforce the highest standards for writing maintainable code." ToolsVersion="10.0">
+  <Include Path="basicdesignguidelinerules.ruleset" Action="Default" />
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1020" Action="Warning" />
+    <Rule Id="CA1021" Action="Warning" />
+    <Rule Id="CA1040" Action="Warning" />
+    <Rule Id="CA1045" Action="Warning" />
+    <Rule Id="CA1062" Action="Warning" />
+    <Rule Id="CA1501" Action="Warning" />
+    <Rule Id="CA1504" Action="Warning" />
+    <Rule Id="CA1505" Action="Warning" />
+    <Rule Id="CA1506" Action="Warning" />
+    <Rule Id="CA1708" Action="None" />
+    <Rule Id="CA1716" Action="None" />
+  </Rules>
+</RuleSet>
