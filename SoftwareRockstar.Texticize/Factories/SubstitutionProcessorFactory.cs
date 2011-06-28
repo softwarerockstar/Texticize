@@ -11,8 +11,16 @@ using SoftwareRockstar.ComponentModel.Extensibility;
 
 namespace SoftwareRockstar.Texticize.Factories
 {
+    /// <summary>
+    /// Factory class for subsitution processors.
+    /// </summary>
     public class SubstitutionProcessorFactory : AbstractExtensionFactory<ISubstitutionProcessor>
     {
+        /// <summary>
+        /// Creates the specified substitution processor using provided unique name.
+        /// </summary>
+        /// <param name="substitutionProcessorUniqueName">Name of the substitution processor unique.</param>
+        /// <returns></returns>
         public static ISubstitutionProcessor Create(string substitutionProcessorUniqueName = SystemTemplateProcessorNames.Default)
         {
             using (var factory = new SubstitutionProcessorFactory())
