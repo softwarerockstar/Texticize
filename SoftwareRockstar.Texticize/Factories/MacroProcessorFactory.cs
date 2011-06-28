@@ -11,8 +11,16 @@ using SoftwareRockstar.ComponentModel.Extensibility;
 
 namespace SoftwareRockstar.Texticize.Factories
 {
+    /// <summary>
+    /// Factory class for macro processors.
+    /// </summary>
     public class MacroProcessorFactory : AbstractExtensionFactory<IMacroProcessor>
     {
+        /// <summary>
+        /// Creates the specified macro processor using provided unique name.
+        /// </summary>
+        /// <param name="macroUniqueName">Unique name of the macro.</param>
+        /// <returns></returns>
         public static IMacroProcessor Create(string macroUniqueName)
         {
             using (var factory = new MacroProcessorFactory())
