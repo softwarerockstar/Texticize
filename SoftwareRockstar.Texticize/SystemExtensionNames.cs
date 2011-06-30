@@ -15,6 +15,7 @@ namespace SoftwareRockstar.Texticize
         public const string UserDomainName = "UserDomainName";
         public const string UserName = "UserName";
         public const string Include = "Include";
+        public const string Echo = "Echo";
     }
 
     public static class SystemSubstitutionProcessorNames

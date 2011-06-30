@@ -27,7 +27,7 @@ namespace SoftwareRockstar.Texticize
         /// <param name="rowBegin"></param>
         /// <param name="rowEnd"></param>
         /// <returns></returns>
-        public static string ToStructuredText<T>(this IList<T> target, Func<T, string>[] columns, string colBeginDelimiter = "", string colEndDelimiter = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
+        public static string ToStructuredText<T>(this IList<T> target, Func<T, string>[] columns, string colSeperator = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
         {
             StringBuilder sb = new StringBuilder();
 
@@ -35,7 +35,7 @@ namespace SoftwareRockstar.Texticize
                 foreach (var t in target)
                 {
                     sb.Append(rowBeginDelimiter);
-                    sb.Append(columns.Select(w => w(t)).Aggregate((a, b) => colBeginDelimiter + a + colEndDelimiter + colBeginDelimiter + b + colEndDelimiter));
+                    sb.Append(columns.Select(w => w(t)).Aggregate((a, b) => a + colSeperator + b));
                     sb.Append(rowEndDelimiter);
                 }
 
@@ -54,7 +54,7 @@ namespace SoftwareRockstar.Texticize
 
             if (capture != null)
             {
-                var parameters = capture.Value.Split(',').Select(s => s.Trim());
+                var parameters = capture.Value.Split(';').Select(s => s.Trim());
 
                 foreach (string parameter in parameters)
                 {

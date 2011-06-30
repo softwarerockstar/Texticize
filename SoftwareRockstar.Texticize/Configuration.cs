@@ -66,13 +66,13 @@ namespace SoftwareRockstar.Texticize
             set { _defaultVariableKey = value; }
         }
 
-        public char MacroRegexPatternBeginChar
+        public char MacroBeginChar
         {
             get { return _macroRegexPatternBeginChar; }
             set { _macroRegexPatternBeginChar = value; }
         }
 
-        public char MacroRegexPatternEndChar
+        public char MacroEndChar
         {
             get { return _macroRegexPatternEndChar; }
             set { _macroRegexPatternEndChar = value; }
