@@ -47,6 +47,7 @@
     <Compile Include="ComponentModel\Extensibility\AbstractExtensionFactory.cs" />
     <Compile Include="ComponentModel\Extensibility\IExtensionUniqueName.cs" />
     <Compile Include="Factories\TemplateReaderFactory.cs" />
+    <Compile Include="MacroProcessors\EchoMacroProcessor.cs" />
     <Compile Include="TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Factories\TemplateProcessorFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />

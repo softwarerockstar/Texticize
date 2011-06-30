@@ -14,7 +14,7 @@ namespace SoftwareRockstar.Texticize
     {
         public static char TemplateRegexParamBeginChar = '[';
         public static char TemplateRegexParamEndChar = ']';
-        public static string TemplateRegexPattern = ".+?(?:,.+?)*?";
+        public static string TemplateRegexPattern = ".+?(?:;.+?)*?";
         public static string TemplateRegexPatternFormat = @"(?:{0}(?<{1}>{2}){3})?";
         public static string TemplateRegexParamInternalGroupName = "paramsGroup90515721005799";
 
