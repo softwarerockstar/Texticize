@@ -1,7 +1,0 @@
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\bin\Debug\SoftwareRockstar.Texticize.MockExtensions.dll
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\bin\Debug\SoftwareRockstar.Texticize.MockExtensions.pdb
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\bin\Debug\SoftwareRockstar.Texticize.dll
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\bin\Debug\SoftwareRockstar.Texticize.pdb
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\obj\x86\Debug\SoftwareRockstar.Texticize.MockExtensions.dll
-C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockExtensions\obj\x86\Debug\SoftwareRockstar.Texticize.MockExtensions.pdb
