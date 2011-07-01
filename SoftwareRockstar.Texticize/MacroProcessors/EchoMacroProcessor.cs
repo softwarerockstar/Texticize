@@ -20,9 +20,13 @@ namespace SoftwareRockstar.Texticize.MacroProcessors
         public string GetValue(string macro)
         {
             string toReturn = String.Empty;
-            var indexOfWhiteSpace = macro.IndexOfAny(new char[] {' ', '\t'});
-            if (indexOfWhiteSpace > 0 && macro.Length > (indexOfWhiteSpace+1))
-                toReturn = macro.Substring(indexOfWhiteSpace + 1);
+
+            if (!String.IsNullOrEmpty(macro))
+            {
+                var indexOfWhiteSpace = macro.IndexOfAny(new char[] { ' ', '\t' });
+                if (indexOfWhiteSpace > 0 && macro.Length > (indexOfWhiteSpace + 1))
+                    toReturn = macro.Substring(indexOfWhiteSpace + 1);
+            }
 
             return toReturn;
         }
