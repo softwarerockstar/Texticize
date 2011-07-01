@@ -21,7 +21,7 @@ namespace SoftwareRockstar.Texticize.Factories
         /// </summary>
         /// <param name="substitutionProcessorUniqueName">Name of the substitution processor unique.</param>
         /// <returns></returns>
-        public static ISubstitutionProcessor Create(string substitutionProcessorUniqueName = SystemTemplateProcessorNames.Default)
+        public static ISubstitutionProcessor Create(string substitutionProcessorUniqueName)
         {
             using (var factory = new SubstitutionProcessorFactory())
             {
