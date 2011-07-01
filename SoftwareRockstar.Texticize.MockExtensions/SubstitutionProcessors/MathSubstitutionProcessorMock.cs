@@ -58,7 +58,6 @@ namespace SoftwareRockstar.Texticize.MockExtensions
                 }
                 catch (ApplicationException ex)
                 {
-                    output.IsSuccess = false;
                     output.Exceptions.Add(ex);
                 }
             }

@@ -53,9 +53,7 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
                     }
 
                     matches = regex.Matches(output.Result);
-                }                
-                
-                output.IsSuccess = true;
+                }
             }
             catch (ApplicationException ex)
             {

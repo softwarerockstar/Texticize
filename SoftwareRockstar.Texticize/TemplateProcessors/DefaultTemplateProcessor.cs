@@ -21,32 +21,38 @@ namespace SoftwareRockstar.Texticize
     {
         public override ProcessorOutput Process()
         {
-            var exceptions = new List<Exception>();
+            ProcessorOutput output = new ProcessorOutput { Result = base.ProcessInput.Target };
 
-            ProcessorOutput currentProcessorOutput = new ProcessorOutput { Result = base.ProcessInput.Target };
-            foreach (var processorName in base.ProcessInput.Configuration.ProcessorPipeline)
+            try
             {
-                var processor = SubstitutionProcessorFactory.Create(processorName);
-                if (processor != null)
+                foreach (var processorName in base.ProcessInput.Configuration.ProcessorPipeline)
                 {
-                    currentProcessorOutput = processor.Process(base.ProcessInput);
-
-                    if (!currentProcessorOutput.IsSuccess)
+                    var processor = SubstitutionProcessorFactory.Create(processorName);
+                    if (processor != null)
                     {
-                        exceptions.AddRange(currentProcessorOutput.Exceptions);
+                        try
+                        {
+                            output.Combine(processor.Process(base.ProcessInput));
+                        }
+                        catch (ApplicationException pex)
+                        {
+                            output.Exceptions.Add(pex);
+                        }
 
-                        if (!base.ProcessInput.Configuration.ContinueOnError)
-                            break;
+                        if (!output.IsSuccess)
+                            if (!base.ProcessInput.Configuration.ContinueOnError)
+                                break;
+
+                        base.ProcessInput.Target = output.Result;
                     }
-
-                    base.ProcessInput.Target = currentProcessorOutput.Result;
                 }
             }
+            catch (ApplicationException ex)
+            {
+                output.Exceptions.Add(ex);
+            }
 
-            return new ProcessorOutput(
-                currentProcessorOutput.Result,
-                (exceptions.Count == 0),
-                exceptions);
+            return output;
         }
 
     }

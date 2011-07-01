@@ -21,18 +21,9 @@ namespace SoftwareRockstar.Texticize.MockExtensions
     {
         public override ProcessorOutput Process()
         {
-            var baseOutput = base.Process();
-
-            var customOutput = new ProcessorOutput
-            {                 
-                IsSuccess = baseOutput.IsSuccess,
-                Result = "<<Custom>>" + baseOutput.Result
-            };
-
-            foreach (var exception in baseOutput.Exceptions)
-                customOutput.Exceptions.Add(exception);
-
-            return customOutput;
+            var output = base.Process();
+            output.Result = "<<Custom>>" + output.Result;
+            return output;
         }
 
     }
