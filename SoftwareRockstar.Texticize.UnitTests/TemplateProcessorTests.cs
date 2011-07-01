@@ -10,8 +10,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SoftwareRockstar.Texticize.TemplateReaders;
-using SoftwareRockstar.Texticize.UnitTests.DTO;
+using SoftwareRockstar.Texticize.MockData;
 using System.Collections;
+using SoftwareRockstar.Texticize.MockExtensions;
 
 namespace SoftwareRockstar.Texticize.UnitTests
 {
@@ -111,7 +112,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -132,7 +133,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -158,7 +159,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -177,7 +178,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -200,7 +201,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .SetVariables("MyDate".ToVariable(DateTime.Now))
                 .Process().Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -225,7 +226,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -249,7 +250,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]        
@@ -279,7 +280,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
             
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -311,7 +312,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -326,7 +327,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -343,7 +344,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -361,7 +362,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -434,19 +435,19 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
-        [TestCategory("Configuration")]
-        public void ProcessPipelineAddTest()
+        [TestCategory("Extensibility")]
+        public void SubstitutionProcessorExtensionTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Dear Mr. Doe:%NewLine%");
-            string toCompare = String.Format("I am tested: Dear Mr. Doe:{0}", System.Environment.NewLine);
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Your order total is $[120 + 5]");
+            string toCompare = "Your order total is $125";
 
             // Add custom processor to the end of the pipeline
             Configuration config = new Configuration();
-            config.ProcessorPipeline.Add("Test");
+            config.ProcessorPipeline.Add("SoftwareRockstar.Texticize.MockExtensions.MathSubstitutionProcessorMock");
 
             string result = TemplateProcessorFactory
 				.CreateDefault(reader)                
@@ -454,8 +455,59 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;                
            
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
+
+        [TestMethod]
+        [TestCategory("Extensibility")]
+        public void MacroExtensionTest()
+        {
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("%Greeting%Mrs. Jones");
+            string toCompare = "Hello: Mrs. Jones";
+
+            string result = TemplateProcessorFactory
+                .CreateDefault(reader)                
+                .Process()
+                .Result;
+
+            Assert.AreEqual<string>(toCompare, result);
+        }
+
+
+        [TestMethod]
+        [TestCategory("Extensibility")]
+        public void TemplateReaderExtensionTest()
+        {
+            var reader = TemplateReaderFactory.Create("SoftwareRockstar.Texticize.MockExtensions.HttpTemplateReaderMock") as HttpTemplateReaderMock;
+            reader.Url = "http://www.SoftwareRockstar.com/Texticize/DefaultTemplate.txt";
+            string result = reader.Read();
+
+            string toCompare = "This template is loaded from http://www.SoftwareRockstar.com/Texticize/DefaultTemplate.txt";
+
+            Assert.AreEqual<string>(toCompare, result);
+        }
+
+        [TestMethod]
+        [TestCategory("Extensibility")]
+        public void TemplateProcessorExtensionTest()
+        {
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("{MyDate!Today} is a gift, that's why it's called Present.");
+            var toCompare = String.Format("<<Custom>>{0} is a gift, that's why it's called Present.", DateTime.Today.ToShortDateString());
+
+            string result = TemplateProcessorFactory
+                .Create("SoftwareRockstar.Texticize.MockExtensions.CustomTemplateProcessorMock", reader)
+                .SetMaps
+                (
+                    "{MyDate!Today}".MapTo<DateTime>(s => s.Variable.ToShortDateString())
+                )
+                .SetVariables("MyDate".ToVariable(DateTime.Now))
+                .Process()
+                .Result;
+
+            Assert.AreEqual<string>(toCompare, result);
+
+        }
+
 
         [TestMethod]
         [TestCategory("Configuration")]
@@ -505,7 +557,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .SetVariables("Products".ToVariable(_products))
                 .Process().Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         [TestMethod]
@@ -520,7 +572,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
         //[TestMethod]
@@ -548,7 +600,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
         //        .Process()
         //        .Result;
 
-        //    Assert.AreEqual<string>(result, toCompare);
+        //    Assert.AreEqual<string>(toCompare, result);
         //}
 
         [TestMethod]
@@ -567,7 +619,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
             var result = PersistenceManager.LoadFromFile(localPath)                
                 .Process().Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
 
         }
 
@@ -587,7 +639,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;            
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
 
 
@@ -603,7 +655,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Process()
                 .Result;
 
-            Assert.AreEqual<string>(result, toCompare);
+            Assert.AreEqual<string>(toCompare, result);
         }
     }
 }
