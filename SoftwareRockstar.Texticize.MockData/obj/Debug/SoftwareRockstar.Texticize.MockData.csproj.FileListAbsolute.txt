@@ -1,0 +1,5 @@
+C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockData\bin\Debug\SoftwareRockstar.Texticize.MockData.dll
+C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockData\bin\Debug\SoftwareRockstar.Texticize.MockData.pdb
+C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockData\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockData\obj\Debug\SoftwareRockstar.Texticize.MockData.dll
+C:\Users\MH\Documents\Visual Studio 2010\Projects\SoftwareRockstar\SoftwareRockstar.Texticize\SoftwareRockstar.Texticize.MockData\obj\Debug\SoftwareRockstar.Texticize.MockData.pdb
