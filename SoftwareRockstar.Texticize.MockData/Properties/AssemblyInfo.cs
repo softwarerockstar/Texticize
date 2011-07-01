@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SoftwareRockstar.Texticize.Data")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("SoftwareRockstar.com")]
 [assembly: AssemblyProduct("SoftwareRockstar.Texticize.Data")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright © SoftwareRockstar.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
