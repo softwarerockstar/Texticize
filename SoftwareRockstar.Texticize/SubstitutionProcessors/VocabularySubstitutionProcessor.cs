@@ -21,27 +21,34 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
     class VocabularySubstitutionProcessor : ISubstitutionProcessor
     {
         public ProcessorOutput Process(ProcessorInput input)
-        {
-            ProcessorOutput toReturn = new ProcessorOutput();
+        {   
+            ProcessorOutput output = new ProcessorOutput();
 
             if (input != null)
             {
-                // Process regular vocabulary with provided maps
-                toReturn = ProcessMaps(input);
-
-                // If no mpas specified but a default variable is specified then see if default variable is a 
-                // dictionary and then perform dictionary subsitutions
-                if (input.Maps.Count == 0 && input.Variables.ContainsKey(input.Configuration.DefaultVariableKey))
+                try
                 {
-                    if (toReturn.IsSuccess || input.Configuration.ContinueOnError)
+                    // Process regular vocabulary with provided maps
+                    output.Combine(ProcessMaps(input));
+
+                    // If no mpas specified but a default variable is specified then see if default variable is a 
+                    // dictionary and then perform dictionary subsitutions
+                    if (input.Maps.Count == 0 && input.Variables.ContainsKey(input.Configuration.DefaultVariableKey))
                     {
-                        input.Target = toReturn.Result;
-                        toReturn = ProcessDefaultVariableDictionary(input);
+                        if (output.IsSuccess || input.Configuration.ContinueOnError)
+                        {
+                            input.Target = output.Result;
+                            output.Combine(ProcessDefaultVariableDictionary(input));
+                        }
                     }
                 }
+                catch (ApplicationException ex)
+                {
+                    output.Exceptions.Add(ex);
+                }
             }
-            
-            return toReturn;
+
+            return output;
         }
 
         /// <summary>
@@ -53,12 +60,19 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
         {
             ProcessorOutput output = new ProcessorOutput();
 
-            output.Result = input.Target;
-            var dictionary = input.Variables[input.Configuration.DefaultVariableKey] as IDictionary;
+            try
+            {
+                output.Result = input.Target;
+                var dictionary = input.Variables[input.Configuration.DefaultVariableKey] as IDictionary;
 
-            if (dictionary != null)
-                foreach (DictionaryEntry item in dictionary)
-                    output.Result = output.Result.Replace(item.Key.ToString(), item.Value.ToString());
+                if (dictionary != null)
+                    foreach (DictionaryEntry item in dictionary)
+                        output.Result = output.Result.Replace(item.Key.ToString(), item.Value.ToString());
+            }
+            catch (ApplicationException ex)
+            {
+                output.Exceptions.Add(ex);
+            }
             
             return output;
         }
@@ -133,8 +147,6 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
                     }
 
                 }
-
-                output.IsSuccess = true;
             }
             catch (ApplicationException ex)
             {

@@ -17,22 +17,26 @@ namespace SoftwareRockstar.Texticize
     {
         List<Exception> _exceptions;
 
-        public ProcessorOutput(): this(null, false, null)
+        public ProcessorOutput(): this(null, true)
         {
         }
 
-        public ProcessorOutput(string result, bool isSuccess, IEnumerable<Exception> exceptions)
+        public ProcessorOutput(string result, bool isSuccess)
         {
             _exceptions = new List<Exception>();
-            this.Result = result;
-            this.IsSuccess = isSuccess;
+            this.Result = result;            
+        }
 
-            if (exceptions != null)
-                _exceptions.AddRange(exceptions);
+        public ProcessorOutput Combine(ProcessorOutput input)
+        {            
+            this.Result = input.Result;
+            _exceptions.AddRange(input.Exceptions);
+
+            return this;
         }
 
         public string Result { get; set; }
-        public bool IsSuccess { get; set; }
+        public bool IsSuccess { get { return (_exceptions.Count == 0); } }
         public IList<Exception> Exceptions { get {return _exceptions; } } 
     }
 }
