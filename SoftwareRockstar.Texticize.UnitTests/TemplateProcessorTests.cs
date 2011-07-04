@@ -108,7 +108,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
 
             string result = TemplateProcessorFactory
                 .CreateDefault(reader)
-                .SetMaps("{OrderNumber}".MapTo(s => "00201767"))
+                .SetMaps("OrderNumber".MapTo(s => "00201767"))
                 .Process()
                 .Result;
 
@@ -123,8 +123,8 @@ namespace SoftwareRockstar.Texticize.UnitTests
 
             Dictionary<string, string> testData = new Dictionary<string, string>
             {
-                {"{OrderNumber}", "00201767"},
-                {"{OrderTotal}", "147.99"}
+                {"OrderNumber", "00201767"},
+                {"OrderTotal", "147.99"}
             };
 
             string result = TemplateProcessorFactory
@@ -152,8 +152,8 @@ namespace SoftwareRockstar.Texticize.UnitTests
 				.CreateDefault(reader)               
                 .SetMaps
                 (
-                    "{OrderNumber}".MapTo<Dictionary<string, string>>(s => s.Variable["OrderNumber"]),
-                    "{OrderTotal}".MapTo<Dictionary<string, string>>(s => s.Variable["OrderTotal"])
+                    "OrderNumber".MapTo<Dictionary<string, string>>(s => s.Variable["OrderNumber"]),
+                    "OrderTotal".MapTo<Dictionary<string, string>>(s => s.Variable["OrderTotal"])
                 )
                 .SetDefaultVariable(testData)                
                 .Process()
@@ -172,7 +172,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .CreateDefault(reader)
                 .SetMaps
                 (
-                    "{MyDate!Today}".MapTo<DateTime>(s => s.Variable.ToShortDateString())
+                    "MyDate!Today".MapTo<DateTime>(s => s.Variable.ToShortDateString())
                 )
                 .SetVariables("MyDate".ToVariable(DateTime.Now))
                 .Process()
@@ -194,9 +194,9 @@ namespace SoftwareRockstar.Texticize.UnitTests
 				.CreateDefault(reader)               
                 .SetMaps
                 (
-                    "{MyDate!Today}".MapTo<DateTime>(s => s.Variable.ToShortDateString()),
-                    "{MyDate!Yesterday}".MapTo<DateTime>(s => s.Variable.AddDays(-1).ToShortDateString()),
-                    "{MyDate!Tomorrow}".MapTo<DateTime>( s => s.Variable.AddDays(1).ToShortDateString())
+                    "MyDate!Today".MapTo<DateTime>(s => s.Variable.ToShortDateString()),
+                    "MyDate!Yesterday".MapTo<DateTime>(s => s.Variable.AddDays(-1).ToShortDateString()),
+                    "MyDate!Tomorrow".MapTo<DateTime>( s => s.Variable.AddDays(1).ToShortDateString())
                 )
                 .SetVariables("MyDate".ToVariable(DateTime.Now))
                 .Process().Result;
@@ -214,9 +214,9 @@ namespace SoftwareRockstar.Texticize.UnitTests
 				.CreateDefault(reader)                
                 .SetMaps
                 (
-                    "{Customer!LastName}".MapTo<CustomerDto>(s => s.Variable.LastName),
-                    "{Order!OrderID}".MapTo<OrderDto>(s => s.Variable.OrderID.ToString()),
-                    "{Order!OrderTotal}".MapTo<OrderDto>(s => s.Variable.Total.ToString())
+                    "Customer!LastName".MapTo<CustomerDto>(s => s.Variable.LastName),
+                    "Order!OrderID".MapTo<OrderDto>(s => s.Variable.OrderID.ToString()),
+                    "Order!OrderTotal".MapTo<OrderDto>(s => s.Variable.Total.ToString())
                 )
                 .SetVariables
                 (
@@ -239,7 +239,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
 				.CreateDefault(reader)                
                 .SetMaps
                 (
-                    "{Product!Price}".MapTo<List<ProductDto>>
+                    "Product!Price".MapTo<List<ProductDto>>
                     (
                         s => s.Variable.Lookup(
                             condition: q => q.Description == s.Parameters["Description"],
@@ -267,7 +267,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
             string result = TemplateProcessorFactory
 	            .CreateDefault(reader)                
                 .SetMaps(
-                    "{Products!List}".MapTo<List<ProductDto>>(
+                    "Products!List".MapTo<List<ProductDto>>(
                         s => s.Variable.ToStructuredText(
                             columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
                             colSeperator: s.Parameters["ColSep"],                            
@@ -299,7 +299,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
             string result = TemplateProcessorFactory
                 .CreateDefault(reader)
                 .SetMaps(
-                    "{Products!List}".MapTo<List<ProductDto>>(
+                    "Products!List".MapTo<List<ProductDto>>(
                         s => s.Variable.ToStructuredText(
                             columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },
                             colSeperator: s.Parameters["ColSep"],                            
@@ -388,13 +388,15 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestCategory("Configuration")]
         public void ConditionalTestWithConfiguration()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Price for 15MP Camera is <Product.Price(Description=15MP Camera)>.");
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader("Price for 15MP Camera is $(Product.Price<Description=15MP Camera>).");
 
             Configuration config = new Configuration
             {
                 PropertySeperator = '.',
-                TemplateRegexParamBeginChar = '(',
-                TemplateRegexParamEndChar = ')'
+                ParameterBeginChar = '<',
+                ParameterEndChar = '>',
+                PlaceHolderBegin = "$(",
+                PlaceHolderEnd = ")"
             };
 
             string result = TemplateProcessorFactory
@@ -402,7 +404,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .SetConfiguration(config)
                 .SetMaps
                 (
-                    "<Product.Price>".MapTo<List<ProductDto>>
+                    "Product.Price".MapTo<List<ProductDto>>
                     (
                         s => s.Variable.Lookup(
                             condition: q => q.Description == s.Parameters["Description"],
@@ -498,7 +500,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .Create("SoftwareRockstar.Texticize.MockExtensions.CustomTemplateProcessorMock", reader)
                 .SetMaps
                 (
-                    "{MyDate!Today}".MapTo<DateTime>(s => s.Variable.ToShortDateString())
+                    "MyDate!Today".MapTo<DateTime>(s => s.Variable.ToShortDateString())
                 )
                 .SetVariables("MyDate".ToVariable(DateTime.Now))
                 .Process()
@@ -520,7 +522,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .CreateDefault(reader);
 
             var output = processor
-                .SetMaps("{Infitinity}".MapTo(s => (2 / i).ToString()))     // This line should error out
+                .SetMaps("Infitinity".MapTo(s => (2 / i).ToString()))     // This line should error out
                 .Process();
 
             Assert.AreEqual<bool>(output.IsSuccess, false);
@@ -540,7 +542,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
                 .CreateDefault(reader)                
                 .SetMaps
                 (
-                    "{Products!List}".MapTo <List<ProductDto>>
+                    "Products!List".MapTo <List<ProductDto>>
                     (
                         s => s.Variable.ToStructuredText(
                             columns: new Func<ProductDto, string>[] { q => q.Description, q => q.Price.ToString("C") },

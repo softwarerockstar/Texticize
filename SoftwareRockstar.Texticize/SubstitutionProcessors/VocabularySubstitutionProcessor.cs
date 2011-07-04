@@ -64,10 +64,12 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
             {
                 output.Result = input.Target;
                 var dictionary = input.Variables[input.Configuration.DefaultVariableKey] as IDictionary;
-
+                
                 if (dictionary != null)
                     foreach (DictionaryEntry item in dictionary)
-                        output.Result = output.Result.Replace(item.Key.ToString(), item.Value.ToString());
+                        output.Result = output.Result.Replace(
+                            input.Configuration.PlaceHolderBegin + item.Key.ToString() + input.Configuration.PlaceHolderEnd, 
+                            item.Value.ToString());
             }
             catch (ApplicationException ex)
             {
@@ -89,9 +91,16 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
             {
                 foreach (var map in input.Maps)
                 {
-                    string originalPattern = Regex.Escape(map.Key);
+                    // Escape begin and end tokens
+                    string placeHolderBegin = Regex.Escape(input.Configuration.PlaceHolderBegin);
+                    string placeHolderEnd = Regex.Escape(input.Configuration.PlaceHolderEnd);
+
+                    // Generate pattern based on mapy's key and begin and end tokens
+                    string originalPattern = placeHolderBegin + Regex.Escape(map.Key) + placeHolderEnd;
+
+                    // Insert parameters pattern into generated pattern 
                     string parameterPattern = input.Configuration.TemplateRegexPatternFormatted;
-                    string pattern = originalPattern.Insert(originalPattern.Length - 1, parameterPattern);
+                    string pattern = originalPattern.Insert(originalPattern.Length - placeHolderEnd.Length, parameterPattern);
                     Regex regex = new Regex(pattern, input.Configuration.TemplateRegexOptions);
 
                     // Get all regex matches in template
@@ -107,7 +116,7 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
                         {
                             // Determine variable name
                             string varName = (map.Key.Contains(input.Configuration.PropertySeperator)) ?
-                                map.Key.Substring(1, map.Key.IndexOf(input.Configuration.PropertySeperator) - 1) :
+                                map.Key.Substring(0, map.Key.IndexOf(input.Configuration.PropertySeperator)) :
                                 input.Variables.ContainsKey(input.Configuration.DefaultVariableKey) ?
                                     input.Configuration.DefaultVariableKey :
                                     input.Configuration.NoVariableName;
@@ -123,7 +132,7 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
                             Dictionary<string, string> parameterDictionary =
                                 (match.Groups.Count > 1) ?
                                     match.Groups[input.Configuration.TemplateRegexParamInternalGroupName]
-                                    .ToParameterDictionary() :
+                                    .ToParameterDictionary(input.Configuration.ParameterSeperatorChar) :
                                     new Dictionary<string, string>();
 
                             // Determine target variable
