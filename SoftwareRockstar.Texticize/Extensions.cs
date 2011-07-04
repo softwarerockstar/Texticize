@@ -48,13 +48,13 @@ namespace SoftwareRockstar.Texticize
             return (value != null) ? value(target.Where(x => condition(x)).First()) : String.Empty;
         }
 
-        public static Dictionary<string, string> ToParameterDictionary(this Capture capture)
+        public static Dictionary<string, string> ToParameterDictionary(this Capture capture, char parameterSeperatorChar)
         {
             Dictionary<string, string> parameterDictionary = new Dictionary<string, string>();
 
             if (capture != null)
             {
-                var parameters = capture.Value.Split(';').Select(s => s.Trim());
+                var parameters = capture.Value.Split(parameterSeperatorChar).Select(s => s.Trim());
 
                 foreach (string parameter in parameters)
                 {

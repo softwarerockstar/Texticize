@@ -15,15 +15,20 @@ namespace SoftwareRockstar.Texticize
     [Serializable]
     public class Configuration
     {
-        char _templateRegexParamBeginChar = DefaultConfigValues.TemplateRegexParamBeginChar;
-        char _templateRegexParamEndChar = DefaultConfigValues.TemplateRegexParamEndChar;
-        string _templateRegexPattern = DefaultConfigValues.TemplateRegexPattern;
+        char _parameterBeginChar = DefaultConfigValues.ParameterBeginChar;
+        char _parameterEndChar = DefaultConfigValues.ParameterEndChar;
+        char _parameterSeperatorChar = DefaultConfigValues.ParameterSeperatorChar;
+        string _parameterRegexPatternFormat = DefaultConfigValues.ParameterRegexPatternFormat;
+        
         string _templateRegexPatternFormat = DefaultConfigValues.TemplateRegexPatternFormat;
         string _templateRegexParamInternalGroupName = DefaultConfigValues.TemplateRegexParamInternalGroupName;
 
+        string _placeHolderBegin = DefaultConfigValues.PlaceHolderBegin;
+        string _placeHolderEnd = DefaultConfigValues.PlaceHolderEnd;
+
         string _macroRegexPattern = DefaultConfigValues.MacroRegexPattern;
-        char _macroRegexPatternBeginChar = DefaultConfigValues.MacroRegexPatternBeginChar;
-        char _macroRegexPatternEndChar = DefaultConfigValues.MacroRegexPatternEndChar;
+        char _macroBeginChar = DefaultConfigValues.MacroBeginChar;
+        char _macroEndChar = DefaultConfigValues.MacroEndChar;
         string _macroRegexPatternFormat = DefaultConfigValues.MacroRegexPatternFormat;
 
         char _propertySeperator = DefaultConfigValues.PropertySeperator;
@@ -36,6 +41,18 @@ namespace SoftwareRockstar.Texticize
         List<string> _processorPipeline = new List<string>(DefaultConfigValues.ProcessorPipelineSteps);
 
         bool _continueOnError = DefaultConfigValues.ContinueOnError;
+
+        public string PlaceHolderBegin
+        {
+            get { return _placeHolderBegin; }
+            set { _placeHolderBegin = value; }
+        }
+
+        public string PlaceHolderEnd
+        {
+            get { return _placeHolderEnd; }
+            set { _placeHolderEnd = value; }
+        }
 
         public bool ContinueOnError
         {
@@ -68,14 +85,14 @@ namespace SoftwareRockstar.Texticize
 
         public char MacroBeginChar
         {
-            get { return _macroRegexPatternBeginChar; }
-            set { _macroRegexPatternBeginChar = value; }
+            get { return _macroBeginChar; }
+            set { _macroBeginChar = value; }
         }
 
         public char MacroEndChar
         {
-            get { return _macroRegexPatternEndChar; }
-            set { _macroRegexPatternEndChar = value; }
+            get { return _macroEndChar; }
+            set { _macroEndChar = value; }
         }
 
         public string MacroRegexPattern
@@ -90,9 +107,9 @@ namespace SoftwareRockstar.Texticize
             {
                 return String.Format(
                     _macroRegexPatternFormat,
-                    Regex.Escape(_macroRegexPatternBeginChar.ToString()),
+                    Regex.Escape(_macroBeginChar.ToString()),
                     _macroRegexPattern,
-                    Regex.Escape(_macroRegexPatternEndChar.ToString()));
+                    Regex.Escape(_macroEndChar.ToString()));
             }            
         }
 
@@ -102,22 +119,33 @@ namespace SoftwareRockstar.Texticize
             set { _propertySeperator = value; }
         }
 
-        public string TemplateRegexPattern
+        public string ParameterRegexPatternFormat
         {
-            get { return _templateRegexPattern; }
-            set { _templateRegexPattern = value; }
+            get { return _parameterRegexPatternFormat; }
+            set { _parameterRegexPatternFormat = value; }
         }
 
-        public char TemplateRegexParamBeginChar
+        public char ParameterSeperatorChar
         {
-            get { return _templateRegexParamBeginChar; }
-            set { _templateRegexParamBeginChar = value; }
+            get { return _parameterSeperatorChar; }
+            set { _parameterSeperatorChar = value; }
         }
 
-        public char TemplateRegexParamEndChar
+        protected internal string ParameterRegexPatternFormatted
         {
-            get { return _templateRegexParamEndChar; }
-            set { _templateRegexParamEndChar = value; }
+            get { return String.Format(ParameterRegexPatternFormat, _parameterSeperatorChar); }
+        }
+
+        public char ParameterBeginChar
+        {
+            get { return _parameterBeginChar; }
+            set { _parameterBeginChar = value; }
+        }
+
+        public char ParameterEndChar
+        {
+            get { return _parameterEndChar; }
+            set { _parameterEndChar = value; }
         }
 
         protected internal string TemplateRegexPatternFormatted
@@ -126,10 +154,10 @@ namespace SoftwareRockstar.Texticize
             {
                 return String.Format(
                     _templateRegexPatternFormat,
-                    Regex.Escape(_templateRegexParamBeginChar.ToString()),
+                    Regex.Escape(_parameterBeginChar.ToString()),
                     _templateRegexParamInternalGroupName,
-                    _templateRegexPattern,
-                    Regex.Escape(_templateRegexParamEndChar.ToString()));
+                    ParameterRegexPatternFormatted,
+                    Regex.Escape(_parameterEndChar.ToString()));
             }
         }
 
