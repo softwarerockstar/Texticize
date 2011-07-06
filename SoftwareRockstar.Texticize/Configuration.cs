@@ -131,7 +131,7 @@ namespace SoftwareRockstar.Texticize
             set { _parameterSeperatorChar = value; }
         }
 
-        protected internal string ParameterRegexPatternFormatted
+        private string ParameterRegexPatternFormatted
         {
             get { return String.Format(ParameterRegexPatternFormat, _parameterSeperatorChar); }
         }
