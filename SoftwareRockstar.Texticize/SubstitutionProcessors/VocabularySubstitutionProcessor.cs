@@ -21,7 +21,8 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
     class VocabularySubstitutionProcessor : ISubstitutionProcessor
     {
         public ProcessorOutput Process(ProcessorInput input)
-        {   
+        {
+            Logger.LogMethodStartup();
             ProcessorOutput output = new ProcessorOutput();
 
             if (input != null)
@@ -29,6 +30,7 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
                 try
                 {
                     // Process regular vocabulary with provided maps
+                    Logger.LogInfo("Processing Maps");                    
                     output.Combine(ProcessMaps(input));
 
                     // If no mpas specified but a default variable is specified then see if default variable is a 
@@ -38,16 +40,19 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
                         if (output.IsSuccess || input.Configuration.ContinueOnError)
                         {
                             input.Target = output.Result;
+                            Logger.LogInfo("Processing Default Variables");
                             output.Combine(ProcessDefaultVariableDictionary(input));
                         }
                     }
                 }
                 catch (ApplicationException ex)
                 {
+                    Logger.LogError(ex);
                     output.Exceptions.Add(ex);
                 }
             }
 
+            Logger.LogMethodEnd();
             return output;
         }
 

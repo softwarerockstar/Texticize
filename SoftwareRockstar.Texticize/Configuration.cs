@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace SoftwareRockstar.Texticize
 {
@@ -41,6 +42,42 @@ namespace SoftwareRockstar.Texticize
         List<string> _processorPipeline = new List<string>(DefaultConfigValues.ProcessorPipelineSteps);
 
         bool _continueOnError = DefaultConfigValues.ContinueOnError;
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("ParameterBeginChar: {0}\n", _parameterBeginChar);
+            sb.AppendFormat("ParameterEndChar: {0}\n", _parameterEndChar);
+            sb.AppendFormat("ParameterSeperatorChar: {0}\n", _parameterSeperatorChar);
+            sb.AppendFormat("ParameterRegexPatternFormat: {0}\n", _parameterRegexPatternFormat);
+
+            sb.AppendFormat("TemplateRegexPatternFormat: {0}\n", _templateRegexPatternFormat);
+            sb.AppendFormat("TemplateRegexParamInternalGroupName: {0}\n", _templateRegexParamInternalGroupName);
+
+            sb.AppendFormat("PlaceHolderBegin: {0}\n", _placeHolderBegin);
+            sb.AppendFormat("PlaceHolderEnd: {0}\n", _placeHolderEnd);
+
+            sb.AppendFormat("MacroRegexPattern: {0}\n", _macroRegexPattern);
+            sb.AppendFormat("MacroBeginChar: {0}\n", _macroBeginChar);
+            sb.AppendFormat("MacroEndChar: {0}\n", _macroEndChar);
+            sb.AppendFormat("MacroRegexPatternFormat: {0}\n", _macroRegexPatternFormat);
+
+            sb.AppendFormat("PropertySeperator: {0}\n", _propertySeperator);
+            sb.AppendFormat("DefaultVariableKey: {0}\n", _defaultVariableKey);
+            sb.AppendFormat("NoVariableName: {0}\n", _noVariableName);
+
+            sb.AppendFormat("TemplateRegexOptions: {0}\n", _templateRegexOptions);
+            sb.AppendFormat("MacroRegexOptions: {0}\n", _macroRegexOptions);
+
+            sb.AppendFormat("ProcessorPipelineSteps: ", _macroRegexOptions);
+            _processorPipeline.ForEach( s => sb.AppendFormat("{0};", s));
+            sb.AppendLine();
+
+            sb.AppendFormat("ContinueOnError: {0}\n", _continueOnError);
+
+            return sb.ToString();
+        }
 
         public string PlaceHolderBegin
         {

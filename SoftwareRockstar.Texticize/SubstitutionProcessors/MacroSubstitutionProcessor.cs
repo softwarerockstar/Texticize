@@ -11,6 +11,7 @@ using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using SoftwareRockstar.Texticize.Factories;
 using SoftwareRockstar.ComponentModel.Extensibility;
+using SoftwareRockstar.ComponentModel.Instrumentation;
 
 namespace SoftwareRockstar.Texticize.SubstitutionProcessors
 {
@@ -28,6 +29,9 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
         /// </summary>
         internal ProcessorOutput ProcessMacro(ProcessorInput input, string macroName = null)
         {
+            Logger.LogMethodStartup();
+            Logger.LogInfo(s => s("Macro: {0}; Target: {0}", macroName ?? "Unknown",  input.Target));
+
             ProcessorOutput output = new ProcessorOutput();
             output.Result = input.Target;
 
@@ -35,7 +39,7 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
             {
                 macroName = macroName ?? String.Empty;
 
-                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, macroName), input.Configuration.MacroRegexOptions);                
+                Regex regex = new Regex(input.Configuration.MacroRegexPatternFormatted.Insert(1, macroName), input.Configuration.MacroRegexOptions);
                 var matches = regex.Matches(output.Result);
 
                 while (matches.Count > 0)
@@ -57,7 +61,12 @@ namespace SoftwareRockstar.Texticize.SubstitutionProcessors
             }
             catch (ApplicationException ex)
             {
+                Logger.LogError(ex);
                 output.Exceptions.Add(ex);
+            }
+            finally
+            {
+                Logger.LogMethodEnd();
             }
 
             return output;
