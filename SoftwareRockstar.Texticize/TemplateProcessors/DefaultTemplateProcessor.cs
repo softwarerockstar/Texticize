@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using SoftwareRockstar.ComponentModel.Extensibility;
 using SoftwareRockstar.Texticize.Factories;
+using SoftwareRockstar.ComponentModel.Instrumentation;
 
 namespace SoftwareRockstar.Texticize
 {   
@@ -18,13 +19,17 @@ namespace SoftwareRockstar.Texticize
     [Export(typeof(ITemplateProcessor))]
     [ExportMetadata(UniquenessEvidenceFields.UniqueName, SystemTemplateProcessorNames.Default)]
     public class DefaultTemplateProcessor : AbstractTemplateProcessor
-    {
+    {   
         public override ProcessorOutput Process()
         {
+            Logger.LogMethodStartup();
+            Logger.LogInfo(s => s("Target: {0}", base.ProcessInput.Target));
+            Logger.LogInfo(s => s("Configuration:\n{0}", base.ProcessInput.Configuration.ToString()));
+            
             ProcessorOutput output = new ProcessorOutput { Result = base.ProcessInput.Target };
 
             try
-            {
+            {                
                 foreach (var processorName in base.ProcessInput.Configuration.ProcessorPipeline)
                 {
                     var processor = SubstitutionProcessorFactory.Create(processorName);
@@ -36,6 +41,7 @@ namespace SoftwareRockstar.Texticize
                         }
                         catch (ApplicationException pex)
                         {
+                            Logger.LogError(pex);
                             output.Exceptions.Add(pex);
                         }
 
@@ -49,7 +55,12 @@ namespace SoftwareRockstar.Texticize
             }
             catch (ApplicationException ex)
             {
+                Logger.LogError(ex);
                 output.Exceptions.Add(ex);
+            }
+            finally
+            {
+                Logger.LogMethodEnd();
             }
 
             return output;

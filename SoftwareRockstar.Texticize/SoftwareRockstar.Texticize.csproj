@@ -46,7 +46,11 @@
   <ItemGroup>
     <Compile Include="ComponentModel\Extensibility\AbstractExtensionFactory.cs" />
     <Compile Include="ComponentModel\Extensibility\IExtensionUniqueName.cs" />
+    <Compile Include="ComponentModel\Instrumentation\ILogger.cs" />
+    <Compile Include="ComponentModel\Instrumentation\TraceLogger.cs" />
+    <Compile Include="ComponentModel\Instrumentation\LogManager.cs" />
     <Compile Include="Factories\TemplateReaderFactory.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MacroProcessors\EchoMacroProcessor.cs" />
     <Compile Include="TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Factories\TemplateProcessorFactory.cs" />
