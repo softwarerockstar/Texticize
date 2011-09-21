@@ -13,6 +13,7 @@ using SoftwareRockstar.Texticize.TemplateReaders;
 using SoftwareRockstar.Texticize.MockData;
 using System.Collections;
 using SoftwareRockstar.Texticize.MockExtensions;
+using System.IO;
 
 namespace SoftwareRockstar.Texticize.UnitTests
 {
@@ -26,6 +27,13 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestInitialize]
         public void Init()
         {
+            // Initialize include file
+            string includePath = Path.Combine(Path.GetTempPath(), "Level1.txt");
+            if (File.Exists(includePath))
+                File.Delete(includePath);
+            File.AppendAllText(includePath, "Level1 Level2");
+
+            // Initialize mock data
             _customers = new List<CustomerDto>
             {
                 new CustomerDto
@@ -536,7 +544,7 @@ namespace SoftwareRockstar.Texticize.UnitTests
         {
             var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"Following products are currently in inventory<br/> {Products!List[ColSep=</td><td>;RowBegin=<tr><td>;RowEnd=</td></tr>]}");
             string toCompare = "Following products are currently in inventory<br/> <tr><td>50MP Camera</td><td>$150.29</td></tr><tr><td>20MP Camera</td><td>$150.29</td></tr><tr><td>15MP Camera</td><td>$150.29</td></tr><tr><td>12MP Camera</td><td>$150.29</td></tr><tr><td>10MP Camera</td><td>$150.29</td></tr>";
-            Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
+            Uri localPath = new Uri(Path.Combine(Path.GetTempPath(), "templateProcessor.bin"));            
 
             var processor = TemplateProcessorFactory
                 .CreateDefault(reader)                
@@ -563,10 +571,11 @@ namespace SoftwareRockstar.Texticize.UnitTests
         }
 
         [TestMethod]
-        [TestCategory("Include")]
+        [TestCategory("Include")]        
         public void IncludeTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"%Include C:\Users\MH\Documents\Temp\Level1.txt%");
+            string includePath = Path.Combine(Path.GetTempPath(), "Level1.txt");
+            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"%Include " + includePath + "%");
             string toCompare = @"Level1 Level2";
 
             var result = TemplateProcessorFactory
@@ -609,9 +618,11 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestCategory("Include")]
         public void SaveTestWithPrefetchIncludesTest()
         {
-            var reader =  TemplateReaderFactory.CreateStringTemplateReader(@"%Include C:\Users\MH\Documents\Temp\Level1.txt%");
+            string includePath = Path.Combine(Path.GetTempPath(), "Level1.txt");
+            var reader = TemplateReaderFactory.CreateStringTemplateReader(@"%Include " + includePath + "%");
+
             string toCompare = @"Level1 Level2";
-            Uri localPath = new Uri(@"C:\Users\MH\Documents\Temp\templateProcessor.bin");
+            Uri localPath = new Uri(Path.Combine(Path.GetTempPath(), "templateProcessor.bin"));
 
             var processor = TemplateProcessorFactory
                 .CreateDefault(reader);
@@ -649,7 +660,9 @@ namespace SoftwareRockstar.Texticize.UnitTests
         [TestCategory("TemplateLoader")]
         public void FileTemplateLoaderTest()
         {
-            var reader = TemplateReaderFactory.CreateFileTemplateReader(@"C:\Users\MH\Documents\Temp\Level1.txt");
+            string includePath = Path.Combine(Path.GetTempPath(), "Level1.txt");
+            var reader = TemplateReaderFactory.CreateStringTemplateReader(@"%Include " + includePath + "%");
+
             string toCompare = @"Level1 Level2";
 
             var result = TemplateProcessorFactory
