@@ -17,9 +17,26 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{7A5608E7-4C06-47BD-ABE0-35725156248B}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs32
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SoftwareRockstar.Texticize\\SoftwareRockstar.Texticize.csproj
+		SccProjectName1 = SoftwareRockstar.Texticize
+		SccLocalPath1 = SoftwareRockstar.Texticize
+		SccProjectUniqueName2 = SoftwareRockstar.Texticize.UnitTests\\SoftwareRockstar.Texticize.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName2 = SoftwareRockstar.Texticize.sln
+		SccProjectName2 = SoftwareRockstar.Texticize.UnitTests
+		SccLocalPath2 = SoftwareRockstar.Texticize.UnitTests
+		SccProjectUniqueName3 = SoftwareRockstar.Texticize.MockData\\SoftwareRockstar.Texticize.MockData.csproj
+		SccProjectTopLevelParentUniqueName3 = SoftwareRockstar.Texticize.sln
+		SccProjectName3 = SoftwareRockstar.Texticize.MockData
+		SccLocalPath3 = SoftwareRockstar.Texticize.MockData
+		SccProjectUniqueName4 = SoftwareRockstar.Texticize.MockExtensions\\SoftwareRockstar.Texticize.MockExtensions.csproj
+		SccProjectTopLevelParentUniqueName4 = SoftwareRockstar.Texticize.sln
+		SccProjectName4 = SoftwareRockstar.Texticize.MockExtensions
+		SccLocalPath4 = SoftwareRockstar.Texticize.MockExtensions
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SoftwareRockstar.Texticize.vsmdi
@@ -78,8 +95,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{ECDC9E14-44C4-4E87-A0A5-DC67A06E3706} = {7A5608E7-4C06-47BD-ABE0-35725156248B}
-		{9A0A3E64-D936-45F4-8A46-F83CFB4CF3C9} = {7A5608E7-4C06-47BD-ABE0-35725156248B}
 		{159EB60F-DF2A-44DB-82D2-08DE02D1D9E5} = {7A5608E7-4C06-47BD-ABE0-35725156248B}
+		{9A0A3E64-D936-45F4-8A46-F83CFB4CF3C9} = {7A5608E7-4C06-47BD-ABE0-35725156248B}
+		{ECDC9E14-44C4-4E87-A0A5-DC67A06E3706} = {7A5608E7-4C06-47BD-ABE0-35725156248B}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
