@@ -49,17 +49,18 @@ namespace SoftwareRockstar.Texticize
             StringBuilder sb = new StringBuilder();
             var columnNames = columnNamesCsv.Split(',');
 
-            foreach (DataRow dr in target.Rows)
-            {
-                List<string> oneRow = new List<string>();
+            if (target != null)
+                foreach (DataRow dr in target.Rows)
+                {
+                    List<string> oneRow = new List<string>();
 
-                foreach (var columnName in columnNames)
-                    oneRow.Add(ToFormattedColumn(dr, columnName.Trim()));
+                    foreach (var columnName in columnNames)
+                        oneRow.Add(ToFormattedColumn(dr, columnName.Trim()));
                     
-                sb.Append(rowBeginDelimiter);
-                sb.Append(oneRow.Select(w => w).Aggregate((a, b) => a + colSeperator + b));
-                sb.Append(rowEndDelimiter);
-            }
+                    sb.Append(rowBeginDelimiter);
+                    sb.Append(oneRow.Select(w => w).Aggregate((a, b) => a + colSeperator + b));
+                    sb.Append(rowEndDelimiter);
+                }
 
             return sb.ToString();
         }
