@@ -14,6 +14,8 @@ using SoftwareRockstar.Texticize.MockData;
 using System.Collections;
 using SoftwareRockstar.Texticize.MockExtensions;
 using System.IO;
+using System.Data;
+using System.Text;
 
 namespace SoftwareRockstar.Texticize.UnitTests
 {
@@ -667,6 +669,41 @@ namespace SoftwareRockstar.Texticize.UnitTests
 
             var result = TemplateProcessorFactory
                 .CreateDefault(reader)
+                .Process()
+                .Result;
+
+            Assert.AreEqual<string>(toCompare, result);
+        }
+
+        [TestMethod]
+        public void DataTableToStructutedTextTest()
+        {
+            DataTable testData = new DataTable();
+            testData.Columns.Add("OrderNumber", typeof(int));
+            testData.Columns.Add("OrderTotal", typeof(decimal));
+
+            testData.Columns["OrderTotal"].ExtendedProperties.Add("Format", new Func<decimal, string>(s => s.ToString("C")));
+
+            testData.Rows.Add(517651, 731.23);
+            testData.Rows.Add(517673, 189.25);
+            testData.AcceptChanges();
+
+            var reader = TemplateReaderFactory.CreateStringTemplateReader("Here are the orders\n{OrderTable!List[Cols=OrderNumber,OrderTotal;ColSep=,;RowEnd=%NewLine%]}");
+            string toCompare = "Here are the orders\n517651,$731.23\r\n517673,$189.25\r\n";
+
+            var result = TemplateProcessorFactory
+                .CreateDefault(reader)
+                .SetMaps
+                (
+                    "OrderTable!List".MapTo<DataTable>(
+                        s => s.Variable.ToStructuredText(                          
+                            columnNamesCsv: s.Parameters["Cols"],
+                            colSeperator: s.Parameters["ColSep"],
+                            rowEndDelimiter: s.Parameters["RowEnd"]
+                        )
+                    )
+                )
+                .SetVariables("OrderTable".ToVariable(testData))
                 .Process()
                 .Result;
 

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Data;
 
 namespace SoftwareRockstar.Texticize
 {
@@ -27,7 +28,7 @@ namespace SoftwareRockstar.Texticize
         /// <param name="rowBegin"></param>
         /// <param name="rowEnd"></param>
         /// <returns></returns>
-        public static string ToStructuredText<T>(this IList<T> target, Func<T, string>[] columns, string colSeperator = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
+        public static string ToStructuredText<T>(this IEnumerable<T> target, Func<T, string>[] columns, string colSeperator = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
         {
             StringBuilder sb = new StringBuilder();
 
@@ -40,6 +41,39 @@ namespace SoftwareRockstar.Texticize
                 }
 
             return sb.ToString();
+        }
+
+
+        public static string ToStructuredText(this DataTable target, string columnNamesCsv, string colSeperator = "", string rowBeginDelimiter = "", string rowEndDelimiter = "")
+        {
+            StringBuilder sb = new StringBuilder();
+            var columnNames = columnNamesCsv.Split(',');
+
+            foreach (DataRow dr in target.Rows)
+            {
+                List<string> oneRow = new List<string>();
+
+                foreach (var columnName in columnNames)
+                    oneRow.Add(ToFormattedColumn(dr, columnName.Trim()));
+                    
+                sb.Append(rowBeginDelimiter);
+                sb.Append(oneRow.Select(w => w).Aggregate((a, b) => a + colSeperator + b));
+                sb.Append(rowEndDelimiter);
+            }
+
+            return sb.ToString();
+        }
+
+        private static string ToFormattedColumn(DataRow row, string columnName)
+        {
+            var extendedProps = row.Table.Columns[columnName].ExtendedProperties;
+            if (extendedProps.ContainsKey("Format"))
+            {
+                Delegate d = extendedProps["Format"] as Delegate;
+                return d.DynamicInvoke(row[columnName]).ToString();                                    
+            }                                    
+            else
+                return row[columnName].ToString();
         }
 
 
